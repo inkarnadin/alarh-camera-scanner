@@ -1,14 +1,17 @@
 package scanner;
 
-import java.io.IOException;
+import lombok.SneakyThrows;
+
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class PortScanner {
-
-    private static final int timeout = 1000;
 
     private final List<InetSocketAddress> addresses = new ArrayList<>();
     private final Converter converter = new Converter();
@@ -23,20 +26,17 @@ public class PortScanner {
             addresses.add(converter.convert(address, port));
     }
 
+    @SneakyThrows
     public void scanning() {
-        for (InetSocketAddress address : addresses) {
-            try (Socket socket = new Socket()) {
-                socket.connect(address, timeout);
-                System.out.println(address.getHostName());
-            } catch (IOException ignored) {}
-        }
-    }
+        ExecutorService executorService = Executors.newFixedThreadPool(20);
+        HashSet<PortExecutor> callables = new HashSet<>();
 
-    public void simpleScan(InetSocketAddress host) {
-        try (Socket socket = new Socket()) {
-            socket.connect(host, timeout);
-            System.out.println(host.getHostName());
-        } catch (IOException ignored) {}
+        for (InetSocketAddress address : addresses)
+            callables.add(new PortExecutor(address));
+
+        List<Future<Optional<String>>> futures = executorService.invokeAll(callables);
+        for (Future<Optional<String>> future : futures)
+            future.get().ifPresent(System.out::println);
     }
 
 }
