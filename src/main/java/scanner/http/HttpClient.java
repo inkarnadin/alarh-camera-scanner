@@ -1,4 +1,4 @@
-package scanner;
+package scanner.http;
 
 import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;

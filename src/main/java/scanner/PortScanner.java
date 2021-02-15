@@ -3,6 +3,10 @@ package scanner;
 import lombok.SneakyThrows;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import scanner.http.Converter;
+import scanner.http.HttpClient;
+import scanner.http.IpV4Address;
+import scanner.http.IpV4Range;
 
 import java.io.File;
 import java.io.FileWriter;

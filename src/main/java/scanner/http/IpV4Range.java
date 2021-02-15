@@ -1,4 +1,4 @@
-package scanner;
+package scanner.http;
 
 import lombok.Getter;
 
