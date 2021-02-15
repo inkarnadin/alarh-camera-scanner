@@ -27,4 +27,13 @@ public class HttpClient {
         return client.newCall(request).execute();
     }
 
+    @SneakyThrows
+    public Response execute(String path, String auth) {
+        Request request = new Request.Builder()
+                .url(path)
+                .addHeader("Authorization", "Basic " + auth)
+                .get().build();
+        return client.newCall(request).execute();
+    }
+
 }

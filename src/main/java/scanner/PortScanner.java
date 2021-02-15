@@ -10,6 +10,7 @@ import scanner.http.IpV4Range;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -52,18 +53,16 @@ public class PortScanner {
             future.get().ifPresent(result::add);
     }
 
-    @SneakyThrows
     public void checkCve20134975() {
-        System.out.println("Check CVE-2013-4975");
-        System.out.println("===================");
         for (String ip : result) {
-            Response response = client.execute(String.format(CVE_2013_4975, ip));
-            ResponseBody responseBody = response.body();
-            if (Objects.nonNull(responseBody)) {
-                String body = responseBody.string();
-                if (body.contains("firmware"))
-                    System.out.println(ip);
-            }
+            try (Response response = client.execute(String.format(CVE_2013_4975, ip))) {
+                ResponseBody responseBody = response.body();
+                if (Objects.nonNull(responseBody)) {
+                    String body = responseBody.string();
+                    if (body.contains("firmware"))
+                        System.out.println(ip);
+                }
+            } catch (IOException ignored) {}
         }
     }
 

@@ -14,20 +14,27 @@ import java.util.stream.Stream;
 public class Main {
 
     private static final PortScanner scanner = new PortScanner("/home/aalekseev/git/port-scanner/result.txt");
+    private static final BruteForce bruteForce = new BruteForce();
 
     public static void main(String[] args) {
         List<String> list = readSource();
 
         int i = 0;
-        for (String range : list) {
-            scanner.prepareSinglePortScanning(range, 8000);
-            scanner.scanning();
-            scanner.checkCve20134975();
-            scanner.flush();
-
-            System.out.println("===================");
+        for (String ip : list) {
+            bruteForce.brute(ip);
             System.out.println("progress: " + i++ + "/" + list.size());
         }
+
+//        int i = 0;
+//        for (String range : list) {
+//            scanner.prepareSinglePortScanning(range, 8000);
+//            scanner.scanning();
+//            scanner.checkCve20134975();
+//            scanner.flush();
+//
+//            System.out.println("===================");
+//            System.out.println("progress: " + i++ + "/" + list.size());
+//        }
     }
 
     @SneakyThrows

@@ -13,8 +13,14 @@ public class IpV4Range {
 
     public IpV4Range(String range) {
         String[] rangeAddresses = range.split("-");
-        startAddress = new IpV4Address(rangeAddresses[0]);
-        endAddress = new IpV4Address(rangeAddresses[1]);
+
+        if (rangeAddresses.length == 1) {
+            startAddress = new IpV4Address(rangeAddresses[0]);
+            endAddress = new IpV4Address(rangeAddresses[0]);
+        } else {
+            startAddress = new IpV4Address(rangeAddresses[0]);
+            endAddress = new IpV4Address(rangeAddresses[1]);
+        }
     }
 
     public List<IpV4Address> range() {
