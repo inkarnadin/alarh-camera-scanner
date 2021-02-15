@@ -19,7 +19,7 @@ public class PortExecutor implements Callable<Optional<String>> {
     public Optional<String> call() {
         try (Socket socket = new Socket()) {
             socket.connect(address, timeout);
-            return Optional.ofNullable(address.getHostName());
+            return Optional.ofNullable(address.getAddress().toString());
         } catch (IOException ignored) {}
         return Optional.empty();
     }
