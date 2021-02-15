@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 
 @RequiredArgsConstructor
-public class PortExecutor implements Callable<Optional<String>> {
+public class CameraScanExecutor implements Callable<Optional<String>> {
 
     private static final int timeout = 500;
 
@@ -19,7 +19,7 @@ public class PortExecutor implements Callable<Optional<String>> {
     public Optional<String> call() {
         try (Socket socket = new Socket()) {
             socket.connect(address, timeout);
-            return Optional.ofNullable(address.getAddress().toString());
+            return Optional.of(address.getAddress().toString().replace("/", ""));
         } catch (IOException ignored) {}
         return Optional.empty();
     }

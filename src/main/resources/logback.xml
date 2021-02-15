@@ -1,0 +1,53 @@
+<configuration>
+  <property name="LOG_DIR" value="logs"/>
+  <property name="RESULT_DIR" value="result"/>
+
+  <appender name="COMMON_FILE" class="ch.qos.logback.core.FileAppender">
+    <file>${LOG_DIR}/out.log</file>
+    <append>false</append>
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="CAMERA" class="ch.qos.logback.core.FileAppender">
+    <file>${RESULT_DIR}/camera.log</file>
+    <append>true</append>
+    <encoder>
+      <pattern>%msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="CVE_FILE" class="ch.qos.logback.core.FileAppender">
+    <file>${RESULT_DIR}/cve-2013-4975.log</file>
+    <append>true</append>
+    <encoder>
+      <pattern>%msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="BRUTE" class="ch.qos.logback.core.FileAppender">
+    <file>${RESULT_DIR}/bruted.log</file>
+    <append>true</append>
+    <encoder>
+      <pattern>%msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <root level="debug">
+    <appender-ref ref="COMMON_FILE"/>
+  </root>
+
+  <logger name="scanner.CameraScanner" level="info">
+    <appender-ref ref="CAMERA"/>
+  </logger>
+
+  <logger name="scanner.CVEScanner" level="info">
+    <appender-ref ref="CVE_FILE"/>
+  </logger>
+
+  <logger name="scanner.BruteForceScanner" level="info">
+    <appender-ref ref="BRUTE"/>
+  </logger>
+
+</configuration>

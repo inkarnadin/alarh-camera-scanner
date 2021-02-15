@@ -1,6 +1,7 @@
 package scanner;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import scanner.http.HttpClient;
@@ -10,7 +11,8 @@ import java.util.Base64;
 import java.util.Objects;
 
 @Data
-public class BruteForce {
+@Slf4j
+public class BruteForceScanner {
 
     private final String BRUTE = "http://%s/system/deviceInfo";
     private final String[] passwords = {
@@ -50,13 +52,12 @@ public class BruteForce {
                 if (Objects.nonNull(responseBody)) {
                     String body = responseBody.string();
                     if (body.contains("firmware")) {
-                        System.out.println(ip + " => admin:" + pass);
+                        log.info(ip + " => admin:" + pass);
                         break;
                     }
                 }
             } catch (IOException ignored) { }
         }
     }
-
 
 }
