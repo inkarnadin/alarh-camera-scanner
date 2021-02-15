@@ -13,19 +13,20 @@ import java.util.stream.Stream;
 
 public class Main {
 
-    private static final PortScanner scanner = new PortScanner();
+    private static final PortScanner scanner = new PortScanner("/home/aalekseev/git/port-scanner/result.txt");
 
     public static void main(String[] args) {
-        //scanner.simpleScan(new InetSocketAddress("5.140.164.16", 8000));
         List<String> list = readSource();
+
         int i = 0;
         for (String range : list) {
             scanner.prepareSinglePortScanning(range, 8000);
             scanner.scanning();
+            scanner.checkCve20134975();
+            scanner.flush();
 
-            i++;
-            System.out.println("---");
-            System.out.println("progress: " + i + "/" + list.size());
+            System.out.println("===================");
+            System.out.println("progress: " + i++ + "/" + list.size());
         }
     }
 
