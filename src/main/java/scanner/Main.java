@@ -34,12 +34,15 @@ public class Main {
         if (params.contains("-c")) {
             final CameraScanner scanner = new CameraScanner();
             int c = 0;
+            int allAddresses = 0;
             for (String range : listSources) {
                 log.info("processing " + range);
-                scanner.prepareSinglePortScanning(range, 8000);
+                int count = scanner.prepareSinglePortScanning(range, 8000);
                 scanner.scanning();
                 log.info("progress: " + ++c + "/" + listSources.size());
+                allAddresses += count;
             }
+            log.info("addresses checked = " + allAddresses);
         }
         System.exit(0);
     }

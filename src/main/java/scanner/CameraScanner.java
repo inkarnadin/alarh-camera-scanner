@@ -18,12 +18,13 @@ public class CameraScanner {
     private final List<InetSocketAddress> addresses = new ArrayList<>();
     private final Converter converter = new Converter();
 
-    public void prepareSinglePortScanning(String rangeAsString, int port) {
+    public int prepareSinglePortScanning(String rangeAsString, int port) {
         addresses.clear();
         IpV4Range rangeContainer = new IpV4Range(rangeAsString);
         List<IpV4Address> range = rangeContainer.range();
         for (IpV4Address address : range)
             addresses.add(converter.convert(address, port));
+        return addresses.size();
     }
 
     @SneakyThrows
