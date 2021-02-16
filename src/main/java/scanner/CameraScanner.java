@@ -31,8 +31,8 @@ public class CameraScanner {
         ExecutorService executorService = Executors.newFixedThreadPool(20);
 
         HashSet<CameraScanExecutor> callables = new HashSet<>();
-        for (InetSocketAddress address : addresses) {
-            if (callables.size() == 500) {
+        for (int i = 0; i < addresses.size(); i++) {
+            if (callables.size() == 500 || i == addresses.size() - 1) {
                 List<Future<Optional<String>>> futures = executorService.invokeAll(callables);
                 for (Future<Optional<String>> future : futures) {
                     Optional<String> result = future.get();
@@ -45,7 +45,7 @@ public class CameraScanner {
                 }
                 callables.clear();
             }
-            callables.add(new CameraScanExecutor(address));
+            callables.add(new CameraScanExecutor(addresses.get(i)));
         }
     }
 
