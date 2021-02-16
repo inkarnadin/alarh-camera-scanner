@@ -22,7 +22,7 @@ public class CVEScanner {
             ResponseBody responseBody = response.body();
             if (Objects.nonNull(responseBody)) {
                 String body = responseBody.string();
-                if (body.contains("firmware")) {
+                if (body.contains("firmwareVersion")) {
                     String credentials;
                     try (Response configFile = client.execute(String.format(CONFIG_FILE, ip))) {
                         ResponseBody configFileBody = configFile.body();
