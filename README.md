@@ -1,6 +1,9 @@
 # Camera Scanner
 
-Simple port scanner for checking single available port. Will be extended in the future. May be :)
+Simple camera vulnerability scanner.
+* Finds cameras on open port 8000 over specified IP ranges.
+* Checks and finds passwords using CVE-2013-4975 
+* Checks passwords by brute force.
 
 ## Usage
 ### Scanning cameras
