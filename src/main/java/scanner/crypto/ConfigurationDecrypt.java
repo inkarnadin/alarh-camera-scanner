@@ -50,15 +50,17 @@ public class ConfigurationDecrypt {
             for (int i = 0; i < content.length; i++)
                 xorOutput[i] = (byte) ((int) content[i] ^ (int) key[i % key.length]);
 
-            return parse(new String(xorOutput), false);
+            return parse(new String(xorOutput));
         }
     }
 
-    public static String parse(String input, boolean isRaw) {
+    public static String parse(String input) {
         Pattern ptn = Pattern.compile("[\\w$&+,:;=?@#.*]+");
         Matcher matcher = ptn.matcher(input);
 
         List<String> list = new ArrayList<>();
+        List<String> allValues = new ArrayList<>();
+
         String[] logins = new String[] { "admin", "admln" };
 
         boolean isLogin = false;
@@ -66,17 +68,15 @@ public class ConfigurationDecrypt {
 
         while (matcher.find()) {
             String val = matcher.group(0);
-            if (isRaw) {
-                list.add(val);
-                continue;
-            }
+            allValues.add(val);
+
             if (isLogin) {
                 list.add(String.format("%s: %s", activeLogin, val));
                 isLogin = false;
             }
             if (Arrays.asList(logins).contains(val)) {
-                isLogin = true;
                 activeLogin = val;
+                isLogin = true;
             }
         }
 
@@ -85,8 +85,8 @@ public class ConfigurationDecrypt {
             list.remove("admin: 12345");
 
         // if login and pass not found - return all found values
-        if (list.isEmpty() && !isRaw)
-            return parse(input, true);
+        if (list.isEmpty())
+            return allValues.toString();
 
         return list.toString();
     }
