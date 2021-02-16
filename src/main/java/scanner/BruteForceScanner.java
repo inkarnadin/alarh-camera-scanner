@@ -1,6 +1,5 @@
 package scanner;
 
-import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.http.HttpClient;
