@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ConfigurationDescriptor {
+public class ConfigurationDecrypt {
 
     /**
      * <p>Decrypt HikVision configuration file through AES with static key. Similar key:</br>
@@ -54,8 +54,8 @@ public class ConfigurationDescriptor {
         }
     }
 
-    private static String parse(String input, boolean isRaw) {
-        Pattern ptn = Pattern.compile("\\w+");
+    public static String parse(String input, boolean isRaw) {
+        Pattern ptn = Pattern.compile("[\\w$&+,:;=?@#.*]+");
         Matcher matcher = ptn.matcher(input);
 
         List<String> list = new ArrayList<>();
