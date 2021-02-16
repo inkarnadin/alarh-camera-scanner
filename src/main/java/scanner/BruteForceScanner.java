@@ -24,7 +24,7 @@ public class BruteForceScanner {
                 ResponseBody responseBody = response.body();
                 if (Objects.nonNull(responseBody)) {
                     String body = responseBody.string();
-                    if (body.contains("firmware")) {
+                    if (body.contains("firmwareVersion")) {
                         log.info(ip + " => admin:" + pass);
                         break;
                     }
