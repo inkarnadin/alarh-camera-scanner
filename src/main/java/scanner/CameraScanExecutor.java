@@ -19,6 +19,7 @@ public class CameraScanExecutor implements Callable<Optional<String>> {
     public Optional<String> call() {
         try (Socket socket = new Socket()) {
             socket.connect(address, timeout);
+            socket.close();
             return Optional.of(address.getAddress().toString().replace("/", ""));
         } catch (IOException ignored) {}
         return Optional.empty();

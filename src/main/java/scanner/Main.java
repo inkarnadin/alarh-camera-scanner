@@ -10,10 +10,6 @@ import java.util.Optional;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Usage: ");
-        System.out.println("  java -jar port-scanner.jar -b source:/home/user/list.txt");
-        System.out.println("  java -jar port-scanner.jar -c source:/home/user/list.txt");
-
         List<String> params = Arrays.asList(args);
         Optional<String> source = params.stream().filter(s -> s.contains("source")).findFirst();
 

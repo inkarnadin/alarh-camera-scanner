@@ -34,7 +34,7 @@
     </encoder>
   </appender>
 
-  <root level="debug">
+  <root name="scanner.Main" level="debug">
     <appender-ref ref="COMMON_FILE"/>
   </root>
 
