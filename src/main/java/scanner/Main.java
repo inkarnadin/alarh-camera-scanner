@@ -34,6 +34,7 @@ public class Main {
             final CameraScanner scanner = new CameraScanner();
             int c = 0;
             for (String range : list) {
+                log.info("processing " + range);
                 scanner.prepareSinglePortScanning(range, 8000);
                 scanner.scanning();
                 log.info("progress: " + ++c + "/" + list.size());

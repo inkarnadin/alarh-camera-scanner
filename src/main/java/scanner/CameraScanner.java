@@ -29,20 +29,23 @@ public class CameraScanner {
     @SneakyThrows
     public void scanning() {
         ExecutorService executorService = Executors.newCachedThreadPool();
+
         HashSet<CameraScanExecutor> callables = new HashSet<>();
+        for (InetSocketAddress address : addresses) {
+            if (callables.size() == 500) {
+                List<Future<Optional<String>>> futures = executorService.invokeAll(callables);
+                for (Future<Optional<String>> future : futures) {
+                    Optional<String> result = future.get();
+                    if (result.isPresent()) {
+                        String value = result.get();
+                        log.info(value);
 
-        for (InetSocketAddress address : addresses)
-            callables.add(new CameraScanExecutor(address));
-
-        List<Future<Optional<String>>> futures = executorService.invokeAll(callables);
-        for (Future<Optional<String>> future : futures) {
-            Optional<String> result = future.get();
-            if (result.isPresent()) {
-                String value = result.get();
-                log.info(value);
-
-                CVEScanner.scanning(value);
+                        CVEScanner.scanning(value);
+                    }
+                }
+                callables.clear();
             }
+            callables.add(new CameraScanExecutor(address));
         }
     }
 
