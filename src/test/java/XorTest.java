@@ -12,7 +12,7 @@ public class XorTest {
     @Ignore
     @SneakyThrows
     public void xor() {
-        File file = new File("decryptedoutput");
+        File file = new File("decrypted");
         byte[] fileContents = Files.readAllBytes(file.toPath());
         byte[] xorOutput = new byte[fileContents.length];
 
@@ -22,7 +22,7 @@ public class XorTest {
             xorOutput[i] = (byte) ((int) fileContents[i] ^ (int) key[i % key.length]);
         }
 
-        FileOutputStream stream = new FileOutputStream("plaintextOutput");
+        FileOutputStream stream = new FileOutputStream("output");
         stream.write(xorOutput);
     }
 
