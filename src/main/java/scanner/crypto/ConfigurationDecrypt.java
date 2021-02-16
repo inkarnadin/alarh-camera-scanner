@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 public class ConfigurationDecrypt {
 
     /**
-     * <p>Decrypt HikVision configuration file through AES with static key. Similar key:</br>
+     * <p>Decrypt HikVision configuration file through AES with static key. Similar console command:</br>
      *
      * <pre>
      * openssl enc -d -in configurationFile -out output -aes-128-ecb -K 279977f62f6cfd2d91cd75b889ce0c9a
