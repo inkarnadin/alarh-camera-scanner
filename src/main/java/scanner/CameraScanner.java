@@ -28,7 +28,7 @@ public class CameraScanner {
 
     @SneakyThrows
     public void scanning() {
-        ExecutorService executorService = Executors.newCachedThreadPool();
+        ExecutorService executorService = Executors.newFixedThreadPool(20);
 
         HashSet<CameraScanExecutor> callables = new HashSet<>();
         for (InetSocketAddress address : addresses) {
