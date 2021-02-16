@@ -32,6 +32,7 @@ public class CameraScanner {
 
         HashSet<CameraScanExecutor> callables = new HashSet<>();
         for (int i = 0; i < addresses.size(); i++) {
+            callables.add(new CameraScanExecutor(addresses.get(i)));
             if (callables.size() == 500 || i == addresses.size() - 1) {
                 List<Future<Optional<String>>> futures = executorService.invokeAll(callables);
                 for (Future<Optional<String>> future : futures) {
@@ -45,7 +46,6 @@ public class CameraScanner {
                 }
                 callables.clear();
             }
-            callables.add(new CameraScanExecutor(addresses.get(i)));
         }
     }
 
