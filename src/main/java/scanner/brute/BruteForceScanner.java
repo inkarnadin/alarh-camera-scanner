@@ -13,10 +13,10 @@ import java.util.concurrent.Future;
 @Slf4j
 public class BruteForceScanner {
 
+    private final ExecutorService executorService = Executors.newFixedThreadPool(20);
+
     @SneakyThrows
     public void brute(String ip, String[] passwords) {
-        ExecutorService executorService = Executors.newFixedThreadPool(20);
-
         HashSet<BruteForceExecutor> requests = new HashSet<>();
         for (int i = 0; i < passwords.length; i++) {
             requests.add(new BruteForceExecutor(ip, passwords[i]));

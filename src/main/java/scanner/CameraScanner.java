@@ -19,6 +19,8 @@ public class CameraScanner {
     private final List<InetSocketAddress> addresses = new ArrayList<>();
     private final Converter converter = new Converter();
 
+    ExecutorService executorService = Executors.newFixedThreadPool(20);
+
     public int prepareSinglePortScanning(String rangeAsString, int port) {
         addresses.clear();
         IpV4Range rangeContainer = new IpV4Range(rangeAsString);
@@ -30,8 +32,6 @@ public class CameraScanner {
 
     @SneakyThrows
     public void scanning() {
-        ExecutorService executorService = Executors.newFixedThreadPool(20);
-
         HashSet<CameraScanExecutor> callables = new HashSet<>();
         for (int i = 0; i < addresses.size(); i++) {
             callables.add(new CameraScanExecutor(addresses.get(i)));
