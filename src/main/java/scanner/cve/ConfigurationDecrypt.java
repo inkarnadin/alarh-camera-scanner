@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ConfigurationDecrypt {
 
@@ -86,7 +87,10 @@ public class ConfigurationDecrypt {
 
         // if login and pass not found - return all found values
         if (list.isEmpty())
-            return allValues.stream().distinct().toString();
+            return allValues.stream()
+                    .distinct()
+                    .collect(Collectors.toList())
+                    .toString();
 
         return list.toString();
     }
