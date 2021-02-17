@@ -1,9 +1,8 @@
-package scanner;
+package scanner.cve;
 
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import scanner.crypto.ConfigurationDecrypt;
 import scanner.http.HttpClient;
 
 import java.io.IOException;

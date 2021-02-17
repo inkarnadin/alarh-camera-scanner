@@ -1,7 +1,7 @@
 import okhttp3.Response;
 import org.junit.Ignore;
 import org.junit.Test;
-import scanner.crypto.ConfigurationDecrypt;
+import scanner.cve.ConfigurationDecrypt;
 import scanner.http.HttpClient;
 
 import java.io.InputStream;

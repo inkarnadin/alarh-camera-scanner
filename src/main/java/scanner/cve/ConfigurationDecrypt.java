@@ -1,4 +1,4 @@
-package scanner.crypto;
+package scanner.cve;
 
 import lombok.SneakyThrows;
 

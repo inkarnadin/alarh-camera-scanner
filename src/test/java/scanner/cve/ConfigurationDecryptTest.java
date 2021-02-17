@@ -1,4 +1,4 @@
-package scanner.crypto;
+package scanner.cve;
 
 import org.junit.Assert;
 import org.junit.Test;

@@ -42,11 +42,11 @@
     <appender-ref ref="CAMERA"/>
   </logger>
 
-  <logger name="scanner.CVEScanner" level="info">
+  <logger name="scanner.cve.CVEScanner" level="info">
     <appender-ref ref="CVE_FILE"/>
   </logger>
 
-  <logger name="scanner.BruteForceScanner" level="info">
+  <logger name="scanner.brute.BruteForceScanner" level="info">
     <appender-ref ref="BRUTE"/>
   </logger>
 

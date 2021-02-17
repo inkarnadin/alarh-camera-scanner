@@ -2,6 +2,7 @@ package scanner;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import scanner.cve.CVEScanner;
 import scanner.http.Converter;
 import scanner.http.IpV4Address;
 import scanner.http.IpV4Range;
