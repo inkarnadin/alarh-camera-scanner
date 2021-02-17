@@ -6,6 +6,7 @@
 
     <groupId>ru.alarh</groupId>
     <artifactId>port-scanner</artifactId>
+    <version>1</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
