@@ -86,7 +86,7 @@ public class ConfigurationDecrypt {
 
         // if login and pass not found - return all found values
         if (list.isEmpty())
-            return allValues.toString();
+            return allValues.stream().distinct().toString();
 
         return list.toString();
     }
