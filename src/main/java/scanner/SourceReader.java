@@ -17,7 +17,7 @@ public class SourceReader {
         List<String> sources = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
             Stream<String> lines = reader.lines();
-            lines.map(String::toLowerCase).forEach(sources::add);
+            lines.forEach(sources::add);
             lines.close();
         }
         return sources;
