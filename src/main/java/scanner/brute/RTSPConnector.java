@@ -39,7 +39,7 @@ public class RTSPConnector {
             String statusLine = bufferedReader.readLine();
             return ("RTSP/1.0 200 OK".equals(statusLine));
         } catch (Exception xep) {
-            log.warn(xep.getMessage());
+            log.warn("ip={}: {}", ip, xep.getMessage());
         }
         return false;
     }
