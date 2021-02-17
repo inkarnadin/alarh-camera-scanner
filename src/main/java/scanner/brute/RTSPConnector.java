@@ -14,11 +14,13 @@ public class RTSPConnector {
 
     private final static String CRCL = "\r\n";
     private final static String SPACE = " ";
+
     private final static int PORT = 554;
+    private final static int TIMEOUT = 1000;
 
     public static boolean describe(String ip, String login, String password) {
         try (Socket socket = new Socket()) {
-            socket.connect(new InetSocketAddress(ip, PORT));
+            socket.connect(new InetSocketAddress(ip, PORT), TIMEOUT);
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
