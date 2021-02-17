@@ -8,7 +8,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.CancellationException;
-import java.util.concurrent.TimeoutException;
 
 @Slf4j
 public class RTSPConnector {
