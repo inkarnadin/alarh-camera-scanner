@@ -1,13 +1,14 @@
 package scanner.brute;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.TimeoutException;
 
 @Slf4j
 public class RTSPConnector {
@@ -18,7 +19,9 @@ public class RTSPConnector {
     private final static int PORT = 554;
     private final static int TIMEOUT = 1000;
 
+    @SneakyThrows
     public static boolean describe(String ip, String login, String password) {
+        String statusLine = "";
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(ip, PORT), TIMEOUT);
 
@@ -36,10 +39,12 @@ public class RTSPConnector {
             bufferedWriter.write(request);
             bufferedWriter.flush();
 
-            String statusLine = bufferedReader.readLine();
+            statusLine = bufferedReader.readLine();
             return ("RTSP/1.0 200 OK".equals(statusLine));
-        } catch (Exception xep) {
-            log.warn("ip={}: {}", ip, xep.getMessage());
+        } catch (SocketTimeoutException ste) {
+            throw new CancellationException();
+        } catch (IOException xep) {
+            log.warn("ip={}: {}/{}", ip, xep.getMessage(), statusLine);
         }
         return false;
     }

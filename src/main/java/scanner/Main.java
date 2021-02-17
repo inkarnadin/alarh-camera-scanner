@@ -28,7 +28,7 @@ public class Main {
             int i = 0;
             for (String ip : listSources) {
                 bruteForceScanner.brute(ip, listPasswords.toArray(new String[0]));
-                log.info("progress: " + ++i + "/" + listSources.size());
+                log.info("progress: {} {}/{}", ip, ++i, listSources.size());
             }
         }
 
@@ -37,10 +37,9 @@ public class Main {
             int c = 0;
             int allAddresses = 0;
             for (String range : listSources) {
-                log.info("processing " + range);
                 int count = scanner.prepareSinglePortScanning(range, 8000);
                 scanner.scanning();
-                log.info("progress: " + ++c + "/" + listSources.size());
+                log.info("progress: {} {}/{}", range, ++c, listSources.size());
                 allAddresses += count;
             }
             log.info("addresses checked = " + allAddresses);
