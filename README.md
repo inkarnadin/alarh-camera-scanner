@@ -11,3 +11,7 @@ Command `java -jar port-scanner.jar -c source:/home/user/range.txt`.
 
 ### BruteForce
 Command `java -jar port-scanner.jar -b source:/home/user/list.txt passwords:/home/user/pass.txt`
+
+## Save stream
+Command `ffmpeg -i rtsp://${login}:${password}@${host}/Streaming/Channels/101 -acodec copy -vcodec copy /home/user/video.mp4
+`
