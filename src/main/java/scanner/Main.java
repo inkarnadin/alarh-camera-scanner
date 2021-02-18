@@ -34,7 +34,8 @@ public class Main {
                 bruteForceScanner.brute(ip, listPasswords.toArray(new String[0]));
                 log.info("progress: {} {}/{}", ip, ++i, listSources.size());
             }
-            IpBruteFilter.cleaning(source.get().split(":")[1]);
+            if (params.contains("-r"))
+                IpBruteFilter.cleaning(source.get().split(":")[1]);
         }
 
         if (params.contains("-c")) {

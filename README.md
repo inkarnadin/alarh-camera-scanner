@@ -7,11 +7,12 @@ Simple camera vulnerability scanner.
 
 ## Usage
 ### Scanning cameras
-Command `java -jar port-scanner.jar -c source:/home/user/range.txt`.  
+* Command `java -jar port-scanner.jar -c source:/home/user/range.txt`.  
 
 ### BruteForce
-Command `java -jar port-scanner.jar -b source:/home/user/list.txt passwords:/home/user/pass.txt`
+* Command `java -jar port-scanner.jar -b source:/home/user/list.txt passwords:/home/user/pass.txt`
+* Add `-r` flag for removed unreliable and slowly hosts from list 
 
 ## Save stream
-Command `ffmpeg -i rtsp://${login}:${password}@${host}/Streaming/Channels/101 -acodec copy -vcodec copy /home/user/video.mp4
+* Command `ffmpeg -i rtsp://${login}:${password}@${host}/Streaming/Channels/101 -acodec copy -vcodec copy /home/user/video.mp4
 `
