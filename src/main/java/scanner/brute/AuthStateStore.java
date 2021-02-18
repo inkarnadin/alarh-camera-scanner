@@ -11,12 +11,11 @@ import java.util.Optional;
 @NoArgsConstructor
 public class AuthStateStore {
 
-    private AuthState state;
-    private String ip;
-    private Optional<String> credentials;
+    private AuthState state = AuthState.NOT_AUTH;
+    private Optional<String> credentials = Optional.empty();
 
     public boolean isAuth() {
-        return state == AuthState.AUTH;
+        return state == AuthState.AUTH || state == AuthState.NOT_REQUIRED;
     }
 
 }
