@@ -10,6 +10,9 @@ import java.util.List;
 @Slf4j
 public class IpV4Range {
 
+    private final static int min = 0;
+    private final static int max = 255;
+
     private final IpV4Address startAddress;
     private final IpV4Address endAddress;
 
@@ -40,7 +43,7 @@ public class IpV4Range {
 
         List<IpV4Address> addresses = new ArrayList<>();
         while (startPart3 <= endPart3) {
-            int endPart4 = (startPart3 != endPart3) ? 255 : endAddress.getPart4();
+            int endPart4 = (startPart3 != endPart3) ? max : endAddress.getPart4();
             while (startPart4 <= endPart4) {
                 IpV4Address ipV4Address = new IpV4Address(startPart1, startPart2, startPart3, startPart4);
                 addresses.add(ipV4Address);
@@ -48,7 +51,7 @@ public class IpV4Range {
                 startPart4++;
             }
             startPart3++;
-            startPart4 = 0;
+            startPart4 = min;
         }
         return addresses;
     }
