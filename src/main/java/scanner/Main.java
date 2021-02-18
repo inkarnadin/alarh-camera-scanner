@@ -2,8 +2,12 @@ package scanner;
 
 import lombok.extern.slf4j.Slf4j;
 import scanner.brute.BruteForceScanner;
+import scanner.brute.IpBruteFilter;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 public class Main {
@@ -30,6 +34,7 @@ public class Main {
                 bruteForceScanner.brute(ip, listPasswords.toArray(new String[0]));
                 log.info("progress: {} {}/{}", ip, ++i, listSources.size());
             }
+            IpBruteFilter.cleaning(source.get().split(":")[1]);
         }
 
         if (params.contains("-c")) {
