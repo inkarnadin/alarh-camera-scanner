@@ -5,6 +5,7 @@ public enum AuthState {
     AUTH,
     NOT_AUTH,
     NOT_REQUIRED,
-    NOT_AVAILABLE
+    NOT_AVAILABLE,
+    UNKNOWN_STATE
 
 }

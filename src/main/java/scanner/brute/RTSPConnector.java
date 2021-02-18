@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.Objects;
 import java.util.concurrent.CancellationException;
 
 @Slf4j
@@ -21,8 +22,10 @@ public class RTSPConnector {
     private final static int TIMEOUT = 1000;
 
     private final static String success = "RTSP/1.0 200 OK";
-    private final static String failure = "RTSP/1.0 401 Unauthorized";
-    private final static String not_found = "RTSP/1.0 404 Not Found";
+    private final static String failure = "RTSP/1.0 401"; // Unauthorized, Authorization Required
+    private final static String not_found = "RTSP/1.0 404"; // Error, Not Found
+    private final static String session_not_found = "RTSP/1.0 454"; // Session Not Found
+    private final static String unknown = "RTSP/1.0 418"; // null
 
     @SneakyThrows
     public static AuthState describe(String ip, String login, String password) {
@@ -30,22 +33,22 @@ public class RTSPConnector {
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(ip, PORT), TIMEOUT);
 
-            Sender sender = new Sender(socket);
+            Sender sender = new Sender(socket, login, password);
             RTSPBuilder builder = new RTSPBuilder(login, password, ip);
 
             statusLine = sender.send(builder.baseRequest);
-            if (not_found.equals(statusLine))
+            if (statusLine.contains(not_found))
                 statusLine = sender.send(builder.baseRequestNotFound);
 
-           switch (statusLine) {
-               case success: return AuthState.AUTH;
-               case failure: return AuthState.NOT_AUTH;
-               case not_found: default: return AuthState.NOT_AVAILABLE;
-           }
+            return statusLine.equals(success)
+                    ? AuthState.AUTH
+                    : statusLine.contains(session_not_found) || statusLine.equals(unknown)
+                        ? AuthState.UNKNOWN_STATE
+                        : AuthState.NOT_AUTH;
         } catch (SocketTimeoutException ste) {
             throw new CancellationException();
         } catch (IOException xep) {
-            log.warn("ip={}: {}/{}", ip, xep.getMessage(), statusLine);
+            log.warn("{}: {}/{}", ip, xep.getMessage(), statusLine);
             return AuthState.NOT_AVAILABLE;
         }
     }
@@ -79,11 +82,17 @@ public class RTSPConnector {
     private static class Sender {
 
         private final String ip;
+        private final String login;
+        private final String password;
+
         private final Socket socket;
 
         @SneakyThrows
-        public Sender(Socket socket) {
+        public Sender(Socket socket, String login, String password) {
             this.ip = socket.getInetAddress().getHostAddress();
+            this.login = login;
+            this.password = password;
+
             this.socket = socket;
         }
 
@@ -97,9 +106,9 @@ public class RTSPConnector {
             bufferedWriter.flush();
 
             String statusLine = bufferedReader.readLine();
-            log.debug("{} : {}", ip, statusLine);
+            log.debug("{} ({}:{}) => {}", ip, login, password, statusLine);
 
-            return statusLine;
+            return Objects.nonNull(statusLine) ? statusLine : "RTSP/1.0 418 Null";
         }
 
     }

@@ -54,6 +54,7 @@ public class BruteForceScanner {
         switch (auth.getState()) {
             case AUTH:
             case NOT_REQUIRED:  log.info("{} => {}", ip, auth.getCredentials().orElse("Auth not required")); break;
+            case UNKNOWN_STATE: // maybe basic request must be changed manually
             case NOT_AVAILABLE: // maybe it will be deleted as "bad cameras"
             case NOT_AUTH:
             default: break;

@@ -47,7 +47,7 @@ public class Main {
             int allAddresses = 0;
             for (String range : listSources) {
                 log.info("progress: {} {}/{}", range, ++c, listSources.size());
-                int count = scanner.prepareSinglePortScanning(range, 8000);
+                int count = scanner.prepareSinglePortScanning(range, 554);
                 scanner.scanning();
                 allAddresses += count;
             }
