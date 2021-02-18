@@ -21,6 +21,7 @@ public class IpBruteFilter {
 
     public static boolean excludeFakeCamera(String ip) {
         CameraScanExecutor executor = new CameraScanExecutor(new InetSocketAddress(ip, 554));
+        executor.setTimeout(2000);
         Optional<String> checkPortResult = executor.call();
         if (checkPortResult.isEmpty()) {
             log.debug("{} is wrong, deleted", ip);
