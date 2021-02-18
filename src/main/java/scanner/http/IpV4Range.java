@@ -1,11 +1,13 @@
 package scanner.http;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Slf4j
 public class IpV4Range {
 
     private final IpV4Address startAddress;
@@ -32,8 +34,10 @@ public class IpV4Range {
         int endPart3 = endAddress.getPart3();
         int endPart4 = endAddress.getPart4();
 
-        if (startPart1 != endAddress.getPart1() || startPart2 != endAddress.getPart2())
+        if (startPart1 != endAddress.getPart1() || startPart2 != endAddress.getPart2()) {
+            log.warn("{} - {}. This range too large and will be skipped", startAddress.getIpAsString(), endAddress.getIpAsString());
             return new ArrayList<>();
+        }
 
         List<IpV4Address> addresses = new ArrayList<>();
         while (startPart3 <= endPart3) {
