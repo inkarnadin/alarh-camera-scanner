@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import scanner.brute.BruteForceScanner;
 import scanner.brute.IpBruteFilter;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +12,10 @@ import java.util.Optional;
 public class Main {
 
     public static void main(String[] args) {
-        List<String> params = Arrays.asList(args);
-        Optional<String> source = params.stream().filter(s -> s.contains("source")).findFirst();
-        Optional<String> passwords = params.stream().filter(s -> s.contains("passwords")).findFirst();
+        Preferences.configure(args);
+
+        Optional<String> source = Preferences.get("source");
+        Optional<String> passwords = Preferences.get("passwords");
 
         if (source.isEmpty()) {
             log.error("source cannot be empty!");
@@ -27,18 +27,18 @@ public class Main {
                 .map(s -> SourceReader.readSource(s.split(":")[1]))
                 .orElseGet(() -> Collections.singletonList("12345"));
 
-        if (params.contains("-b")) {
+        if (Preferences.check("-b")) {
             final BruteForceScanner bruteForceScanner = new BruteForceScanner();
             int i = 0;
             for (String ip : listSources) {
                 log.info("progress: {} {}/{}", ip, ++i, listSources.size());
                 bruteForceScanner.brute(ip, listPasswords.toArray(new String[0]));
             }
-            if (params.contains("-r"))
+            if (Preferences.check("-r"))
                 IpBruteFilter.cleaning(source.get().split(":")[1]);
         }
 
-        if (params.contains("-c")) {
+        if (Preferences.check("-c")) {
             System.out.println("It can be very long. Please, wait...");
             System.out.println("See log files for more information");
 

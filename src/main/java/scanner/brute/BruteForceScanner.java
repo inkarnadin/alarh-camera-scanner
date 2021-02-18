@@ -2,6 +2,7 @@ package scanner.brute;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import scanner.Preferences;
 
 import java.util.HashSet;
 import java.util.List;
@@ -17,7 +18,7 @@ public class BruteForceScanner {
     public void brute(String ip, String[] passwords) {
         AuthStateStore auth = new AuthStateStore();
 
-        if (IpBruteFilter.excludeFakeCamera(ip))
+        if (IpBruteFilter.excludeFakeCamera(ip) && Preferences.check("-r"))
             return;
 
         int successTryingCounter = 0;
