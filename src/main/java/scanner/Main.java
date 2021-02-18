@@ -39,6 +39,9 @@ public class Main {
         }
 
         if (params.contains("-c")) {
+            System.out.println("It can be very long. Please, wait...");
+            System.out.println("See log files for more information");
+
             final CameraScanner scanner = new CameraScanner();
             int c = 0;
             int allAddresses = 0;
