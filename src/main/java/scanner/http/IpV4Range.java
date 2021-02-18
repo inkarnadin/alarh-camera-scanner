@@ -32,7 +32,6 @@ public class IpV4Range {
         int startPart4 = startAddress.getPart4();
 
         int endPart3 = endAddress.getPart3();
-        int endPart4 = endAddress.getPart4();
 
         if (startPart1 != endAddress.getPart1() || startPart2 != endAddress.getPart2()) {
             log.warn("{} - {}. This range too large and will be skipped", startAddress.getIpAsString(), endAddress.getIpAsString());
@@ -41,6 +40,7 @@ public class IpV4Range {
 
         List<IpV4Address> addresses = new ArrayList<>();
         while (startPart3 <= endPart3) {
+            int endPart4 = (startPart3 != endPart3) ? 255 : endAddress.getPart4();
             while (startPart4 <= endPart4) {
                 IpV4Address ipV4Address = new IpV4Address(startPart1, startPart2, startPart3, startPart4);
                 addresses.add(ipV4Address);
