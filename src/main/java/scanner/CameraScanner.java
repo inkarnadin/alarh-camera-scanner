@@ -8,10 +8,7 @@ import scanner.http.IpV4Address;
 import scanner.http.IpV4Range;
 
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -19,13 +16,12 @@ import java.util.concurrent.Future;
 @Slf4j
 public class CameraScanner {
 
-    private final List<InetSocketAddress> addresses = new ArrayList<>();
+    private final Queue<InetSocketAddress> addresses = new ArrayDeque<>();
     private final Converter converter = new Converter();
 
     ExecutorService executorService = Executors.newFixedThreadPool(20);
 
     public int prepareSinglePortScanning(String rangeAsString, int port) {
-        addresses.clear();
         IpV4Range rangeContainer = new IpV4Range(rangeAsString);
         List<IpV4Address> range = rangeContainer.range();
         for (IpV4Address address : range)
@@ -36,9 +32,9 @@ public class CameraScanner {
     @SneakyThrows
     public void scanning() {
         HashSet<CameraScanExecutor> callables = new HashSet<>();
-        for (int i = 0; i < addresses.size(); i++) {
-            callables.add(new CameraScanExecutor(addresses.get(i)));
-            if (callables.size() == 500 || i == addresses.size() - 1) {
+        while (!addresses.isEmpty()) {
+            callables.add(new CameraScanExecutor(addresses.poll()));
+            if (callables.size() == 500 || addresses.isEmpty()) {
                 List<Future<Optional<String>>> futures = executorService.invokeAll(callables);
                 for (Future<Optional<String>> future : futures) {
                     Optional<String> result = future.get();
@@ -53,5 +49,4 @@ public class CameraScanner {
             }
         }
     }
-
 }
