@@ -14,8 +14,8 @@ public class Main {
     public static void main(String[] args) {
         Preferences.configure(args);
 
-        Optional<String> source = Preferences.get("source");
-        Optional<String> passwords = Preferences.get("passwords");
+        Optional<String> source = Preferences.get("-source");
+        Optional<String> passwords = Preferences.get("-passwords");
 
         if (source.isEmpty()) {
             log.error("source cannot be empty!");
