@@ -12,7 +12,7 @@ public class ConfigurationDecryptTest {
     @Ignore
     public void testDectypt() {
         HttpClient client = new HttpClient();
-        Response response = client.execute("http://81.25.57.11/System/configurationFile?auth=YWRtaW46MTEK");
+        Response response = client.execute("http://host/System/configurationFile?auth=YWRtaW46MTEK");
         InputStream inputStream = response.body().byteStream();
         System.out.println(ConfigurationDecrypt.decrypt(inputStream));
     }
