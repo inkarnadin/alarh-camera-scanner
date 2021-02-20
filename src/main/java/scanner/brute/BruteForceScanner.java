@@ -15,14 +15,15 @@ import static scanner.brute.AuthState.NOT_REQUIRED;
 public class BruteForceScanner {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(20);
-    private final AuthStateStore auth = new AuthStateStore();
 
     @SneakyThrows
     public void brute(String ip, String[] passwords) {
+        AuthStateStore auth = new AuthStateStore();
+
         if (IpBruteFilter.excludeFakeCamera(ip))
             return;
 
-        checkEmptyCredentials(ip);
+        checkEmptyCredentials(auth, ip);
 
         HashSet<BruteForceExecutor> requests = new HashSet<>();
         for (int i = 0; i < passwords.length; i++) {
@@ -57,7 +58,7 @@ public class BruteForceScanner {
         }
     }
 
-    private void checkEmptyCredentials(String ip) {
+    private void checkEmptyCredentials(AuthStateStore auth, String ip) {
         try {
             Future<AuthStateStore> emptyCredentialsFuture = executorService.submit(new BruteForceExecutor(ip, null));
             AuthState emptyCredentialsState = emptyCredentialsFuture.get(3L, TimeUnit.SECONDS).getState();
