@@ -19,13 +19,14 @@ public class RTSPConnector {
     private final static String SPACE = " ";
 
     private final static int PORT = 554;
-    private final static int TIMEOUT = 1000;
+    private final static int TIMEOUT = 2000;
 
     private final static String success = "RTSP/1.0 200 OK";
     private final static String failure = "RTSP/1.0 401"; // Unauthorized, Authorization Required
     private final static String not_found = "RTSP/1.0 404"; // Error, Not Found
     private final static String session_not_found = "RTSP/1.0 454"; // Session Not Found
     private final static String bad_request = "RTSP/1.0 400"; // Bad request
+    private final static String invalid_param = "RTSP/1.0 451"; // Parameter Not Understood, Invalid Parameter
     private final static String unknown = "RTSP/1.0 418"; // null
 
     @SneakyThrows
@@ -43,7 +44,7 @@ public class RTSPConnector {
 
             return statusLine.equals(success)
                     ? AuthState.AUTH
-                    : statusLine.contains(session_not_found) || statusLine.contains(bad_request) || statusLine.equals(unknown)
+                    : statusLine.contains(session_not_found) || statusLine.contains(bad_request) || statusLine.contains(invalid_param) || statusLine.equals(unknown)
                         ? AuthState.UNKNOWN_STATE
                         : AuthState.NOT_AUTH;
         } catch (SocketTimeoutException ste) {

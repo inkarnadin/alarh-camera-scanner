@@ -32,7 +32,7 @@ public class BruteForceScanner {
 
             requests.add(new BruteForceExecutor(ip, passwords[i]));
             if (requests.size() == 5 || i == passwords.length - 1) {
-                List<Future<AuthStateStore>> futures = executorService.invokeAll(requests, 10L, TimeUnit.SECONDS);
+                List<Future<AuthStateStore>> futures = executorService.invokeAll(requests, 4L, TimeUnit.SECONDS);
                 for (Future<AuthStateStore> future : futures) {
                     try {
                         AuthStateStore authNew = future.get();
