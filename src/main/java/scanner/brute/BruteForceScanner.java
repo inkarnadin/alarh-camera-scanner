@@ -2,7 +2,6 @@ package scanner.brute;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import scanner.Preferences;
 
 import java.util.HashSet;
 import java.util.List;
