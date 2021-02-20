@@ -30,16 +30,16 @@ public class RTSPConnector {
     private final static String unknown = "RTSP/1.0 418"; // null
 
     @SneakyThrows
-    public static AuthState describe(String ip, String login, String password) {
+    public static AuthState describe(String ip, String credentials) {
         String statusLine = "";
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(ip, PORT), TIMEOUT);
 
-            Sender sender = new Sender(socket, login, password);
-            RTSPBuilder builder = new RTSPBuilder(login, password, ip);
+            Sender sender = new Sender(socket, credentials);
+            RTSPBuilder builder = new RTSPBuilder(ip, credentials);
 
             statusLine = sender.send(builder.baseRequest);
-            if (statusLine.contains(not_found))
+            if (statusLine.contains(not_found) || statusLine.contains(unknown))
                 statusLine = sender.send(builder.baseRequestNotFound);
 
             return statusLine.equals(success)
@@ -51,7 +51,7 @@ public class RTSPConnector {
             throw new CancellationException();
         } catch (IOException xep) {
             log.warn("{}: {}/{}", ip, xep.getMessage(), statusLine);
-            return AuthState.NOT_AVAILABLE;
+            return AuthState.NOT_AUTH;
         }
     }
 
@@ -59,20 +59,21 @@ public class RTSPConnector {
     private static class RTSPBuilder {
 
         @Getter
-        private final String baseRequest;
+        private String baseRequest;
         @Getter
-        private final String baseRequestNotFound;
+        private String baseRequestNotFound;
 
-        RTSPBuilder(String login, String password, String ip) {
+        RTSPBuilder(String ip, String credentials) {
+            credentials = Objects.nonNull(credentials) ? credentials + "@" : "";
             baseRequest = new StringBuilder()
-                    .append("DESCRIBE").append(SPACE).append("rtsp://").append(login).append(":").append(password).append("@").append(ip).append(":").append(PORT)
-                    .append(SPACE).append("RTSP/1.0").append(CRCL)
+                    .append("DESCRIBE").append(SPACE).append("rtsp://").append(credentials).append(ip).append(":").append(PORT)
+                    .append("/").append(SPACE).append("RTSP/1.0").append(CRCL)
                     .append("CSeq:").append(SPACE).append("1").append(CRCL)
                     .append("Content-Type:").append(SPACE).append("application/sdp").append(CRCL)
                     .append(CRCL)
                     .toString();
             baseRequestNotFound = new StringBuilder()
-                    .append("DESCRIBE").append(SPACE).append("rtsp://").append(login).append(":").append(password).append("@").append(ip).append(":").append(PORT)
+                    .append("DESCRIBE").append(SPACE).append("rtsp://").append(credentials).append(ip).append(":").append(PORT)
                     .append("/Streaming/Channels/101").append(SPACE).append("RTSP/1.0").append(CRCL)
                     .append("CSeq:").append(SPACE).append("1").append(CRCL)
                     .append("Content-Type:").append(SPACE).append("application/sdp").append(CRCL)
@@ -84,16 +85,14 @@ public class RTSPConnector {
     private static class Sender {
 
         private final String ip;
-        private final String login;
-        private final String password;
+        private final String credentials;
 
         private final Socket socket;
 
         @SneakyThrows
-        public Sender(Socket socket, String login, String password) {
+        public Sender(Socket socket, String credentials) {
             this.ip = socket.getInetAddress().getHostAddress();
-            this.login = login;
-            this.password = password;
+            this.credentials = credentials;
 
             this.socket = socket;
         }
@@ -108,7 +107,7 @@ public class RTSPConnector {
             bufferedWriter.flush();
 
             String statusLine = bufferedReader.readLine();
-            log.debug("{} ({}:{}) => {}", ip, login, password, statusLine);
+            log.debug("{} ({}) => {}", ip, credentials.length() != 0 ? credentials : "empty", statusLine);
 
             return Objects.nonNull(statusLine) ? statusLine : "RTSP/1.0 418 Null";
         }

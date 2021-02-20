@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.*;
 
 @Slf4j
@@ -20,27 +19,29 @@ public class BruteForceScanner {
         if (IpBruteFilter.excludeFakeCamera(ip))
             return;
 
-        int successTryingCounter = 0;
         HashSet<BruteForceExecutor> requests = new HashSet<>();
+
+        BruteForceExecutor bruteForceExecutor = new BruteForceExecutor(ip, null);
+        AuthState stateForEmptyCredentials = bruteForceExecutor.call().getState();
+
         for (int i = 0; i < passwords.length; i++) {
-            if (auth.isAuth() && successTryingCounter > 1) {
-                auth.setCredentials(Optional.empty());
-                auth.setState(AuthState.NOT_REQUIRED);
+            if (stateForEmptyCredentials == AuthState.AUTH) {
+                auth.setState(stateForEmptyCredentials);
                 break;
             }
 
+            if (auth.getState() == AuthState.NOT_AVAILABLE)
+                break;
+
             requests.add(new BruteForceExecutor(ip, passwords[i]));
             if (requests.size() == 5 || i == passwords.length - 1) {
-                List<Future<AuthStateStore>> futures = executorService.invokeAll(requests, 4L, TimeUnit.SECONDS);
+                List<Future<AuthStateStore>> futures = executorService.invokeAll(requests, 2L, TimeUnit.SECONDS);
                 for (Future<AuthStateStore> future : futures) {
                     try {
-                        AuthStateStore authNew = future.get();
-                        if (authNew.isAuth()) {
-                            if (!auth.isAuth()) {
-                                auth.setCredentials(authNew.getCredentials());
-                                auth.setState(authNew.getState());
-                            }
-                            successTryingCounter++;
+                        AuthStateStore authNew = future.get(1L, TimeUnit.SECONDS);
+                        if (authNew.isAuth() && !auth.isAuth()) {
+                            auth.setCredentials(authNew.getCredentials());
+                            auth.setState(authNew.getState());
                         }
                     } catch (CancellationException | ExecutionException | InterruptedException ce) {
                         auth.setState(AuthState.NOT_AVAILABLE);
