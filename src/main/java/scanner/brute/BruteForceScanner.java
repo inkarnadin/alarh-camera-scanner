@@ -3,9 +3,13 @@ package scanner.brute;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.*;
+
+import static scanner.brute.AuthState.NOT_AVAILABLE;
+import static scanner.brute.AuthState.NOT_REQUIRED;
 
 @Slf4j
 public class BruteForceScanner {
@@ -19,18 +23,18 @@ public class BruteForceScanner {
         if (IpBruteFilter.excludeFakeCamera(ip))
             return;
 
+        try {
+            Future<AuthStateStore> emptyCredentialsFuture = executorService.submit(new BruteForceExecutor(ip, null));
+            AuthState emptyCredentialsState = emptyCredentialsFuture.get(3L, TimeUnit.SECONDS).getState();
+            if (emptyCredentialsState == AuthState.AUTH)
+                auth.setState(NOT_REQUIRED);
+        } catch (TimeoutException | CancellationException | ExecutionException | InterruptedException xep) {
+            auth.setState(NOT_AVAILABLE);
+        }
+
         HashSet<BruteForceExecutor> requests = new HashSet<>();
-
-        BruteForceExecutor bruteForceExecutor = new BruteForceExecutor(ip, null);
-        AuthState stateForEmptyCredentials = bruteForceExecutor.call().getState();
-
         for (int i = 0; i < passwords.length; i++) {
-            if (stateForEmptyCredentials == AuthState.AUTH) {
-                auth.setState(stateForEmptyCredentials);
-                break;
-            }
-
-            if (auth.getState() == AuthState.NOT_AVAILABLE)
+            if (Arrays.asList(NOT_REQUIRED, NOT_AVAILABLE).contains(auth.getState()))
                 break;
 
             requests.add(new BruteForceExecutor(ip, passwords[i]));
@@ -38,13 +42,13 @@ public class BruteForceScanner {
                 List<Future<AuthStateStore>> futures = executorService.invokeAll(requests, 2L, TimeUnit.SECONDS);
                 for (Future<AuthStateStore> future : futures) {
                     try {
-                        AuthStateStore authNew = future.get(1L, TimeUnit.SECONDS);
+                        AuthStateStore authNew = future.get();
                         if (authNew.isAuth() && !auth.isAuth()) {
                             auth.setCredentials(authNew.getCredentials());
                             auth.setState(authNew.getState());
                         }
                     } catch (CancellationException | ExecutionException | InterruptedException ce) {
-                        auth.setState(AuthState.NOT_AVAILABLE);
+                        auth.setState(NOT_AVAILABLE);
                         future.cancel(true);
                     }
                 }
