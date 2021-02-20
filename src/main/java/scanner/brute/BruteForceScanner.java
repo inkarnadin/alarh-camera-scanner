@@ -15,22 +15,14 @@ import static scanner.brute.AuthState.NOT_REQUIRED;
 public class BruteForceScanner {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(20);
+    private final AuthStateStore auth = new AuthStateStore();
 
     @SneakyThrows
     public void brute(String ip, String[] passwords) {
-        AuthStateStore auth = new AuthStateStore();
-
         if (IpBruteFilter.excludeFakeCamera(ip))
             return;
 
-        try {
-            Future<AuthStateStore> emptyCredentialsFuture = executorService.submit(new BruteForceExecutor(ip, null));
-            AuthState emptyCredentialsState = emptyCredentialsFuture.get(3L, TimeUnit.SECONDS).getState();
-            if (emptyCredentialsState == AuthState.AUTH)
-                auth.setState(NOT_REQUIRED);
-        } catch (TimeoutException | CancellationException | ExecutionException | InterruptedException xep) {
-            auth.setState(NOT_AVAILABLE);
-        }
+        checkEmptyCredentials(ip);
 
         HashSet<BruteForceExecutor> requests = new HashSet<>();
         for (int i = 0; i < passwords.length; i++) {
@@ -62,6 +54,17 @@ public class BruteForceScanner {
             case NOT_AVAILABLE: log.debug("{} => skipped, not available", ip); // maybe it will be deleted as "bad cameras"
             case NOT_AUTH:
             default: break;
+        }
+    }
+
+    private void checkEmptyCredentials(String ip) {
+        try {
+            Future<AuthStateStore> emptyCredentialsFuture = executorService.submit(new BruteForceExecutor(ip, null));
+            AuthState emptyCredentialsState = emptyCredentialsFuture.get(3L, TimeUnit.SECONDS).getState();
+            if (emptyCredentialsState == AuthState.AUTH)
+                auth.setState(NOT_REQUIRED);
+        } catch (TimeoutException | CancellationException | ExecutionException | InterruptedException xep) {
+            auth.setState(NOT_AVAILABLE);
         }
     }
 
