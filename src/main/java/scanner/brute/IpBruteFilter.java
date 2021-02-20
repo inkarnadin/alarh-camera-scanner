@@ -3,6 +3,7 @@ package scanner.brute;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.CameraScanExecutor;
+import scanner.Preferences;
 import scanner.SourceReader;
 
 import java.io.File;
@@ -20,6 +21,9 @@ public class IpBruteFilter {
     private static final Set<String> excludedSet = new HashSet<>();
 
     public static boolean excludeFakeCamera(String ip) {
+        if (!Preferences.check("-r"))
+            return false;
+
         CameraScanExecutor executor = new CameraScanExecutor(new InetSocketAddress(ip, 554));
         executor.setTimeout(2000);
         Optional<String> checkPortResult = executor.call();
