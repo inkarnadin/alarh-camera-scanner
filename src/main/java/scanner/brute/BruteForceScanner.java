@@ -18,7 +18,7 @@ public class BruteForceScanner {
     public void brute(String ip, String[] passwords) {
         AuthStateStore auth = new AuthStateStore();
 
-        if (IpBruteFilter.excludeFakeCamera(ip) && Preferences.check("-r"))
+        if (IpBruteFilter.excludeFakeCamera(ip))
             return;
 
         int successTryingCounter = 0;
@@ -31,8 +31,8 @@ public class BruteForceScanner {
             }
 
             requests.add(new BruteForceExecutor(ip, passwords[i]));
-            if (requests.size() == 20 || i == passwords.length - 1) {
-                List<Future<AuthStateStore>> futures = executorService.invokeAll(requests, 2L, TimeUnit.SECONDS);
+            if (requests.size() == 5 || i == passwords.length - 1) {
+                List<Future<AuthStateStore>> futures = executorService.invokeAll(requests, 10L, TimeUnit.SECONDS);
                 for (Future<AuthStateStore> future : futures) {
                     try {
                         AuthStateStore authNew = future.get();
@@ -55,7 +55,7 @@ public class BruteForceScanner {
             case AUTH:
             case NOT_REQUIRED:  log.info("{} => {}", ip, auth.getCredentials().orElse("Auth not required")); break;
             case UNKNOWN_STATE: // maybe basic request must be changed manually
-            case NOT_AVAILABLE: // maybe it will be deleted as "bad cameras"
+            case NOT_AVAILABLE: log.debug("{} => skipped, not available", ip); // maybe it will be deleted as "bad cameras"
             case NOT_AUTH:
             default: break;
         }
