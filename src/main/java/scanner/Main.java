@@ -22,9 +22,9 @@ public class Main {
             System.exit(0);
         }
 
-        List<String> listSources = SourceReader.readSource(source.get().split(":")[1]);
+        List<String> listSources = SourceReader.readSource(source.get());
         List<String> listPasswords = passwords
-                .map(s -> SourceReader.readSource(s.split(":")[1]))
+                .map(SourceReader::readSource)
                 .orElseGet(() -> Collections.singletonList("12345"));
 
         if (Preferences.check("-b")) {
@@ -35,19 +35,21 @@ public class Main {
                 bruteForceScanner.brute(ip, listPasswords.toArray(new String[0]));
             }
             if (Preferences.check("-r"))
-                IpBruteFilter.cleaning(source.get().split(":")[1]);
+                IpBruteFilter.cleaning(source.get());
         }
 
         if (Preferences.check("-c")) {
             System.out.println("It can be very long. Please, wait...");
-            System.out.println("See log files for more information");
+            System.out.println("See log files for more information: /logs/out.log");
+
+            int port = Integer.parseInt(Preferences.get("-p").orElse("554"));
 
             final CameraScanner scanner = new CameraScanner();
             int c = 0;
             int allAddresses = 0;
             for (String range : listSources) {
                 log.info("progress: {} {}/{}", range, ++c, listSources.size());
-                int count = scanner.prepareSinglePortScanning(range, 554);
+                int count = scanner.prepareSinglePortScanning(range, port);
                 scanner.scanning();
                 allAddresses += count;
             }

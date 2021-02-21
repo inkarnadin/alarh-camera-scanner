@@ -7,7 +7,8 @@ Simple camera vulnerability scanner.
 
 ## Usage
 ### Scanning cameras
-* Command `java -jar port-scanner.jar -c source:/home/user/range.txt`.  
+* Command `java -jar port-scanner.jar -c source:/home/user/range.txt`. 
+* Add `-p` flag for set scanning port (554 by default).
 
 ### BruteForce
 * Command `java -jar port-scanner.jar -b source:/home/user/list.txt passwords:/home/user/pass.txt`.
