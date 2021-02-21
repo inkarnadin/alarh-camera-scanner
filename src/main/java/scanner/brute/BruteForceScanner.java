@@ -20,8 +20,6 @@ public class BruteForceScanner {
     public void brute(String ip, String[] passwords) {
         AuthStateStore auth = new AuthStateStore();
 
-
-
         if (IpBruteFilter.excludeFakeCamera(ip))
             return;
 
