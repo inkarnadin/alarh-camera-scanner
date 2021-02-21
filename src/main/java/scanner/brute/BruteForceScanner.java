@@ -6,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.*;
 
-import static scanner.brute.AuthState.NOT_AVAILABLE;
-import static scanner.brute.AuthState.NOT_REQUIRED;
+import static scanner.brute.AuthState.*;
 
 @Slf4j
 public class BruteForceScanner {
@@ -25,10 +25,16 @@ public class BruteForceScanner {
 
         checkEmptyCredentials(auth, ip);
 
+        int successAttemptCounter = 0;
         HashSet<BruteForceExecutor> requests = new HashSet<>();
         for (int i = 0; i < passwords.length; i++) {
             if (Arrays.asList(NOT_REQUIRED, NOT_AVAILABLE).contains(auth.getState()))
                 break;
+
+            if (auth.getState() == AUTH && successAttemptCounter > 1) {
+                auth.setState(NOT_REQUIRED);
+                auth.setCredentials(Optional.empty());
+            }
 
             requests.add(new BruteForceExecutor(ip, passwords[i]));
             if (requests.size() == 5 || i == passwords.length - 1) {
@@ -36,9 +42,12 @@ public class BruteForceScanner {
                 for (Future<AuthStateStore> future : futures) {
                     try {
                         AuthStateStore authNew = future.get();
-                        if (authNew.isAuth() && !auth.isAuth()) {
-                            auth.setCredentials(authNew.getCredentials());
-                            auth.setState(authNew.getState());
+                        if (authNew.isAuth()) {
+                            if (!auth.isAuth()) {
+                                auth.setCredentials(authNew.getCredentials());
+                                auth.setState(authNew.getState());
+                            }
+                            successAttemptCounter++;
                         }
                     } catch (CancellationException | ExecutionException | InterruptedException ce) {
                         auth.setState(NOT_AVAILABLE);
