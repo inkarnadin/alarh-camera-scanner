@@ -27,6 +27,7 @@ public class RTSPConnector {
     private final static String session_not_found = "RTSP/1.0 454"; // Session Not Found
     private final static String bad_request = "RTSP/1.0 400"; // Bad request
     private final static String invalid_param = "RTSP/1.0 451"; // Parameter Not Understood, Invalid Parameter
+    private final static String internal = "RTSP/1.0 500"; // Internal Server Error
     private final static String unknown = "RTSP/1.0 418"; // null
 
     @SneakyThrows
@@ -39,7 +40,7 @@ public class RTSPConnector {
             RTSPBuilder builder = new RTSPBuilder(ip, credentials);
 
             statusLine = sender.send(builder.baseRequest);
-            if (statusLine.contains(not_found) || statusLine.contains(unknown))
+            if (statusLine.contains(not_found) || statusLine.contains(internal) || statusLine.contains(unknown))
                 statusLine = sender.send(builder.baseRequestNotFound);
 
             return statusLine.equals(success)
