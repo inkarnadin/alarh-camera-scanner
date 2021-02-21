@@ -20,6 +20,8 @@ public class BruteForceScanner {
     public void brute(String ip, String[] passwords) {
         AuthStateStore auth = new AuthStateStore();
 
+
+
         if (IpBruteFilter.excludeFakeCamera(ip))
             return;
 
@@ -54,6 +56,7 @@ public class BruteForceScanner {
                         future.cancel(true);
                     }
                 }
+                Thread.sleep(200);
                 requests.clear();
             }
 
@@ -74,9 +77,9 @@ public class BruteForceScanner {
             AuthState emptyCredentialsState = emptyCredentialsFuture.get(3L, TimeUnit.SECONDS).getState();
             if (emptyCredentialsState == AuthState.AUTH)
                 auth.setState(NOT_REQUIRED);
-        } catch (TimeoutException xep) {
+        } catch (TimeoutException | CancellationException | ExecutionException xep) {
             auth.setState(NOT_AVAILABLE);
-        } catch (CancellationException | ExecutionException | InterruptedException exp) {
+        } catch (InterruptedException exp) {
             auth.setState(NOT_AUTH);
         }
     }
