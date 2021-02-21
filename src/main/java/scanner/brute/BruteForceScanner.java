@@ -50,12 +50,13 @@ public class BruteForceScanner {
                             successAttemptCounter++;
                         }
                     } catch (CancellationException | ExecutionException | InterruptedException ce) {
-                        auth.setState(NOT_AVAILABLE);
+                        auth.setState(NOT_AUTH);
                         future.cancel(true);
                     }
                 }
                 requests.clear();
             }
+
         }
         switch (auth.getState()) {
             case AUTH:
@@ -70,11 +71,13 @@ public class BruteForceScanner {
     private void checkEmptyCredentials(AuthStateStore auth, String ip) {
         try {
             Future<AuthStateStore> emptyCredentialsFuture = executorService.submit(new BruteForceExecutor(ip, null));
-            AuthState emptyCredentialsState = emptyCredentialsFuture.get(3L, TimeUnit.SECONDS).getState();
+            AuthState emptyCredentialsState = emptyCredentialsFuture.get(5L, TimeUnit.SECONDS).getState();
             if (emptyCredentialsState == AuthState.AUTH)
                 auth.setState(NOT_REQUIRED);
-        } catch (TimeoutException | CancellationException | ExecutionException | InterruptedException xep) {
+        } catch (TimeoutException xep) {
             auth.setState(NOT_AVAILABLE);
+        } catch (CancellationException | ExecutionException | InterruptedException exp) {
+            auth.setState(NOT_AUTH);
         }
     }
 
