@@ -71,7 +71,7 @@ public class BruteForceScanner {
     private void checkEmptyCredentials(AuthStateStore auth, String ip) {
         try {
             Future<AuthStateStore> emptyCredentialsFuture = executorService.submit(new BruteForceExecutor(ip, null));
-            AuthState emptyCredentialsState = emptyCredentialsFuture.get(5L, TimeUnit.SECONDS).getState();
+            AuthState emptyCredentialsState = emptyCredentialsFuture.get(3L, TimeUnit.SECONDS).getState();
             if (emptyCredentialsState == AuthState.AUTH)
                 auth.setState(NOT_REQUIRED);
         } catch (TimeoutException xep) {
