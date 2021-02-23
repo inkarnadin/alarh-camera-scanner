@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Replace Future tasks to CompletableFuture tasks for the brute scanner.
+- Replace Future tasks to CompletableFuture tasks for the camera scanner.
 - Returns NOT_AVAILABLE if host is not available.
 - Optimized creation and execution of brute subtasks.
 - Change some log messages.

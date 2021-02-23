@@ -9,9 +9,8 @@ import scanner.http.IpV4Range;
 
 import java.net.InetSocketAddress;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class CameraScanner {
@@ -19,7 +18,9 @@ public class CameraScanner {
     private final Queue<InetSocketAddress> addresses = new ArrayDeque<>();
     private final Converter converter = new Converter();
 
-    ExecutorService executorService = Executors.newFixedThreadPool(20);
+    ExecutorService executorService = Executors.newFixedThreadPool(255);
+
+    private final static long TERMINATION_TIMEOUT = 500L;
 
     public int prepareSinglePortScanning(String rangeAsString, int port) {
         IpV4Range rangeContainer = new IpV4Range(rangeAsString);
@@ -31,22 +32,26 @@ public class CameraScanner {
 
     @SneakyThrows
     public void scanning() {
-        HashSet<CameraScanExecutor> callables = new HashSet<>();
-        while (!addresses.isEmpty()) {
-            callables.add(new CameraScanExecutor(addresses.poll()));
-            if (callables.size() == 500 || addresses.isEmpty()) {
-                List<Future<Optional<String>>> futures = executorService.invokeAll(callables);
-                for (Future<Optional<String>> future : futures) {
-                    Optional<String> result = future.get();
-                    if (result.isPresent()) {
-                        String value = result.get();
-                        log.info(value);
+        List<CompletableFuture<Optional<String>>> futures = new ArrayList<>();
+        while (!addresses.isEmpty())
+            futures.add(createCameraScanTask(addresses.poll()));
 
-                        CVEScanner.scanning(value);
-                    }
-                }
-                callables.clear();
-            }
-        }
+        List<Optional<String>> results = futures.stream()
+                .map(CompletableFuture::join)
+                .collect(Collectors.toList());
+
+        results.stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .peek(log::info)
+                .forEach(CVEScanner::scanning);
+        executorService.awaitTermination(TERMINATION_TIMEOUT, TimeUnit.MILLISECONDS);
     }
+
+    private CompletableFuture<Optional<String>> createCameraScanTask(InetSocketAddress address) {
+        CompletableFuture<Optional<String>> future = new CompletableFuture<>();
+        CompletableFuture.runAsync(() -> new CameraScanTask(future, address).run(), executorService);
+        return future;
+    }
+
 }
