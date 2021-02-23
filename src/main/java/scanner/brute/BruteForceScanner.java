@@ -3,6 +3,7 @@ package scanner.brute;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.Context;
+import scanner.Preferences;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,9 +20,15 @@ public class BruteForceScanner {
 
     @SneakyThrows
     public void brute(String ip, String[] passwords) {
-        if (execEmptyBruteTask(ip)) {
-            log.info("{} => {}", ip, "auth not required");
-            return;
+        switch (execEmptyBruteTask(ip)) {
+            case AUTH:
+                log.info("{} => {}", ip, "auth not required");
+                return;
+            case NOT_AVAILABLE:
+                if (!Preferences.check("-uc"))
+                    return;
+            default:
+                break;
         }
 
         List<CompletableFuture<AuthStateStore>> futures = Arrays.stream(passwords)
@@ -53,7 +60,7 @@ public class BruteForceScanner {
         return future;
     }
 
-    private boolean execEmptyBruteTask(String ip) {
+    private AuthState execEmptyBruteTask(String ip) {
         CompletableFuture<AuthStateStore> future = new CompletableFuture<AuthStateStore>()
                 .completeOnTimeout(AuthStateStore.BAD_AUTH, EXEC_TIMEOUT, TimeUnit.MILLISECONDS);
 
@@ -61,7 +68,7 @@ public class BruteForceScanner {
         CompletableFuture.runAsync(() -> new BruteTask(future, ip, null).run(), executorService);
 
         AuthStateStore result = future.join();
-        return (result.getState() == AuthState.AUTH);
+        return result.getState();
     }
 
 }

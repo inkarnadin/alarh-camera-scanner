@@ -12,7 +12,11 @@ Simple camera vulnerability scanner.
 
 ### BruteForce
 * Command `java -jar port-scanner.jar -b source:/home/user/list.txt passwords:/home/user/pass.txt`.
-* Add `-r` flag for removed unreliable and slowly hosts from list. 
+* Add `-uc` flag - checking even socket connection unstable.
+
+### Results
+* All results will be saved in the path `/results/...`.
+* All common logs will be saved in the path `/logs/out.log`.
 
 ## Save stream
 * An example command for receiving a video stream:
