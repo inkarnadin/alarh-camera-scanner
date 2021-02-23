@@ -2,6 +2,7 @@ package scanner;
 
 import lombok.extern.slf4j.Slf4j;
 import scanner.brute.BruteForceScanner;
+import scanner.brute.BruteForceScannerUp;
 import scanner.brute.IpBruteFilter;
 
 import java.util.Collections;
@@ -28,7 +29,7 @@ public class Main {
                 .orElseGet(() -> Collections.singletonList("12345"));
 
         if (Preferences.check("-b")) {
-            final BruteForceScanner bruteForceScanner = new BruteForceScanner();
+            final BruteForceScannerUp bruteForceScanner = new BruteForceScannerUp();
             int i = 0;
             for (String ip : listSources) {
                 log.info("progress: {} {}/{}", ip, ++i, listSources.size());

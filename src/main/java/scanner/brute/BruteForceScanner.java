@@ -12,6 +12,7 @@ import java.util.concurrent.*;
 import static scanner.brute.AuthState.*;
 
 @Slf4j
+@Deprecated
 public class BruteForceScanner {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(20);
@@ -69,16 +70,16 @@ public class BruteForceScanner {
         }
     }
 
+    @SneakyThrows
     private void checkEmptyCredentials(AuthStateStore auth, String ip) {
+        Future<AuthStateStore> emptyCredentialsFuture = executorService.submit(new BruteForceExecutor(ip, null));
         try {
-            Future<AuthStateStore> emptyCredentialsFuture = executorService.submit(new BruteForceExecutor(ip, null));
             AuthState emptyCredentialsState = emptyCredentialsFuture.get(3L, TimeUnit.SECONDS).getState();
             if (emptyCredentialsState == AuthState.AUTH)
                 auth.setState(NOT_REQUIRED);
         } catch (TimeoutException | CancellationException | ExecutionException xep) {
             auth.setState(NOT_AVAILABLE);
-        } catch (InterruptedException exp) {
-            auth.setState(NOT_AUTH);
+            emptyCredentialsFuture.cancel(true);
         }
     }
 

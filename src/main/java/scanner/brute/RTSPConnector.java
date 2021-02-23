@@ -31,7 +31,7 @@ public class RTSPConnector {
     private final static String unknown = "RTSP/1.0 418"; // null
 
     @SneakyThrows
-    public static AuthState describe(String ip, String credentials) {
+    public AuthState describe(String ip, String credentials) {
         String statusLine = "";
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(ip, PORT), TIMEOUT);
@@ -57,7 +57,7 @@ public class RTSPConnector {
     }
 
     @RequiredArgsConstructor
-    private static class RTSPBuilder {
+    private class RTSPBuilder {
 
         @Getter
         private String baseRequest;
@@ -83,7 +83,7 @@ public class RTSPConnector {
         }
     }
 
-    private static class Sender {
+    private class Sender {
 
         private final String ip;
         private final String credentials;

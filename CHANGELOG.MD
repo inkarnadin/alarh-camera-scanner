@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## UNREALISED
+
+### Changed
+- Replace Future tasks to CompletableFuture tasks for brute scanner.
+
 ## [0.0.1] - 21-02-2021
 
 ### Added 
