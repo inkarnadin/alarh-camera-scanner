@@ -46,7 +46,7 @@
     <appender-ref ref="CVE_FILE"/>
   </logger>
 
-  <logger name="scanner.brute.BruteForceScannerUp" level="info">
+  <logger name="scanner.brute.BruteForceScanner" level="info">
     <appender-ref ref="BRUTE"/>
   </logger>
 

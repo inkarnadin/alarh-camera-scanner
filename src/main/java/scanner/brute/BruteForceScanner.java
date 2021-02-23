@@ -4,83 +4,62 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.*;
-
-import static scanner.brute.AuthState.*;
+import java.util.stream.Collectors;
 
 @Slf4j
-@Deprecated
 public class BruteForceScanner {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(20);
 
+    private final static long EXEC_TIMEOUT = 2500L;
+    private final static long TERMINATION_TIMEOUT = 500L;
+
     @SneakyThrows
     public void brute(String ip, String[] passwords) {
-        AuthStateStore auth = new AuthStateStore();
-
-        if (IpBruteFilter.excludeFakeCamera(ip))
+        if (execEmptyBruteTask(ip)) {
+            log.info("{} => {}", ip, "auth not required");
             return;
-
-        checkEmptyCredentials(auth, ip);
-
-        int successAttemptCounter = 0;
-        HashSet<BruteForceExecutor> requests = new HashSet<>();
-        for (int i = 0; i < passwords.length; i++) {
-            if (Arrays.asList(NOT_REQUIRED, NOT_AVAILABLE).contains(auth.getState()))
-                break;
-
-            if (auth.getState() == AUTH && successAttemptCounter > 1) {
-                auth.setState(NOT_REQUIRED);
-                auth.setCredentials(Optional.empty());
-            }
-
-            requests.add(new BruteForceExecutor(ip, passwords[i]));
-            if (requests.size() == 5 || i == passwords.length - 1) {
-                List<Future<AuthStateStore>> futures = executorService.invokeAll(requests, 2L, TimeUnit.SECONDS);
-                for (Future<AuthStateStore> future : futures) {
-                    try {
-                        AuthStateStore authNew = future.get();
-                        if (authNew.isAuth()) {
-                            if (!auth.isAuth()) {
-                                auth.setCredentials(authNew.getCredentials());
-                                auth.setState(authNew.getState());
-                            }
-                            successAttemptCounter++;
-                        }
-                    } catch (CancellationException | ExecutionException | InterruptedException ce) {
-                        auth.setState(NOT_AUTH);
-                        future.cancel(true);
-                    }
-                }
-                Thread.sleep(200);
-                requests.clear();
-            }
-
         }
-        switch (auth.getState()) {
-            case AUTH:
-            case NOT_REQUIRED:  log.info("{} => {}", ip, auth.getCredentials().orElse("Auth not required")); break;
-            case UNKNOWN_STATE: // maybe basic request must be changed manually
-            case NOT_AVAILABLE: log.debug("{} => skipped, not available", ip); // maybe it will be deleted as "bad cameras"
-            case NOT_AUTH:
-            default: break;
+
+        List<CompletableFuture<AuthStateStore>> futures = Arrays.stream(passwords)
+                .map(f -> createBruteTask(ip, f))
+                .collect(Collectors.toList());
+
+        List<AuthStateStore> results = futures.stream()
+                .map(CompletableFuture::join)
+                .collect(Collectors.toList());
+
+        List<AuthStateStore> authList = results.stream()
+                .filter(AuthStateStore::isAuth)
+                .collect(Collectors.toList());
+        int size = authList.size();
+
+        if (size > 0) {
+            log.info("{} => {}", ip, (size == 1)
+                    ? authList.get(0).getCredentials().orElse("auth not required")
+                    : "auth not required");
+
+            executorService.awaitTermination(TERMINATION_TIMEOUT, TimeUnit.MILLISECONDS);
         }
     }
 
-    @SneakyThrows
-    private void checkEmptyCredentials(AuthStateStore auth, String ip) {
-        Future<AuthStateStore> emptyCredentialsFuture = executorService.submit(new BruteForceExecutor(ip, null));
-        try {
-            AuthState emptyCredentialsState = emptyCredentialsFuture.get(3L, TimeUnit.SECONDS).getState();
-            if (emptyCredentialsState == AuthState.AUTH)
-                auth.setState(NOT_REQUIRED);
-        } catch (TimeoutException | CancellationException | ExecutionException xep) {
-            auth.setState(NOT_AVAILABLE);
-            emptyCredentialsFuture.cancel(true);
-        }
+    private CompletableFuture<AuthStateStore> createBruteTask(String ip, String password) {
+        CompletableFuture<AuthStateStore> future = new CompletableFuture<AuthStateStore>()
+                .completeOnTimeout(AuthStateStore.BAD_AUTH, EXEC_TIMEOUT, TimeUnit.MILLISECONDS);
+        CompletableFuture.runAsync(() -> new BruteTask(future, ip, password), executorService);
+        return future;
+    }
+
+    private boolean execEmptyBruteTask(String ip) {
+        CompletableFuture<AuthStateStore> future = new CompletableFuture<AuthStateStore>()
+                .completeOnTimeout(AuthStateStore.BAD_AUTH, EXEC_TIMEOUT, TimeUnit.MILLISECONDS);
+
+        CompletableFuture.runAsync(() -> new BruteTask(future, ip, null), executorService);
+
+        AuthStateStore result = future.join();
+        return (result.getState() == AuthState.AUTH);
     }
 
 }
