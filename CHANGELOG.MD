@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Replace Future tasks to CompletableFuture tasks for the brute scanner.
 - Returns NOT_AVAILABLE if host is not available.
 - Optimize create and exec brute subtasks.
+- Change some log messages.
 
 ### Fixed
 - Fix brute force blocking when server is not responding and read stream is busy.
