@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Add sub thread name.
+- Add Context for every brute address. It contains info about properly path of checking.
 
 ### Changed
 - Replace Future tasks to CompletableFuture tasks for the brute scanner.

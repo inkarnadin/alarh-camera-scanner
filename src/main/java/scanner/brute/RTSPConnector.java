@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import scanner.Context;
 
 import java.io.*;
 import java.net.*;
@@ -40,9 +41,11 @@ public class RTSPConnector {
             Sender sender = new Sender(socket);
             RTSPBuilder builder = new RTSPBuilder(ip, credentials);
 
-            statusLine = sender.send(builder.baseRequest);
-            if (statusLine.contains(not_found) || statusLine.contains(internal) || statusLine.contains(unknown))
-                statusLine = sender.send(builder.baseRequestNotFound);
+            statusLine = sender.send(builder.request());
+            if (statusLine.contains(not_found) || statusLine.contains(internal) || statusLine.contains(unknown)) {
+                Context.set(ip, RTSPMode.SPECIAL);
+                statusLine = sender.send(builder.request());
+            }
 
             return statusLine.equals(success)
                     ? AuthState.AUTH
@@ -65,7 +68,11 @@ public class RTSPConnector {
         @Getter
         private String baseRequestNotFound;
 
+        private final String ip;
+
         RTSPBuilder(String ip, String credentials) {
+            this.ip = ip;
+
             credentials = credentials.length() > 0 ? credentials + "@" : "";
             baseRequest = new StringBuilder()
                     .append("DESCRIBE").append(SPACE).append("rtsp://").append(credentials).append(ip).append(":").append(PORT)
@@ -82,6 +89,13 @@ public class RTSPConnector {
                     .append(CRCL)
                     .toString();
         }
+
+        private String request() {
+            return Context.get(ip) == RTSPMode.ORTHODOX
+                    ? baseRequest
+                    : baseRequestNotFound;
+        }
+
     }
 
     @RequiredArgsConstructor

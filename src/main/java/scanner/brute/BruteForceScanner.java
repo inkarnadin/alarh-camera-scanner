@@ -2,6 +2,7 @@ package scanner.brute;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import scanner.Context;
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,6 +57,7 @@ public class BruteForceScanner {
         CompletableFuture<AuthStateStore> future = new CompletableFuture<AuthStateStore>()
                 .completeOnTimeout(AuthStateStore.BAD_AUTH, EXEC_TIMEOUT, TimeUnit.MILLISECONDS);
 
+        Context.set(ip, RTSPMode.ORTHODOX);
         CompletableFuture.runAsync(() -> new BruteTask(future, ip, null).run(), executorService);
 
         AuthStateStore result = future.join();
