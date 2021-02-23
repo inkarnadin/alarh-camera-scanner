@@ -37,7 +37,7 @@ public class RTSPConnector {
             socket.setSoTimeout(INTERRUPTED_TIMEOUT);
             socket.connect(new InetSocketAddress(ip, PORT), CONNECT_TIMEOUT);
 
-            Sender sender = new Sender(socket, credentials);
+            Sender sender = new Sender(socket);
             RTSPBuilder builder = new RTSPBuilder(ip, credentials);
 
             statusLine = sender.send(builder.baseRequest);
@@ -84,20 +84,10 @@ public class RTSPConnector {
         }
     }
 
+    @RequiredArgsConstructor
     private static class Sender {
 
-        private final String ip;
-        private final String credentials;
-
         private final Socket socket;
-
-        @SneakyThrows
-        public Sender(Socket socket, String credentials) {
-            this.ip = socket.getInetAddress().getHostAddress();
-            this.credentials = credentials;
-
-            this.socket = socket;
-        }
 
         @SneakyThrows
         private String send(String request) {
@@ -109,7 +99,7 @@ public class RTSPConnector {
             bufferedWriter.flush();
 
             String statusLine = bufferedReader.readLine();
-            log.debug("{} ({}) => {}", ip, credentials.length() != 0 ? credentials : "empty", statusLine);
+            log.debug("response => {}", statusLine);
 
             return Objects.nonNull(statusLine) ? statusLine : "RTSP/1.0 418 Null";
         }
