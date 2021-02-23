@@ -2,7 +2,8 @@ package scanner;
 
 import scanner.brute.RTSPMode;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Defines and remembers the base path for credential validation.
@@ -15,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Context {
 
-    private static final ConcurrentHashMap<String, RTSPMode> storage = new ConcurrentHashMap<>();
+    private static final Map<String, RTSPMode> storage = new HashMap<>();
 
     public static void set(String ip, RTSPMode mode) {
         storage.put(ip, mode);
