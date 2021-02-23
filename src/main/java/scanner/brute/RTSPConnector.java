@@ -39,7 +39,7 @@ public class RTSPConnector {
             socket.connect(new InetSocketAddress(ip, PORT), CONNECT_TIMEOUT);
 
             Sender sender = new Sender(socket);
-            RTSPBuilder builder = new RTSPBuilder(ip, credentials);
+            RequestBuilder builder = new RequestBuilder(ip, credentials);
 
             statusLine = sender.send(builder.request());
             if (statusLine.contains(not_found) || statusLine.contains(internal) || statusLine.contains(unknown)) {
@@ -61,7 +61,7 @@ public class RTSPConnector {
     }
 
     @RequiredArgsConstructor
-    private static class RTSPBuilder {
+    private static class RequestBuilder {
 
         @Getter
         private String baseRequest;
@@ -70,7 +70,7 @@ public class RTSPConnector {
 
         private final String ip;
 
-        RTSPBuilder(String ip, String credentials) {
+        RequestBuilder(String ip, String credentials) {
             this.ip = ip;
 
             credentials = credentials.length() > 0 ? credentials + "@" : "";
