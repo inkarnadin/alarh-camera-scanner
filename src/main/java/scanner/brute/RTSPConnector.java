@@ -66,7 +66,7 @@ public class RTSPConnector {
         private String baseRequestNotFound;
 
         RTSPBuilder(String ip, String credentials) {
-            credentials = Objects.nonNull(credentials) ? credentials + "@" : "";
+            credentials = credentials.length() > 0 ? credentials + "@" : "";
             baseRequest = new StringBuilder()
                     .append("DESCRIBE").append(SPACE).append("rtsp://").append(credentials).append(ip).append(":").append(PORT)
                     .append("/").append(SPACE).append("RTSP/1.0").append(CRCL)
