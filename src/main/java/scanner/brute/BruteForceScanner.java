@@ -48,7 +48,7 @@ public class BruteForceScanner {
     private CompletableFuture<AuthStateStore> createBruteTask(String ip, String password) {
         CompletableFuture<AuthStateStore> future = new CompletableFuture<AuthStateStore>()
                 .completeOnTimeout(AuthStateStore.BAD_AUTH, EXEC_TIMEOUT, TimeUnit.MILLISECONDS);
-        CompletableFuture.runAsync(() -> new BruteTask(future, ip, password), executorService);
+        CompletableFuture.runAsync(() -> new BruteTask(future, ip, password).run(), executorService);
         return future;
     }
 
@@ -56,7 +56,7 @@ public class BruteForceScanner {
         CompletableFuture<AuthStateStore> future = new CompletableFuture<AuthStateStore>()
                 .completeOnTimeout(AuthStateStore.BAD_AUTH, EXEC_TIMEOUT, TimeUnit.MILLISECONDS);
 
-        CompletableFuture.runAsync(() -> new BruteTask(future, ip, null), executorService);
+        CompletableFuture.runAsync(() -> new BruteTask(future, ip, null).run(), executorService);
 
         AuthStateStore result = future.join();
         return (result.getState() == AuthState.AUTH);
