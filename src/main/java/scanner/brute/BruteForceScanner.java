@@ -13,7 +13,7 @@ public class BruteForceScanner {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(20);
 
-    private final static long EXEC_TIMEOUT = 2500L;
+    private final static long EXEC_TIMEOUT = 5000L;
     private final static long TERMINATION_TIMEOUT = 500L;
 
     @SneakyThrows
