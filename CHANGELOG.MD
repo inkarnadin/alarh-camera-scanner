@@ -5,7 +5,10 @@ All notable changes to this project will be documented in this file.
 ## UNREALISED
 
 ### Changed
-- Replace Future tasks to CompletableFuture tasks for brute scanner.
+- Replace Future tasks to CompletableFuture tasks for the brute scanner.
+
+### Fixed
+- Fix brute force blocking when server is not responding and read stream is busy.
 
 ## [0.0.1] - 21-02-2021
 

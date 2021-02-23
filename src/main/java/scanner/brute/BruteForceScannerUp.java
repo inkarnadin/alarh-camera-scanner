@@ -6,13 +6,16 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class BruteForceScannerUp {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(20);
+
+    private final static long FIRST_EXEC_TIMEOUT = 5000L;
+    private final static long EXEC_TIMEOUT = 2500L;
+    private final static long TERMINATION_TIMEOUT = 500L;
 
     @SneakyThrows
     public void brute(String ip, String[] passwords) {
@@ -39,15 +42,13 @@ public class BruteForceScannerUp {
                     ? authList.get(0).getCredentials().orElse("auth not required")
                     : "auth not required");
 
-            try {
-                executorService.awaitTermination(500, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException ignored) {}
+            executorService.awaitTermination(TERMINATION_TIMEOUT, TimeUnit.MILLISECONDS);
         }
     }
 
     private CompletableFuture<AuthStateStore> getBrute(String ip, String password) {
         CompletableFuture<AuthStateStore> result = new CompletableFuture<AuthStateStore>()
-                .completeOnTimeout(AuthStateStore.BAD_AUTH, 2500L, TimeUnit.MILLISECONDS);
+                .completeOnTimeout(AuthStateStore.BAD_AUTH, EXEC_TIMEOUT, TimeUnit.MILLISECONDS);
 
         CompletableFuture.runAsync(() -> {
             try {
@@ -64,7 +65,7 @@ public class BruteForceScannerUp {
 
     private boolean checkEmptyCredentials() {
         AuthStateStore result = new CompletableFuture<AuthStateStore>()
-                .completeOnTimeout(AuthStateStore.BAD_AUTH, 5000L, TimeUnit.MILLISECONDS)
+                .completeOnTimeout(AuthStateStore.BAD_AUTH, FIRST_EXEC_TIMEOUT, TimeUnit.MILLISECONDS)
                 .join();
         return (result.getState() == AuthState.AUTH);
     }

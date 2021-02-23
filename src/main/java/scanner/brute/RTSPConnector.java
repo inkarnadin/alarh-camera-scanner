@@ -19,7 +19,9 @@ public class RTSPConnector {
     private final static String SPACE = " ";
 
     private final static int PORT = 554;
-    private final static int TIMEOUT = 2000;
+
+    private final static int CONNECT_TIMEOUT = 2000;
+    private final static int INTERRUPTED_TIMEOUT = 2000;
 
     private final static String success = "RTSP/1.0 200 OK";
     private final static String failure = "RTSP/1.0 401"; // Unauthorized, Authorization Required
@@ -31,10 +33,11 @@ public class RTSPConnector {
     private final static String unknown = "RTSP/1.0 418"; // null
 
     @SneakyThrows
-    public AuthState describe(String ip, String credentials) {
+    public static AuthState describe(String ip, String credentials) {
         String statusLine = "";
         try (Socket socket = new Socket()) {
-            socket.connect(new InetSocketAddress(ip, PORT), TIMEOUT);
+            socket.setSoTimeout(INTERRUPTED_TIMEOUT);
+            socket.connect(new InetSocketAddress(ip, PORT), CONNECT_TIMEOUT);
 
             Sender sender = new Sender(socket, credentials);
             RTSPBuilder builder = new RTSPBuilder(ip, credentials);
@@ -57,7 +60,7 @@ public class RTSPConnector {
     }
 
     @RequiredArgsConstructor
-    private class RTSPBuilder {
+    private static class RTSPBuilder {
 
         @Getter
         private String baseRequest;
@@ -83,7 +86,7 @@ public class RTSPConnector {
         }
     }
 
-    private class Sender {
+    private static class Sender {
 
         private final String ip;
         private final String credentials;

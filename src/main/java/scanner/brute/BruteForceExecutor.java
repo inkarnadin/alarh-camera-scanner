@@ -21,7 +21,7 @@ public class BruteForceExecutor implements Callable<AuthStateStore> {
         String credentials = Objects.nonNull(pass)
                 ? String.format("%s:%s", defaultLogin, pass)
                 : "";
-        AuthState state = new RTSPConnector().describe(ip, credentials);
+        AuthState state = RTSPConnector.describe(ip, credentials);
         AuthStateStore auth = new AuthStateStore();
         auth.setState(state);
         auth.setCredentials((auth.isAuth())
