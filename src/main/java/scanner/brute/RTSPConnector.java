@@ -53,9 +53,10 @@ public class RTSPConnector {
                         ? AuthState.UNKNOWN_STATE
                         : AuthState.NOT_AUTH;
         } catch (SocketTimeoutException | SocketException ste) {
+            log.warn("socket connection failed");
             throw new CancellationException();
         } catch (IOException xep) {
-            log.warn("{}: {}/{}", ip, xep.getMessage(), statusLine);
+            log.warn("socket connection failed: {}, {}", xep.getMessage(), statusLine);
             return AuthState.NOT_AUTH;
         }
     }
