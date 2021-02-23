@@ -16,6 +16,7 @@ public class BruteTask implements Runnable {
     private final String password;
 
     public void run() {
+        Thread.currentThread().setName(String.format("brute-%s-%s",ip, password));
         AuthStateStore auth = new AuthStateStore();
         try {
             String credentials = Objects.nonNull(password)
