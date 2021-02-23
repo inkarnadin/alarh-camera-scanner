@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## UNREALISED
 
+### Added
+- Add sub thread name.
+
 ### Changed
 - Replace Future tasks to CompletableFuture tasks for the brute scanner.
 - Returns NOT_AVAILABLE if host is not available.
