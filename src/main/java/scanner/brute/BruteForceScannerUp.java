@@ -13,19 +13,18 @@ public class BruteForceScannerUp {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(20);
 
-    private final static long FIRST_EXEC_TIMEOUT = 5000L;
     private final static long EXEC_TIMEOUT = 2500L;
     private final static long TERMINATION_TIMEOUT = 500L;
 
     @SneakyThrows
     public void brute(String ip, String[] passwords) {
-        if (checkEmptyCredentials()) {
+        if (execEmptyBruteTask(ip)) {
             log.info("{} => {}", ip, "auth not required");
             return;
         }
 
         List<CompletableFuture<AuthStateStore>> futures = Arrays.stream(passwords)
-                .map(f -> getBrute(ip, f))
+                .map(f -> createBruteTask(ip, f))
                 .collect(Collectors.toList());
 
         List<AuthStateStore> results = futures.stream()
@@ -46,27 +45,20 @@ public class BruteForceScannerUp {
         }
     }
 
-    private CompletableFuture<AuthStateStore> getBrute(String ip, String password) {
-        CompletableFuture<AuthStateStore> result = new CompletableFuture<AuthStateStore>()
+    private CompletableFuture<AuthStateStore> createBruteTask(String ip, String password) {
+        CompletableFuture<AuthStateStore> future = new CompletableFuture<AuthStateStore>()
                 .completeOnTimeout(AuthStateStore.BAD_AUTH, EXEC_TIMEOUT, TimeUnit.MILLISECONDS);
-
-        CompletableFuture.runAsync(() -> {
-            try {
-                BruteForceExecutor executor = new BruteForceExecutor(ip, password);
-                AuthStateStore auth = executor.call();
-                result.complete(auth);
-            } catch (Exception e) {
-                AuthStateStore auth = new AuthStateStore();
-                result.complete(auth);
-            }
-        }, executorService);
-        return result;
+        CompletableFuture.runAsync(() -> new BruteTask(future, ip, password), executorService);
+        return future;
     }
 
-    private boolean checkEmptyCredentials() {
-        AuthStateStore result = new CompletableFuture<AuthStateStore>()
-                .completeOnTimeout(AuthStateStore.BAD_AUTH, FIRST_EXEC_TIMEOUT, TimeUnit.MILLISECONDS)
-                .join();
+    private boolean execEmptyBruteTask(String ip) {
+        CompletableFuture<AuthStateStore> future = new CompletableFuture<AuthStateStore>()
+                .completeOnTimeout(AuthStateStore.BAD_AUTH, EXEC_TIMEOUT, TimeUnit.MILLISECONDS);
+
+        CompletableFuture.runAsync(() -> new BruteTask(future, ip, null), executorService);
+
+        AuthStateStore result = future.join();
         return (result.getState() == AuthState.AUTH);
     }
 

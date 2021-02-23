@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.net.InetSocketAddress;
+import java.net.NoRouteToHostException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.Objects;
@@ -51,7 +52,7 @@ public class RTSPConnector {
                     : statusLine.contains(session_not_found) || statusLine.contains(bad_request) || statusLine.contains(invalid_param) || statusLine.equals(unknown)
                         ? AuthState.UNKNOWN_STATE
                         : AuthState.NOT_AUTH;
-        } catch (SocketTimeoutException ste) {
+        } catch (SocketTimeoutException | NoRouteToHostException ste) {
             throw new CancellationException();
         } catch (IOException xep) {
             log.warn("{}: {}/{}", ip, xep.getMessage(), statusLine);
