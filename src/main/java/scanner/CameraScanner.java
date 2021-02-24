@@ -18,7 +18,7 @@ public class CameraScanner {
     private final Queue<InetSocketAddress> addresses = new ArrayDeque<>();
     private final Converter converter = new Converter();
 
-    ExecutorService executorService = Executors.newFixedThreadPool(100);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(Integer.parseInt(Preferences.get("-t")));
 
     private final static long TERMINATION_TIMEOUT = 500L;
 

@@ -5,7 +5,6 @@ import scanner.brute.BruteForceScanner;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 public class Main {
@@ -13,18 +12,19 @@ public class Main {
     public static void main(String[] args) {
         Preferences.configure(args);
 
-        Optional<String> source = Preferences.get("-source");
-        Optional<String> passwords = Preferences.get("-passwords");
+        String source = Preferences.get("-source");
+        String passwords = Preferences.get("-passwords");
 
         if (source.isEmpty()) {
             log.error("source cannot be empty!");
             System.exit(0);
         }
 
-        List<String> listSources = SourceReader.readSource(source.get());
-        List<String> listPasswords = passwords
-                .map(SourceReader::readSource)
-                .orElseGet(() -> Collections.singletonList("12345"));
+        List<String> listSources = SourceReader.readSource(source);
+        List<String> listPasswords = SourceReader.readSource(passwords);
+
+        if (listPasswords.isEmpty())
+            listPasswords.addAll(Collections.singletonList("asdf1234"));
 
         if (Preferences.check("-b")) {
             final BruteForceScanner bruteForceScanner = new BruteForceScanner();
@@ -39,7 +39,7 @@ public class Main {
             System.out.println("It can be very long. Please, wait...");
             System.out.println("See log files for more information: /logs/out.log");
 
-            int port = Integer.parseInt(Preferences.get("-p").orElse("554"));
+            int port = Integer.parseInt(Preferences.get("-p"));
 
             final CameraScanner scanner = new CameraScanner();
             int c = 0;

@@ -9,10 +9,12 @@ Simple camera vulnerability scanner.
 ### Scanning cameras
 * Command `java -jar port-scanner.jar -c source:/home/user/range.txt`. 
 * Add `-p` flag for set scanning port (554 by default).
+* Add `-t` flag for set parallel threads (25 by default).
 
 ### BruteForce
 * Command `java -jar port-scanner.jar -b source:/home/user/list.txt passwords:/home/user/pass.txt`.
 * Add `-uc` flag - checking even socket connection unstable.
+* Add `-t` flag for set parallel threads (25 by default).
 
 ### Results
 * All results will be saved in the path `/results/...`.

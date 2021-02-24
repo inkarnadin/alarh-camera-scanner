@@ -3,8 +3,6 @@ package scanner;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Optional;
-
 public class PreferencesTest {
 
     static {
@@ -22,12 +20,11 @@ public class PreferencesTest {
 
     @Test
     public void testGetPreferences() {
-        Optional<String> sources = Preferences.get("-source");
-        Assert.assertEquals(Optional.of("list.txt"), sources);
+        String sources = Preferences.get("-source");
+        Assert.assertEquals("list.txt", sources);
 
-        Optional<String> passwords = Preferences.get("-passwords");
-        Assert.assertEquals(Optional.empty(), passwords);
+        String passwords = Preferences.get("-passwords");
+        Assert.assertNull(passwords);
     }
-
 
 }

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class BruteForceScanner {
 
-    private final ExecutorService executorService = Executors.newFixedThreadPool(20);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(Integer.parseInt(Preferences.get("-t")));
 
     private final static long EXEC_TIMEOUT = 5000L;
     private final static long TERMINATION_TIMEOUT = 500L;

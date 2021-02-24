@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Add sub thread name.
 - Add Context for every brute address. It contains info about properly path of checking.
 - Add flag `-uc`. If toggle it checked even connection unstable which returns errors.
+- Add flag `-t` for changing count of active threads.
 
 ### Changed
 - Replace Future tasks to CompletableFuture tasks for the brute scanner.
