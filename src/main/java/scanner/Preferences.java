@@ -2,6 +2,11 @@ package scanner;
 
 import java.util.*;
 
+/**
+ * Global settings class.
+ *
+ * @author inkarnadin
+ */
 public class Preferences {
 
     private static final Map<String, String> prefs = new HashMap<>();

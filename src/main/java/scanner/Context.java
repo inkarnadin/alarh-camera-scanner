@@ -20,10 +20,23 @@ public class Context {
 
     private static final Map<String, RTSPMode> storage = new HashMap<>();
 
+    /**
+     * Set certain for given IP address. For one IP address must be only one active mode.
+     * It override previous value.
+     *
+     * @param ip target IP address.
+     * @param mode current active mode.
+     */
     public static void set(String ip, RTSPMode mode) {
         storage.put(ip, mode);
     }
 
+    /**
+     * Getting current RTSP mode for certain IP.
+     *
+     * @param ip certain IP address.
+     * @return active RTSP mode.
+     */
     public static RTSPMode get(String ip) {
         return storage.getOrDefault(ip, RTSPMode.ORTHODOX);
     }

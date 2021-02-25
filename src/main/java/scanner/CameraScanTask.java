@@ -9,6 +9,11 @@ import java.net.Socket;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Scan port subtask class.
+ *
+ * @author inkarnadin
+ */
 @RequiredArgsConstructor
 @Slf4j
 public class CameraScanTask implements Runnable {
@@ -19,6 +24,9 @@ public class CameraScanTask implements Runnable {
     private final CompletableFuture<Optional<String>> future;
     private final InetSocketAddress address;
 
+    /**
+     * Start checking certain IP address.
+     */
     @Override
     public void run() {
         Thread.currentThread().setName(String.format("brute-%s", address));
