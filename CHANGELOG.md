@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 - Add Context for every brute address. It contains info about properly path of checking.
 - Add flag `-uc`. If toggle it checked even connection unstable which returns errors.
 - Add flag `-t` for changing count of active threads.
-- Add flag `-a` for set limit reconnection socket in failure case.
+- Add flag `-a` flag to set the socket reconnection limit on failure.
 - Add brute force `javadoc`.
 
 ### Changed
