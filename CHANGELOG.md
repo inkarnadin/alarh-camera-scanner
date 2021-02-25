@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## UNREALISED
 
+## [0.1.0] - 26-02-2021
+
 ### Added
 - Add sub thread name.
 - Add Context for every brute address. It contains info about properly path of checking.
