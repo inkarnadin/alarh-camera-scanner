@@ -1,12 +1,12 @@
 package scanner.brute;
 
 import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.Context;
 import scanner.Preferences;
 
 import java.io.*;
+import java.net.SocketException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 /**
  * RTSP request sending class.
- * Only supports describe method sufficient to iterate over.
+ * Only supports DESCRIBE method sufficient to iterate over.
  *
  * @author inkarnadin
  */
@@ -46,10 +46,10 @@ public class RTSPRequestSender implements Closeable {
      * Wrapper for create socket connection.
      * Try until the connection is established or attempts are terminated.
      *
-     * @param ip - target IP address
+     * @param ip target IP address.
+     * @throws SocketException if connection failed.
      */
-    @SneakyThrows
-    public void connect(String ip) {
+    public void connect(String ip) throws SocketException {
         this.ip = ip;
         int repeatCount = Integer.parseInt(Preferences.get("-a"));
         connector = new SocketConnector(ip, port);
@@ -62,7 +62,9 @@ public class RTSPRequestSender implements Closeable {
             if (connector.isConnected())
                 return;
         } while (repeatCount > 0);
+
         log.warn("socket connection failed (attempts ended)");
+        throw new SocketException();
     }
 
     /**
@@ -76,8 +78,8 @@ public class RTSPRequestSender implements Closeable {
     /**
      * Method of auth attempt via RTSP describe.
      *
-     * @param credentials - login and password pair, ex. admin:12345
-     * @return - auth status
+     * @param credentials Login and password pair, ex. admin:12345.
+     * @return Authentication status.
      */
     public AuthState describe(String credentials) {
         try {
