@@ -28,8 +28,8 @@ public class BruteForceScanner {
     /**
      * Start brute certain address by prepared range passwords list.
      *
-     * @param ip Target
-     * @param passwords Passwords array
+     * @param ip target IP address.
+     * @param passwords passwords array.
      */
     @SneakyThrows
     public void brute(String ip, String[] passwords) {

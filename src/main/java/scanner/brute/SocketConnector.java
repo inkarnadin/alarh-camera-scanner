@@ -37,7 +37,7 @@ public class SocketConnector {
     /**
      * Get connection status.
      *
-     * @return True if connection is live.
+     * @return true if connection is live.
      */
     public boolean isConnected() {
         return socket.isConnected();
@@ -55,7 +55,7 @@ public class SocketConnector {
     /**
      * Intercept the input stream.
      *
-     * @return Socket input stream.
+     * @return socket input stream.
      */
     @SneakyThrows
     public BufferedReader input() {
@@ -65,7 +65,7 @@ public class SocketConnector {
     /**
      * Intercept the output stream.
      *
-     * @return Socket output stream.
+     * @return socket output stream.
      */
     @SneakyThrows
     public BufferedWriter output() {

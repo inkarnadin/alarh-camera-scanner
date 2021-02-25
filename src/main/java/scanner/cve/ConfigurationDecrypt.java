@@ -14,20 +14,24 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * Decrypt camera configuration file through AES with static key and parse potential credentials.
+ *
+ * @author inkarnadin
+ */
 public class ConfigurationDecrypt {
 
     /**
-     * <p>Decrypt HikVision configuration file through AES with static key. Similar console command:</br>
+     * <p>Decrypt configuration file through AES with static key. Similar console command:</br>
      *
      * <pre>
      * openssl enc -d -in configurationFile -out output -aes-128-ecb -K 279977f62f6cfd2d91cd75b889ce0c9a
      * </pre>
      *
      * <p>Let's decrypt the content using the XOR command.
-     * <p>Parse all words from result and get potential login and password values.
      *
-     * @param inputStream - input byte array
-     * @return - login & password values. If not found - return all valid words
+     * @param inputStream input byte array
+     * @return union login & password values. If not found - return all valid words
      */
     @SneakyThrows
     public static String decrypt(InputStream inputStream) {
@@ -56,6 +60,12 @@ public class ConfigurationDecrypt {
         }
     }
 
+    /**
+     * Parses the converted string and gets the potential credentials.
+     *
+     * @param input transformation config file.
+     * @return finding potential credentials.
+     */
     public static String parse(String input) {
         Pattern ptn = Pattern.compile("[\\w$&+,:;=?@#.*]+");
         Matcher matcher = ptn.matcher(input);

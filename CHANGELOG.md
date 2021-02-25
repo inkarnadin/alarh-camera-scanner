@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## UNREALISED
 
+### Fixed
+- No longer tries to send a message if the socket connection failed.
+- Minor corrections of `javadoc`. 
+
 ## [0.1.0] - 26-02-2021
 
 ### Added

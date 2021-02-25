@@ -8,6 +8,11 @@ import scanner.http.HttpClient;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Basic CVE scanner.
+ *
+ * @author inkarnadin
+ */
 @Slf4j
 public class CVEScanner {
 
@@ -16,6 +21,11 @@ public class CVEScanner {
 
     private static final HttpClient client = new HttpClient();
 
+    /**
+     * Checks target address for vulnerability to CVE-2013-4975.
+     *
+     * @param ip target IP address.
+     */
     public static void scanning(String ip) {
         try (Response response = client.execute(String.format(CVE_2013_4975, ip))) {
             ResponseBody responseBody = response.body();

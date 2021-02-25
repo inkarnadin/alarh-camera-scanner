@@ -27,7 +27,7 @@ public class AuthContainer {
     /**
      * Return all success auth results.
      *
-     * @return List of successfully verified passwords
+     * @return list of successfully verified passwords
      */
     public List<String> getOnlyAuth() {
         return auth.entrySet().stream()
