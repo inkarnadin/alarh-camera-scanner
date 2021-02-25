@@ -5,70 +5,66 @@ import lombok.extern.slf4j.Slf4j;
 import scanner.Context;
 import scanner.Preferences;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.*;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class BruteForceScanner {
 
-    private final ExecutorService executorService = Executors.newFixedThreadPool(Integer.parseInt(Preferences.get("-t")));
+    private final static long termination_timeout = 1000L;
 
-    private final static long EXEC_TIMEOUT = 5000L;
-    private final static long TERMINATION_TIMEOUT = 500L;
+    private final static int countThreads = Integer.parseInt(Preferences.get("-t"));
+    private final ExecutorService executorService = Executors.newFixedThreadPool(countThreads);
 
     @SneakyThrows
     public void brute(String ip, String[] passwords) {
-        switch (execEmptyBruteTask(ip)) {
-            case AUTH:
-                log.info("{} => {}", ip, "auth not required");
-                return;
-            case NOT_AVAILABLE:
-                if (!Preferences.check("-uc"))
-                    return;
-            default:
-                break;
-        }
+        if (isEmptyBruteTask(ip))
+            return;
 
-        List<CompletableFuture<AuthStateStore>> futures = Arrays.stream(passwords)
-                .map(f -> createBruteTask(ip, f))
-                .collect(Collectors.toList());
+        int threshold = (countThreads - (passwords.length % countThreads) + passwords.length) / countThreads;
+        List<CompletableFuture<AuthContainer>> futures = new ArrayList<>();
+        for (int j = 0; j < passwords.length; j += threshold)
+            futures.add(createBruteTask(ip, Arrays.copyOfRange(passwords, j, Math.min(j + threshold, passwords.length))));
 
-        List<AuthStateStore> results = futures.stream()
+        List<String> results = futures.stream()
                 .map(CompletableFuture::join)
+                .filter(i -> i.getIp().equals(ip))
+                .flatMap(x -> x.getOnlyAuth().stream())
                 .collect(Collectors.toList());
+        int size = results.size();
 
-        List<AuthStateStore> authList = results.stream()
-                .filter(AuthStateStore::isAuth)
-                .collect(Collectors.toList());
-        int size = authList.size();
-
-        if (size > 0) {
+        if (size > 0)
             log.info("{} => {}", ip, (size == 1)
-                    ? authList.get(0).getCredentials().orElse("auth not required")
+                    ? results.get(0)
                     : "auth not required");
 
-            executorService.awaitTermination(TERMINATION_TIMEOUT, TimeUnit.MILLISECONDS);
-        }
+        executorService.awaitTermination(termination_timeout, TimeUnit.MILLISECONDS);
     }
 
-    private CompletableFuture<AuthStateStore> createBruteTask(String ip, String password) {
-        CompletableFuture<AuthStateStore> future = new CompletableFuture<AuthStateStore>()
-                .completeOnTimeout(AuthStateStore.BAD_AUTH, EXEC_TIMEOUT, TimeUnit.MILLISECONDS);
-        CompletableFuture.runAsync(() -> new BruteTask(future, ip, password).run(), executorService);
+    private CompletableFuture<AuthContainer> createBruteTask(String ip, String[] passwords) {
+        CompletableFuture<AuthContainer> future = new CompletableFuture<>();
+        CompletableFuture.runAsync(() -> new BruteTask(future, ip, passwords).run(), executorService);
         return future;
     }
 
-    private AuthState execEmptyBruteTask(String ip) {
-        CompletableFuture<AuthStateStore> future = new CompletableFuture<AuthStateStore>()
-                .completeOnTimeout(AuthStateStore.BAD_AUTH, EXEC_TIMEOUT, TimeUnit.MILLISECONDS);
-
+    private boolean isEmptyBruteTask(String ip) {
         Context.set(ip, RTSPMode.ORTHODOX);
-        CompletableFuture.runAsync(() -> new BruteTask(future, ip, null).run(), executorService);
+        CompletableFuture<AuthContainer> bruteTask = createBruteTask(ip, new String[] { null });
+        AuthContainer result = bruteTask.join();
 
-        AuthStateStore result = future.join();
-        return result.getState();
+        switch (result.getFirst()) {
+            case AUTH:
+                log.info("{} => {}", ip, "auth not required");
+                return true;
+            case NOT_AVAILABLE:
+                return !Preferences.check("-uc");
+            default:
+                return false;
+        }
     }
 
 }

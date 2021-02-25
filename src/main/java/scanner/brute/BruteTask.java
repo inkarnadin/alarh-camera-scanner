@@ -3,34 +3,36 @@ package scanner.brute;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadLocalRandom;
 
 @RequiredArgsConstructor
 public class BruteTask implements Runnable {
 
     private final static String defaultLogin = "admin";
 
-    private final CompletableFuture<AuthStateStore> future;
+    private final CompletableFuture<AuthContainer> future;
     private final String ip;
-    private final String password;
+    private final String[] passwords;
 
+    @Override
     public void run() {
-        Thread.currentThread().setName(String.format("brute-%s-%s", ip, password));
-        AuthStateStore auth = new AuthStateStore();
-        try {
-            String credentials = Objects.nonNull(password)
-                    ? String.format("%s:%s", defaultLogin, password)
-                    : "";
-            AuthState state = RTSPConnector.describe(ip, credentials);
-            auth.setState(state);
-            auth.setCredentials(auth.isAuth()
-                    ? Optional.of(credentials)
-                    : Optional.empty());
+        int num = ThreadLocalRandom.current().nextInt(0, 10);
+
+        Thread.currentThread().setName(String.format("brute-%s-%s...-%s", ip, passwords[0], num));
+        AuthContainer auth = new AuthContainer(ip);
+
+        try (RTSPRequestSender sender = new RTSPRequestSender()) {
+            sender.connect(ip);
+            for (String password : passwords) {
+                String credentials = Objects.nonNull(password)
+                        ? String.format("%s:%s", defaultLogin, password)
+                        : null;
+                auth.put(credentials, sender.describe(credentials));
+            }
             future.complete(auth);
-        } catch (Exception e) {
+        } catch (Exception xep) {
             future.complete(auth);
         }
     }
-
 }
