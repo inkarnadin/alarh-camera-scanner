@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## UNREALISED
 
+### Added
+- Add missing `javadoc`.
+
 ### Fixed
 - No longer tries to send a message if the socket connection failed.
 - Minor corrections of `javadoc`. 
