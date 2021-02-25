@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Add flag `-uc`. If toggle it checked even connection unstable which returns errors.
 - Add flag `-t` for changing count of active threads.
 - Add flag `-a` for set limit reconnection socket in failure case.
+- Add brute force `javadoc`.
 
 ### Changed
 - The brute force attack mechanism has been updated. Now you do not need to specify many threads, the enumeration occurs through `n` 

@@ -6,6 +6,11 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+/**
+ * Wrapper for socket management.
+ *
+ * @author inkarnadin
+ */
 public class SocketConnector {
 
     private final static int interrupted_timeout = 2000;
@@ -22,7 +27,7 @@ public class SocketConnector {
     /**
      * Open socket connection with certain timeouts.
      *
-     * @throws IOException - throws if problem with connection
+     * @throws IOException if problem with connection.
      */
     public void open() throws IOException {
         socket.setSoTimeout(interrupted_timeout);
@@ -32,7 +37,7 @@ public class SocketConnector {
     /**
      * Get connection status.
      *
-     * @return true if connection is live
+     * @return True if connection is live.
      */
     public boolean isConnected() {
         return socket.isConnected();
@@ -50,7 +55,7 @@ public class SocketConnector {
     /**
      * Intercept the input stream.
      *
-     * @return - socket input stream
+     * @return Socket input stream.
      */
     @SneakyThrows
     public BufferedReader input() {
@@ -60,7 +65,7 @@ public class SocketConnector {
     /**
      * Intercept the output stream.
      *
-     * @return - socket output stream
+     * @return Socket output stream.
      */
     @SneakyThrows
     public BufferedWriter output() {

@@ -13,6 +13,8 @@ import java.util.Map;
  * Its value is determined on the first request with empty credentials. This avoids unnecessary checks on the wrong path.
  *
  * ORTHODOX mode will return by default.
+ *
+ * @author inkarnadin
  */
 public class Context {
 

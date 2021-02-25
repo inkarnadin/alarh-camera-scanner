@@ -8,6 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Auth result store.
+ *
+ * @author inkarnadin
+ */
 @RequiredArgsConstructor
 public class AuthContainer {
 
@@ -19,6 +24,11 @@ public class AuthContainer {
         auth.put(password, state);
     }
 
+    /**
+     * Return all success auth results.
+     *
+     * @return List of successfully verified passwords
+     */
     public List<String> getOnlyAuth() {
         return auth.entrySet().stream()
                 .filter(x -> x.getValue() == AuthState.AUTH)
@@ -26,7 +36,12 @@ public class AuthContainer {
                 .collect(Collectors.toList());
     }
 
-    public AuthState getFirst() {
+    /**
+     * Return state of empty credentials auth.
+     *
+     * @return The first successfully result - empty credentials. If missing returns {@link AuthState#NOT_AVAILABLE} state.
+     */
+    public AuthState getEmptyCredentialsAuth() {
         return auth.getOrDefault(null, AuthState.NOT_AVAILABLE);
     }
 

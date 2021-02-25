@@ -6,12 +6,19 @@ import lombok.extern.slf4j.Slf4j;
 import scanner.Context;
 import scanner.Preferences;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.Closeable;
-import java.io.IOException;
+import java.io.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+/**
+ * RTSP request sending class.
+ * Only supports describe method sufficient to iterate over.
+ *
+ * @author inkarnadin
+ */
 @Slf4j
 @NoArgsConstructor
 public class RTSPRequestSender implements Closeable {
@@ -24,14 +31,16 @@ public class RTSPRequestSender implements Closeable {
     private SocketConnector connector;
     private String ip;
 
-    private final static String success = "RTSP/1.0 200 OK";
-    private final static String failure = "RTSP/1.0 401"; // Unauthorized, Authorization Required
-    private final static String not_found = "RTSP/1.0 404"; // Error, Not Found
-    private final static String session_not_found = "RTSP/1.0 454"; // Session Not Found
-    private final static String bad_request = "RTSP/1.0 400"; // Bad request
-    private final static String invalid_param = "RTSP/1.0 451"; // Parameter Not Understood, Invalid Parameter
-    private final static String internal = "RTSP/1.0 500"; // Internal Server Error
-    private final static String unknown = "RTSP/1.0 418"; // null
+    private final static int successCode = 200;
+    private final static int failureCode = 401;
+    private final static int notFoundCode = 404;
+    private final static int sessionNotFoundCode = 454;
+    private final static int badRequestCode = 400;
+    private final static int invalidParamCode = 451;
+    private final static int unknownStateCode = 418;
+
+    private final static List<Integer> badCodes = Arrays.asList(notFoundCode, badRequestCode, invalidParamCode, unknownStateCode, sessionNotFoundCode);
+    private final static List<Integer> goodCodes = Arrays.asList(successCode, failureCode);
 
     /**
      * Wrapper for create socket connection.
@@ -72,18 +81,20 @@ public class RTSPRequestSender implements Closeable {
      */
     public AuthState describe(String credentials) {
         try {
-            String statusLine = send(request(ip, credentials));
+            int statusCode = send(request(ip, credentials));
 
-            if (statusLine.contains(not_found) || statusLine.contains(internal) || statusLine.contains(unknown)) {
+            if (badCodes.contains(statusCode)) {
                 Context.set(ip, RTSPMode.SPECIAL);
-                statusLine = send(request(ip, credentials));
+                statusCode = send(request(ip, credentials));
+                if (!goodCodes.contains(statusCode)) {
+                    log.warn("skipped wrong request");
+                    return AuthState.UNKNOWN_STATE;
+                }
             }
 
-            return statusLine.equals(success)
+            return statusCode == successCode
                     ? AuthState.AUTH
-                    : statusLine.contains(session_not_found) || statusLine.contains(bad_request) || statusLine.contains(invalid_param) || statusLine.equals(unknown)
-                        ? AuthState.UNKNOWN_STATE
-                        : AuthState.NOT_AUTH;
+                    : AuthState.NOT_AUTH;
         } catch (IOException xep) {
             log.warn("ip not available");
             return AuthState.NOT_AVAILABLE;
@@ -109,7 +120,7 @@ public class RTSPRequestSender implements Closeable {
                     .toString();
     }
 
-    private String send(String request) throws IOException {
+    private int send(String request) throws IOException {
         BufferedReader bufferedReader = connector.input();
         BufferedWriter bufferedWriter = connector.output();
 
@@ -122,7 +133,10 @@ public class RTSPRequestSender implements Closeable {
         bufferedReader.mark(0);
         bufferedReader.reset();
 
-        return Objects.nonNull(statusLine) ? statusLine : "RTSP/1.0 418 Null";
+        Matcher matcher = Pattern.compile("RTSP/1\\.0\\s(\\d{3})").matcher(statusLine);
+        return matcher.find()
+                ? Integer.parseInt(matcher.group(1))
+                : unknownStateCode;
     }
 
 }

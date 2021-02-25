@@ -12,6 +12,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+/**
+ * Brute force attack basic class.
+ *
+ * @author inkarnadin
+ */
 @Slf4j
 public class BruteForceScanner {
 
@@ -20,6 +25,12 @@ public class BruteForceScanner {
     private final static int countThreads = Integer.parseInt(Preferences.get("-t"));
     private final ExecutorService executorService = Executors.newFixedThreadPool(countThreads);
 
+    /**
+     * Start brute certain address by prepared range passwords list.
+     *
+     * @param ip Target
+     * @param passwords Passwords array
+     */
     @SneakyThrows
     public void brute(String ip, String[] passwords) {
         if (isEmptyBruteTask(ip))
@@ -56,12 +67,14 @@ public class BruteForceScanner {
         CompletableFuture<AuthContainer> bruteTask = createBruteTask(ip, new String[] { null });
         AuthContainer result = bruteTask.join();
 
-        switch (result.getFirst()) {
+        switch (result.getEmptyCredentialsAuth()) {
             case AUTH:
                 log.info("{} => {}", ip, "auth not required");
                 return true;
             case NOT_AVAILABLE:
                 return !Preferences.check("-uc");
+            case UNKNOWN_STATE:
+                return true;
             default:
                 return false;
         }

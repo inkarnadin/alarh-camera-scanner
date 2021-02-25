@@ -6,6 +6,11 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Brute force attack subtask class.
+ *
+ * @author inkarnadin
+ */
 @RequiredArgsConstructor
 public class BruteTask implements Runnable {
 
@@ -15,6 +20,9 @@ public class BruteTask implements Runnable {
     private final String ip;
     private final String[] passwords;
 
+    /**
+     * Opens a socket connection and begins iterating over the received credentials.
+     */
     @Override
     public void run() {
         int num = ThreadLocalRandom.current().nextInt(0, 10);
