@@ -12,17 +12,31 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
+/**
+ * Port scanning basic class.
+ *
+ * @author inkarnadin
+ */
 @Slf4j
 public class CameraScanner {
 
     private final Queue<InetSocketAddress> addresses = new ArrayDeque<>();
     private final Converter converter = new Converter();
 
-    private final ExecutorService executorService = Executors.newFixedThreadPool(Integer.parseInt(Preferences.get("-t")));
+    private final static int port = Integer.parseInt(Preferences.get("-p"));
+    private final static int countThreads = Integer.parseInt(Preferences.get("-t"));
+
+    private final ExecutorService executorService = Executors.newFixedThreadPool(countThreads);
 
     private final static long TERMINATION_TIMEOUT = 500L;
 
-    public int prepareSinglePortScanning(String rangeAsString, int port) {
+    /**
+     * Prepare scanning ranges.
+     *
+     * @param rangeAsString range of IPs in string view, ex. 10.20.3.0-10.20.4.255
+     * @return count IP addresses by range.
+     */
+    public int prepareSinglePortScanning(String rangeAsString) {
         IpV4Range rangeContainer = new IpV4Range(rangeAsString);
         List<IpV4Address> range = rangeContainer.range();
         for (IpV4Address address : range)
@@ -30,6 +44,9 @@ public class CameraScanner {
         return addresses.size();
     }
 
+    /**
+     * Start scanning certain address by prepared IPs ranges and settings port.
+     */
     @SneakyThrows
     public void scanning() {
         List<CompletableFuture<Optional<String>>> futures = new ArrayList<>();

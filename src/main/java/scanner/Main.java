@@ -39,14 +39,12 @@ public class Main {
             System.out.println("It can be very long. Please, wait...");
             System.out.println("See log files for more information: /logs/out.log");
 
-            int port = Integer.parseInt(Preferences.get("-p"));
-
             final CameraScanner scanner = new CameraScanner();
             int c = 0;
             int allAddresses = 0;
             for (String range : listSources) {
                 log.info("progress: {} {}/{}", range, ++c, listSources.size());
-                int count = scanner.prepareSinglePortScanning(range, port);
+                int count = scanner.prepareSinglePortScanning(range);
                 scanner.scanning();
                 allAddresses += count;
             }

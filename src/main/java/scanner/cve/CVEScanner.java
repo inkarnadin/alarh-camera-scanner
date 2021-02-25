@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
- * Basic CVE scanner.
+ * Basic CVE scanning class.
  *
  * @author inkarnadin
  */
