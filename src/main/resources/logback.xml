@@ -50,4 +50,8 @@
     <appender-ref ref="BRUTE"/>
   </logger>
 
+  <logger name="scanner.brute.BasicAuthScanner" level="info">
+    <appender-ref ref="BRUTE"/>
+  </logger>
+
 </configuration>

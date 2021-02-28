@@ -2,6 +2,7 @@ package scanner;
 
 import lombok.extern.slf4j.Slf4j;
 import scanner.brute.BruteForceScanner;
+import scanner.brute.basic.BasicAuthScanner;
 
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +36,15 @@ public class Main {
             }
         }
 
+        if (Preferences.check("-ba")) {
+            final BasicAuthScanner basicAuthScanner = new BasicAuthScanner();
+            int i = 0;
+            for (String ip : listSources) {
+                log.info("progress: {} {}/{}", ip, ++i, listSources.size());
+                basicAuthScanner.brute(ip, listPasswords.toArray(new String[0]));
+            }
+        }
+
         if (Preferences.check("-c")) {
             System.out.println("It can be very long. Please, wait...");
             System.out.println("See log files for more information: /logs/out.log");
@@ -50,6 +60,7 @@ public class Main {
             }
             log.info("addresses checked = " + allAddresses);
         }
+
         System.exit(0);
     }
 

@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## UNREALISED
 
 ### Added
+- Add BasicAuth scanner (flag `-ba`).
 - Add missing `javadoc`.
 
 ### Fixed

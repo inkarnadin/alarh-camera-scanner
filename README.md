@@ -6,15 +6,18 @@ Simple camera vulnerability scanner.
 * Realizing brute-force attack through RTSP protocol.
 
 ## Usage
-### Scanning cameras
+### Scanning
 * Command `java -jar port-scanner.jar -c source:/home/user/range.txt`. 
 * Add `-p` flag for set scanning port (554 by default).
 * Add `-t` flag for set parallel threads (25 by default).
 
-### BruteForce
+### BruteForce RTSP
 * Command `java -jar port-scanner.jar -b source:/home/user/list.txt passwords:/home/user/pass.txt`.
 * Add `-uc` flag - checking even socket connection unstable.
 * Add `-t` flag for set parallel threads (25 by default).
+
+### BruteForce Auth
+* Command `java -jar port-scanner.jar -ba source:/home/user/list.txt passwords:/home/user/pass.txt`.
 
 ### Results
 * All results will be saved in the path `/results/...`.

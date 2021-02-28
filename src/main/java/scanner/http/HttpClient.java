@@ -9,18 +9,14 @@ import java.util.concurrent.TimeUnit;
 
 public class HttpClient {
 
-    private final OkHttpClient client;
-
-    public HttpClient() {
-        client = new OkHttpClient()
-                .newBuilder()
-                .followSslRedirects(true)
-                .callTimeout(2, TimeUnit.SECONDS)
-                .build();
-    }
+    private final static OkHttpClient client = new OkHttpClient()
+            .newBuilder()
+            .followSslRedirects(true)
+            .callTimeout(2, TimeUnit.SECONDS)
+            .build();
 
     @SneakyThrows
-    public Response execute(String path) {
+    public static Response execute(String path) {
         Request request = new Request.Builder()
                 .url(path)
                 .get().build();
@@ -28,9 +24,9 @@ public class HttpClient {
     }
 
     @SneakyThrows
-    public Response execute(String path, String auth) {
+    public static Response executeBasicAuth(String path, String auth) {
         Request request = new Request.Builder()
-                .url(path)
+                .url("http://" + path)
                 .addHeader("Authorization", "Basic " + auth)
                 .get().build();
         return client.newCall(request).execute();
