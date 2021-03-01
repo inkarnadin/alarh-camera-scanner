@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.alarh</groupId>
-    <artifactId>port-scanner</artifactId>
-    <version>0.0.1</version>
+    <artifactId>camera-scanner</artifactId>
+    <version>0.1.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
