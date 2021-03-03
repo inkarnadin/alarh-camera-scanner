@@ -3,7 +3,6 @@ package scanner;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.cve.CVEScanner;
-import scanner.http.Converter;
 import scanner.http.IpV4Address;
 import scanner.http.IpV4Range;
 
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
 public class CameraScanner {
 
     private final Queue<InetSocketAddress> addresses = new ArrayDeque<>();
-    private final Converter converter = new Converter();
 
     private final static int port = Integer.parseInt(Preferences.get("-p"));
     private final static int countThreads = Integer.parseInt(Preferences.get("-t"));
@@ -40,7 +38,7 @@ public class CameraScanner {
         IpV4Range rangeContainer = new IpV4Range(rangeAsString);
         List<IpV4Address> range = rangeContainer.range();
         for (IpV4Address address : range)
-            addresses.add(converter.convert(address, port));
+            addresses.add(new InetSocketAddress(address.getIpAsString(), port));
         return addresses.size();
     }
 
