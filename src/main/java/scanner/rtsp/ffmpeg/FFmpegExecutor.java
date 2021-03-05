@@ -14,6 +14,12 @@ import static scanner.rtsp.ffmpeg.FFmpegState.BASIC;
 @Slf4j
 public class FFmpegExecutor {
 
+    /**
+     * Save one frame.
+     *
+     * @param credentials login and password or null if absent.
+     * @param ip target address.
+     */
     public static void saveFrame(String credentials, String ip) {
         try {
             CompletableFuture<FFmpegState> future = CompletableFuture.supplyAsync(new FFmpegFrameReader(ip, credentials, BASIC));
