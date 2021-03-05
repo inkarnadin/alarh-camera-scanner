@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Frame reader for saving screenshot (via FFmpeg).
@@ -25,7 +25,7 @@ public class FFmpegFrameReader implements Runnable {
     @Override
     public void run() {
         try {
-            String url = (credentials.length() > 0)
+            String url = (Objects.nonNull(credentials))
                     ? String.format("rtsp://%s@%s/Streaming/Channels/101", credentials, ip)
                     : String.format("rtsp://%s/Streaming/Channels/101", ip);
 
