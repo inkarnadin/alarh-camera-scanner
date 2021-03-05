@@ -1,6 +1,7 @@
 package scanner;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Global settings class.

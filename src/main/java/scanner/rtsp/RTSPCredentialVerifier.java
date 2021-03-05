@@ -8,10 +8,12 @@ import scanner.Preferences;
 import scanner.brute.AuthState;
 import scanner.brute.SocketConnector;
 import scanner.brute.TransportMode;
-import scanner.rtsp.*;
 import scanner.rtsp.ffmpeg.FFmpegExecutor;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.Closeable;
+import java.io.IOException;
 import java.net.SocketException;
 import java.util.Arrays;
 import java.util.List;
