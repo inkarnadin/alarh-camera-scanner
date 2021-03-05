@@ -9,18 +9,20 @@ Simple camera vulnerability scanner.
 ### Scanning
 * Command `java -jar port-scanner.jar -c source:/home/user/range.txt`. 
 * Add `-p` flag for set scanning port (554 by default).
-* Add `-t` flag for set parallel threads (25 by default).
+* Add `-t` flag for set parallel threads (10 by default).
 
 ### BruteForce RTSP
 * Command `java -jar port-scanner.jar -b source:/home/user/list.txt passwords:/home/user/pass.txt`.
-* Add `-uc` flag - checking even socket connection unstable.
-* Add `-t` flag for set parallel threads (25 by default).
+* Add `-uc` flag allows attempts to connect to untrusted hosts.
+* Add `-t` flag indicates the number of threads (10 by default).
+* Add `-screen` flag enables saving screenshots (experimental, need installed FFmpeg).
 
 ### BruteForce Auth
 * Command `java -jar port-scanner.jar -ba source:/home/user/list.txt passwords:/home/user/pass.txt`.
 
 ### Results
 * All results will be saved in the path `/results/...`.
+* All screenshots will be saved in the path `/results/screen/...`.
 * All common logs will be saved in the path `/logs/out.log`.
 
 ## Save stream

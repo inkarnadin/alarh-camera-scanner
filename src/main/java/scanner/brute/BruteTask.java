@@ -30,13 +30,13 @@ public class BruteTask implements Runnable {
         Thread.currentThread().setName(String.format("brute-%s-%s...-%s", ip, passwords[0], num));
         AuthContainer auth = new AuthContainer(ip);
 
-        try (RTSPRequestSender sender = new RTSPRequestSender()) {
+        try (RTSPCredentialVerifier sender = new RTSPCredentialVerifier()) {
             sender.connect(ip);
             for (String password : passwords) {
                 String credentials = Objects.nonNull(password)
                         ? String.format("%s:%s", defaultLogin, password)
                         : null;
-                auth.put(credentials, sender.describe(credentials));
+                auth.put(credentials, sender.check(credentials));
             }
             future.complete(auth);
         } catch (Exception xep) {

@@ -5,8 +5,10 @@ All notable changes to this project will be documented in this file.
 ## UNREALISED
 
 ### Added
-- Add BasicAuth scanner (flag `-ba`).
-- Add missing `javadoc`.
+- Added BasicAuth scanner (flag `-ba`).
+- Added missing `javadoc`.
+- Added separate parser for socket responses.
+- (*Experimental*) Added saving screenshot function.
 
 ### Fixed
 - No longer tries to send a message if the socket connection failed.
@@ -15,12 +17,12 @@ All notable changes to this project will be documented in this file.
 ## [0.1.0] - 26-02-2021
 
 ### Added
-- Add sub thread name.
-- Add Context for every brute address. It contains info about properly path of checking.
-- Add flag `-uc`. If toggle it checked even connection unstable which returns errors.
-- Add flag `-t` for changing count of active threads.
-- Add flag `-a` flag to set the socket reconnection limit on failure.
-- Add brute force `javadoc`.
+- Added sub thread name.
+- Added Context for every brute address. It contains info about properly path of checking.
+- Added flag `-uc`. If toggle it checked even connection unstable which returns errors.
+- Added flag `-t` for changing count of active threads.
+- Added flag `-a` flag to set the socket reconnection limit on failure.
+- Added brute force `javadoc`.
 
 ### Changed
 - The brute force attack mechanism has been updated. Now you do not need to specify many threads, the enumeration occurs through `n` 
@@ -46,7 +48,7 @@ dictionaries without overloading the server. It is desirable that the connection
 
 ### Added 
 - Added changelog file.
-- Add `-p` flag for input scanning port.
+- Added `-p` flag for input scanning port.
 
 ### Changed
 - Modified check algorithm brute-force checking for an empty credential.
