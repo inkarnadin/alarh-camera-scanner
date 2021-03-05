@@ -1,6 +1,7 @@
 package scanner.brute;
 
 import lombok.RequiredArgsConstructor;
+import scanner.rtsp.RTSPCredentialVerifier;
 
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
