@@ -93,7 +93,7 @@ public class RTSPCredentialVerifier implements Closeable {
                 }
             }
 
-            if (statusCode == successCode)
+            if (statusCode == successCode && Preferences.check("-screen"))
                 CompletableFuture.runAsync(() -> new FFmpegFrameReader(credentials, ip).run());
 
             return statusCode == successCode
