@@ -1,19 +1,17 @@
 package scanner.brute;
 
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.Context;
 import scanner.Preferences;
-import scanner.rtsp.FFmpegFrameReader;
-import scanner.rtsp.RTSPStateStore;
-import scanner.rtsp.RequestBuilder;
-import scanner.rtsp.ResponseHandler;
+import scanner.rtsp.*;
+import scanner.rtsp.ffmpeg.FFmpegExecutor;
 
 import java.io.*;
 import java.net.SocketException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * RTSP credential pair checking class.
@@ -79,13 +77,14 @@ public class RTSPCredentialVerifier implements Closeable {
      * @param credentials Login and password pair, ex. admin:12345.
      * @return Authentication status.
      */
+    @SneakyThrows
     public AuthState check(String credentials) {
         try {
             RequestBuilder builder = new RequestBuilder(ip, credentials);
 
             int statusCode = send(builder.describe()).getCode();
             if (badCodes.contains(statusCode)) {
-                Context.set(ip, RTSPMode.SPECIAL);
+                Context.set(ip, TransportMode.SPECIAL);
                 statusCode = send(builder.describe()).getCode();
                 if (!goodCodes.contains(statusCode)) {
                     log.warn("skipped wrong request");
@@ -94,7 +93,7 @@ public class RTSPCredentialVerifier implements Closeable {
             }
 
             if (statusCode == successCode && Preferences.check("-screen"))
-                CompletableFuture.runAsync(() -> new FFmpegFrameReader(credentials, ip).run());
+                FFmpegExecutor.saveFrame(credentials, ip);
 
             return statusCode == successCode
                     ? AuthState.AUTH

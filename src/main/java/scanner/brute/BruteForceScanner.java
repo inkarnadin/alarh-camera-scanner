@@ -63,7 +63,7 @@ public class BruteForceScanner {
     }
 
     private boolean isEmptyBruteTask(String ip) {
-        Context.set(ip, RTSPMode.ORTHODOX);
+        Context.set(ip, TransportMode.ORTHODOX);
         CompletableFuture<AuthContainer> bruteTask = createBruteTask(ip, new String[] { null });
         AuthContainer result = bruteTask.join();
 
