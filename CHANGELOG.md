@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## UNREALISED
+## UNRELEASED
 
 ### Added
 - Added BasicAuth scanner (flag `-ba`).
