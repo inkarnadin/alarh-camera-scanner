@@ -57,7 +57,7 @@ public class FFmpegFrameReader implements Supplier<FFmpegState> {
         return new ProcessBuilder()
                 .redirectErrorStream(true)
                 .command(
-                        "scanner/ffmpeg",
+                        "ffmpeg",
                         "-hide_banner",
                         "-rtsp_transport", "tcp",
                         "-i", url,
