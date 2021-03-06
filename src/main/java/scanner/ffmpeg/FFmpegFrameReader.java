@@ -1,4 +1,4 @@
-package scanner.rtsp.ffmpeg;
+package scanner.ffmpeg;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -57,7 +57,7 @@ public class FFmpegFrameReader implements Supplier<FFmpegState> {
         return new ProcessBuilder()
                 .redirectErrorStream(true)
                 .command(
-                        "ffmpeg",
+                        "scanner/ffmpeg",
                         "-hide_banner",
                         "-rtsp_transport", "tcp",
                         "-i", url,

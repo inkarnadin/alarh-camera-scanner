@@ -1,11 +1,11 @@
-package scanner.rtsp.ffmpeg;
+package scanner.ffmpeg;
 
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-import static scanner.rtsp.ffmpeg.FFmpegState.UNIVERSAL;
+import static scanner.ffmpeg.FFmpegState.UNIVERSAL;
 
 /**
  * FFmpeg manipulation control class.
@@ -24,11 +24,11 @@ public class FFmpegExecutor {
     public static void saveFrame(String credentials, String ip) {
         try {
             CompletableFuture<FFmpegState> future = CompletableFuture.supplyAsync(new FFmpegFrameReader(ip, credentials, UNIVERSAL))
-                    .orTimeout(3, TimeUnit.SECONDS);
+                    .orTimeout(5, TimeUnit.SECONDS);
             FFmpegState state = future.get();
             if (state != FFmpegState.COMPLETE)
                 CompletableFuture.supplyAsync(new FFmpegFrameReader(ip, credentials, state))
-                        .orTimeout(3, TimeUnit.SECONDS)
+                        .orTimeout(5, TimeUnit.SECONDS)
                         .get();
         } catch (Exception xep) {
             log.warn("FFmpeg executor error: {}", xep.getMessage());

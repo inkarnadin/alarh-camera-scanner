@@ -1,4 +1,4 @@
-package scanner.rtsp.ffmpeg;
+package scanner.ffmpeg;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
