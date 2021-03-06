@@ -40,7 +40,7 @@ public class FFmpegFrameReader implements Supplier<FFmpegState> {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.contains("CSeq 2 expected, 1 received"))
-                    return FFmpegState.PATH_11;
+                    return FFmpegState.SIMPLE;
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());

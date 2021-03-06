@@ -3,11 +3,16 @@ package scanner.rtsp.ffmpeg;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Basic RTSP stream path.
+ *
+ * @author inkarnadin
+ */
 @RequiredArgsConstructor
 public enum FFmpegState {
 
-    BASIC("/Streaming/Channels/101"),
-    PATH_11("/11"),
+    UNIVERSAL("/Streaming/Channels/101"),
+    SIMPLE("/11"),
     COMPLETE("");
 
     @Getter
