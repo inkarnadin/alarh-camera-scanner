@@ -1,30 +1,31 @@
-package scanner.brute;
+package scanner.rtsp;
 
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.Context;
 import scanner.Preferences;
+import scanner.brute.AuthState;
+import scanner.brute.SocketConnector;
+import scanner.brute.TransportMode;
+import scanner.ffmpeg.FFmpegExecutor;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.Closeable;
+import java.io.IOException;
 import java.net.SocketException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
- * RTSP request sending class.
- * Only supports DESCRIBE method sufficient to iterate over.
+ * RTSP credential pair checking class.
  *
  * @author inkarnadin
  */
 @Slf4j
 @NoArgsConstructor
-public class RTSPRequestSender implements Closeable {
-
-    private final static String crcl = "\r\n";
-    private final static String space = " ";
+public class RTSPCredentialVerifier implements Closeable {
 
     private final static int port = 554;
 
@@ -81,18 +82,23 @@ public class RTSPRequestSender implements Closeable {
      * @param credentials Login and password pair, ex. admin:12345.
      * @return Authentication status.
      */
-    public AuthState describe(String credentials) {
+    @SneakyThrows
+    public AuthState check(String credentials) {
         try {
-            int statusCode = send(request(ip, credentials));
+            RequestBuilder builder = new RequestBuilder(ip, credentials);
 
+            int statusCode = send(builder.describe()).getCode();
             if (badCodes.contains(statusCode)) {
-                Context.set(ip, RTSPMode.SPECIAL);
-                statusCode = send(request(ip, credentials));
+                Context.set(ip, TransportMode.SPECIAL);
+                statusCode = send(builder.describe()).getCode();
                 if (!goodCodes.contains(statusCode)) {
                     log.warn("skipped wrong request");
                     return AuthState.UNKNOWN_STATE;
                 }
             }
+
+            if (statusCode == successCode && Preferences.check("-screen"))
+                FFmpegExecutor.saveFrame(credentials, ip);
 
             return statusCode == successCode
                     ? AuthState.AUTH
@@ -103,42 +109,17 @@ public class RTSPRequestSender implements Closeable {
         }
     }
 
-    private String request(String ip, String credentials) {
-        credentials = Objects.nonNull(credentials) ? credentials + "@" : "";
-        return Context.get(ip) == RTSPMode.ORTHODOX
-                ? new StringBuilder()
-                    .append("DESCRIBE").append(space).append("rtsp://").append(credentials).append(ip).append(":").append(port)
-                    .append("/").append(space).append("RTSP/1.0").append(crcl)
-                    .append("CSeq:").append(space).append("1").append(crcl)
-                    .append("Content-Type:").append(space).append("application/sdp").append(crcl)
-                    .append(crcl)
-                    .toString()
-                : new StringBuilder()
-                    .append("DESCRIBE").append(space).append("rtsp://").append(credentials).append(ip).append(":").append(port)
-                    .append("/Streaming/Channels/101").append(space).append("RTSP/1.0").append(crcl)
-                    .append("CSeq:").append(space).append("1").append(crcl)
-                    .append("Content-Type:").append(space).append("application/sdp").append(crcl)
-                    .append(crcl)
-                    .toString();
-    }
-
-    private int send(String request) throws IOException {
+    private RTSPStateStore send(String request) throws IOException {
         BufferedReader bufferedReader = connector.input();
         BufferedWriter bufferedWriter = connector.output();
 
         bufferedWriter.write(request);
         bufferedWriter.flush();
 
-        String statusLine = bufferedReader.readLine();
-        log.debug("response => {}", statusLine);
+        RTSPStateStore store = ResponseHandler.handle(bufferedReader);
+        log.debug("response => {}", store.getStatusLine());
 
-        bufferedReader.mark(0);
-        bufferedReader.reset();
-
-        Matcher matcher = Pattern.compile("RTSP/1\\.0\\s(\\d{3})").matcher(statusLine);
-        return matcher.find()
-                ? Integer.parseInt(matcher.group(1))
-                : unknownStateCode;
+        return store;
     }
 
 }

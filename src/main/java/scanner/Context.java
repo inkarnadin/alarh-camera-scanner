@@ -1,6 +1,6 @@
 package scanner;
 
-import scanner.brute.RTSPMode;
+import scanner.brute.TransportMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public class Context {
 
-    private static final Map<String, RTSPMode> storage = new HashMap<>();
+    private static final Map<String, TransportMode> storage = new HashMap<>();
 
     /**
      * Set certain for given IP address. For one IP address must be only one active mode.
@@ -27,7 +27,7 @@ public class Context {
      * @param ip target IP address.
      * @param mode current active mode.
      */
-    public static void set(String ip, RTSPMode mode) {
+    public static void set(String ip, TransportMode mode) {
         storage.put(ip, mode);
     }
 
@@ -37,8 +37,8 @@ public class Context {
      * @param ip certain IP address.
      * @return active RTSP mode.
      */
-    public static RTSPMode get(String ip) {
-        return storage.getOrDefault(ip, RTSPMode.ORTHODOX);
+    public static TransportMode get(String ip) {
+        return storage.getOrDefault(ip, TransportMode.ORTHODOX);
     }
 
 }
