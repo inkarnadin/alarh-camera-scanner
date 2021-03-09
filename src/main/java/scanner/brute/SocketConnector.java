@@ -1,6 +1,7 @@
 package scanner.brute;
 
 import lombok.SneakyThrows;
+import scanner.Preferences;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -13,8 +14,7 @@ import java.net.Socket;
  */
 public class SocketConnector {
 
-    private final static int interrupted_timeout = 2000;
-    private final static int connection_timeout = 2000;
+    private final static int timeout = Integer.parseInt(Preferences.get("-bw"));
 
     private final Socket socket = new Socket();
 
@@ -30,8 +30,8 @@ public class SocketConnector {
      * @throws IOException if problem with connection.
      */
     public void open() throws IOException {
-        socket.setSoTimeout(interrupted_timeout);
-        socket.connect(this.address, connection_timeout);
+        socket.setSoTimeout(timeout);
+        socket.connect(this.address, timeout);
     }
 
     /**
