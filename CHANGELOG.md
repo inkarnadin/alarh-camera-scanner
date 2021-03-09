@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Added BasicAuth scanner (flag `-ba`).
 - Added missing `javadoc`.
 - Added separate parser for socket responses.
+- Added IP not available detail message.
 - (*Experimental*) Added saving screenshot function.
 
 ### Fixed
