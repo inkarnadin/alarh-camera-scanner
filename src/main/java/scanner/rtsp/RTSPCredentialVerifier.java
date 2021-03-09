@@ -104,7 +104,7 @@ public class RTSPCredentialVerifier implements Closeable {
                     ? AuthState.AUTH
                     : AuthState.NOT_AUTH;
         } catch (IOException xep) {
-            log.warn("ip not available");
+            log.warn("ip not available: {}", xep.getMessage());
             return AuthState.NOT_AVAILABLE;
         }
     }
