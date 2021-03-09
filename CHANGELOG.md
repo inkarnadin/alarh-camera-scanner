@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Added BasicAuth scanner (flag `-ba`).
-- Added flag `-bw` brute waiting timeout.
+- Added flag `-bw` brute waiting timeout (sec, default 2).
 - Added missing `javadoc`.
 - Added separate parser for socket responses.
 - Added IP not available detail message.
