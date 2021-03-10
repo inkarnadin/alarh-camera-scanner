@@ -10,11 +10,12 @@ All notable changes to this project will be documented in this file.
 - Added missing `javadoc`.
 - Added separate parser for socket responses.
 - Added IP not available detail message.
+- Added cyrillic support for CVE parse password.
 - (*Experimental*) Added saving screenshot function.
 
 ### Fixed
 - No longer tries to send a message if the socket connection failed.
-- Minor corrections of `javadoc`. 
+- Minor corrections of `javadoc`.
 
 ## [0.1.0] - 26-02-2021
 

@@ -67,7 +67,7 @@ public class ConfigurationDecrypt {
      * @return finding potential credentials.
      */
     public static String parse(String input) {
-        Pattern ptn = Pattern.compile("[\\w$&+,:;=?@#.*]+");
+        Pattern ptn = Pattern.compile("[\\wА-яЁё$&+,:;=?@#.*]+");
         Matcher matcher = ptn.matcher(input);
 
         List<String> list = new ArrayList<>();
