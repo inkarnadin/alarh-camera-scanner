@@ -19,6 +19,11 @@ public class Preferences {
         prefs.put("-bw", "2");
     }
 
+    /**
+     * Save all start arguments as application preferences.
+     *
+     * @param values list of preferences.
+     */
     public static void configure(String[] values) {
         for (String value : values) {
             String[] params = value.split(":");
@@ -26,10 +31,22 @@ public class Preferences {
         }
     }
 
+    /**
+     * Check some property value.
+     *
+     * @param param property name.
+     * @return property state - true/false.
+     */
     public static Boolean check(String param) {
         return Boolean.parseBoolean(prefs.get(param));
     }
 
+    /**
+     * Get some property value.
+     *
+     * @param param property name.
+     * @return property value. If specified, then it, otherwise by default.
+     */
     public static String get(String param) {
         return prefs.get(param);
     }
