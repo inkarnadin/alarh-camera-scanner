@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## UNRELEASED
 
+## [0.2.0] - 17-03-2021
+
 ### Added
 - Added BasicAuth scanner (flag `-ba`).
 - Added flag `-bw` brute waiting timeout (sec, default 2).
