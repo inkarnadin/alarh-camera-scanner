@@ -34,7 +34,7 @@ public class CVEScanner {
                     try (Response configFile = HttpClient.execute(String.format(CONFIG_FILE, ip))) {
                         ResponseBody configFileBody = configFile.body();
                         credentials = (Objects.nonNull(configFileBody))
-                                ? " " + ConfigurationDecrypt.decrypt(configFileBody.byteStream())
+                                ? " => " + ConfigurationDecrypt.decrypt(configFileBody.byteStream())
                                 : "";
                     }
                     log.info(ip + credentials);

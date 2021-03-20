@@ -73,7 +73,7 @@ public class ConfigurationDecrypt {
         List<String> list = new ArrayList<>();
         List<String> allValues = new ArrayList<>();
 
-        String[] logins = new String[] { "admin", "admln" };
+        String[] logins = new String[] { "admin" };
 
         boolean isLogin = false;
         String activeLogin = "admin";
@@ -83,7 +83,7 @@ public class ConfigurationDecrypt {
             allValues.add(val);
 
             if (isLogin) {
-                list.add(String.format("%s: %s", activeLogin, val));
+                list.add(String.format("%s:%s", activeLogin, val));
                 isLogin = false;
             }
             if (Arrays.asList(logins).contains(val)) {
@@ -103,7 +103,7 @@ public class ConfigurationDecrypt {
                     .collect(Collectors.toList())
                     .toString();
 
-        return list.toString();
+        return list.get(0);
     }
 
     @SneakyThrows
