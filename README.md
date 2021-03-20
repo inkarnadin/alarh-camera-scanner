@@ -1,9 +1,15 @@
 # Camera Scanner
 
+## Description
+
 Simple camera vulnerability scanner.
 * Finds video streams on open port 554 over specified IP ranges;
 * Checks and finds passwords using CVE-2013-4975;
 * Realizing brute-force attack through RTSP protocol.
+
+## Build
+
+Execute command `mvn package`.
 
 ## Usage
 ### Scanning
