@@ -6,7 +6,7 @@ import scanner.http.HttpClient;
 
 import java.io.InputStream;
 
-public class ConfigurationDecryptTest {
+public class ConfigurationDecryptFuncTest {
 
     @Test
     @Ignore
