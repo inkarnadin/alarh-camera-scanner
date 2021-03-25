@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum FFmpegState {
 
-    UNIVERSAL("/Streaming/Channels/101"),
     SIMPLE("/11"),
     COMPLETE("");
 
