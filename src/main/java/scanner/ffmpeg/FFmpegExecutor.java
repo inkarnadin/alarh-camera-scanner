@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-import static scanner.ffmpeg.FFmpegState.UNIVERSAL;
+import static scanner.ffmpeg.FFmpegState.SIMPLE;
 
 /**
  * FFmpeg manipulation control class.
@@ -23,7 +23,7 @@ public class FFmpegExecutor {
      */
     public static void saveFrame(String credentials, String ip) {
         try {
-            CompletableFuture<FFmpegState> future = CompletableFuture.supplyAsync(new FFmpegFrameReader(ip, credentials, UNIVERSAL))
+            CompletableFuture<FFmpegState> future = CompletableFuture.supplyAsync(new FFmpegFrameReader(ip, credentials, SIMPLE))
                     .orTimeout(5, TimeUnit.SECONDS);
             FFmpegState state = future.get();
             if (state != FFmpegState.COMPLETE)

@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -34,18 +32,8 @@ public class FFmpegFrameReader implements Supplier<FFmpegState> {
     @SneakyThrows
     public FFmpegState get() {
         ProcessBuilder builder = createProcess();
-        Process process = builder.start();
+        builder.start();
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.contains("CSeq 2 expected, 1 received"))
-                    return FFmpegState.SIMPLE;
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            log.warn("FFmpeg error! {}", e.getMessage());
-        }
         return FFmpegState.COMPLETE;
     }
 
