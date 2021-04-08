@@ -7,7 +7,10 @@ All notable changes to this project will be documented in this file.
 ## [0.2.0] - 17-03-2021
 
 ### Changed
-- Change CVE credentials output format.
+- Changed CVE credentials output format.
+
+### Removed
+- Removed excess log message about checking camera address.
 
 ### Added
 - Added BasicAuth scanner (flag `-ba`).
