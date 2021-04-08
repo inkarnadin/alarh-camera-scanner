@@ -4,14 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## UNRELEASED
 
-## [0.2.0] - 17-03-2021
-
 ### Changed
-- Changed CVE credentials output format.
 - Updated special RTSP path as 11 instead Streaming/Channels/101.
 
 ### Removed
 - Removed excess log message about checking camera address.
+
+## [0.2.0] - 17-03-2021
+
+### Changed
+- Changed CVE credentials output format.
 
 ### Added
 - Added BasicAuth scanner (flag `-ba`).
