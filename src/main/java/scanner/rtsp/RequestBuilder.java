@@ -40,7 +40,7 @@ public class RequestBuilder {
                     .toString()
                 : new StringBuilder()
                     .append(RTSPMethod.DESCRIBE).append(space).append("rtsp://").append(credentials).append(ip).append(":").append(port)
-                    .append("/Streaming/Channels/101").append(space).append("RTSP/1.0").append(crcl)
+                    .append("/11").append(space).append("RTSP/1.0").append(crcl)
                     .append("CSeq:").append(space).append("1").append(crcl)
                     .append("Content-Type:").append(space).append("application/sdp").append(crcl)
                     .append(crcl)
