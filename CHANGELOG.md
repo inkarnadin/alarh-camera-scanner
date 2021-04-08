@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Changed CVE credentials output format.
+- Updated special RTSP path as 11 instead Streaming/Channels/101.
 
 ### Removed
 - Removed excess log message about checking camera address.
