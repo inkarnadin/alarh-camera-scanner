@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file.
 - Added missing `javadoc`.
 - Added separate parser for socket responses.
 - Added IP not available detail message.
-- Added cyrillic support for CVE parse password.
+- Added cyrillic support for CVE parse a password.
 - (*Experimental*) Added saving screenshot function.
 
 ### Fixed
