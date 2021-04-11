@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Decrypt camera configuration file through AES with static key and parse potential credentials.
@@ -96,12 +95,9 @@ public class ConfigurationDecrypt {
         if (list.size() > 1)
             list.remove("admin: 12345");
 
-        // if login and pass not found - return all found values
+        // if login and pass not found - return message
         if (list.isEmpty())
-            return allValues.stream()
-                    .distinct()
-                    .collect(Collectors.toList())
-                    .toString();
+            return "password not found";
 
         return list.get(0);
     }
