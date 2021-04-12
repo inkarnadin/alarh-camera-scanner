@@ -29,7 +29,7 @@ public class CameraScanTask implements Runnable {
      */
     @Override
     public void run() {
-        Thread.currentThread().setName(String.format("brute-%s", address));
+        Thread.currentThread().setName(String.format("scan-%s", address));
         try (Socket socket = new Socket()) {
             socket.connect(address, timeout);
             socket.close();
