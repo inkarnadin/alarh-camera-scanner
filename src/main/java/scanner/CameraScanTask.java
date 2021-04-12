@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 public class CameraScanTask implements Runnable {
 
     @Setter
-    private int timeout = 500;
+    private int timeout = 1000;
 
     private final CompletableFuture<Optional<String>> future;
     private final InetSocketAddress address;
