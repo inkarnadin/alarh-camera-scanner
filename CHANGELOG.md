@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Changed CVE credentials output format.
+- Increased socket connection timeout.
 
 ### Added
 - Added BasicAuth scanner (flag `-ba`).
