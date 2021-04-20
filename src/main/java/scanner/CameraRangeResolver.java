@@ -8,6 +8,11 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Camera range resolve class.
+ *
+ * @author inkarnadin
+ */
 public class CameraRangeResolver {
 
     @Getter
