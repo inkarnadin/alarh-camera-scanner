@@ -2,6 +2,11 @@ package scanner.http;
 
 import lombok.Data;
 
+/**
+ * IpV4 container class.
+ *
+ * @author inkarnadin
+ */
 @Data
 public class IpV4Address {
 
@@ -29,6 +34,11 @@ public class IpV4Address {
         this.part4 = part4;
 
         ipAsString = part1 + "." + part2 + "." + part3 + "." + part4;
+    }
+
+    @Override
+    public String toString() {
+        return part1 + "." + part2 + "." + part3 + "." + part4;
     }
 
 }

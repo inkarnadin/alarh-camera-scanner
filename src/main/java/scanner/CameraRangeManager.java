@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Camera range resolve class.
+ * Range manager class.
  *
  * @author inkarnadin
  */
-public class CameraRangeResolver {
+public class CameraRangeManager {
 
     @Getter
     private static final List<List<InetSocketAddress>> addressCache = new ArrayList<>();
@@ -28,9 +28,9 @@ public class CameraRangeResolver {
     public static void prepareSinglePortScanning(String rangeAsString) {
         List<InetSocketAddress> addresses = new ArrayList<>();
         IpV4Range rangeContainer = new IpV4Range(rangeAsString);
-        List<IpV4Address> range = rangeContainer.range();
+        List<IpV4Address> range = rangeContainer.disassembleRange();
         for (IpV4Address address : range)
-            addresses.add(new InetSocketAddress(address.getIpAsString(), port));
+            addresses.add(new InetSocketAddress(address.toString(), port));
         addressCache.add(addresses);
     }
 

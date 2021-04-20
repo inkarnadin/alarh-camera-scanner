@@ -51,11 +51,11 @@ public class Main {
             System.out.println("See log files for more information: /logs/out.log");
 
             for (String range : listSources)
-                CameraRangeResolver.prepareSinglePortScanning(range);
-            log.info("addresses will be checked = " + CameraRangeResolver.count());
+                CameraRangeManager.prepareSinglePortScanning(range);
+            log.info("addresses will be checked = " + CameraRangeManager.count());
 
             final CameraScanner scanner = new CameraScanner();
-            final List<List<InetSocketAddress>> addressCache = CameraRangeResolver.getAddressCache();
+            final List<List<InetSocketAddress>> addressCache = CameraRangeManager.getAddressCache();
 
             int c = 0;
             for (List<InetSocketAddress> listOfIpAddresses : addressCache) {
