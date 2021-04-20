@@ -10,8 +10,8 @@ public class CameraScannerTest {
         String range = "188.202.63.40-188.202.63.47";
 
         CameraScanner scanner = new CameraScanner();
-        int count = scanner.prepareSinglePortScanning(range);
-        Assert.assertEquals(8, count);
+        CameraRangeResolver.prepareSinglePortScanning(range);
+        Assert.assertEquals(8, CameraRangeResolver.count());
     }
 
 }

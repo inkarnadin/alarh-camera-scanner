@@ -24,7 +24,6 @@ public class CameraScanner {
 
     private final Queue<InetSocketAddress> addresses = new ArrayDeque<>();
 
-    private final static int port = Integer.parseInt(Preferences.get("-p"));
     private final static int countThreads = Integer.parseInt(Preferences.get("-t"));
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(countThreads);
@@ -32,24 +31,12 @@ public class CameraScanner {
     private final static long TERMINATION_TIMEOUT = 500L;
 
     /**
-     * Prepare scanning ranges.
-     *
-     * @param rangeAsString range of IPs in string view, ex. 10.20.3.0-10.20.4.255
-     * @return count IP addresses by range.
-     */
-    public int prepareSinglePortScanning(String rangeAsString) {
-        IpV4Range rangeContainer = new IpV4Range(rangeAsString);
-        List<IpV4Address> range = rangeContainer.range();
-        for (IpV4Address address : range)
-            addresses.add(new InetSocketAddress(address.getIpAsString(), port));
-        return addresses.size();
-    }
-
-    /**
      * Start scanning certain address by prepared IPs ranges and settings port.
      */
     @SneakyThrows
-    public void scanning() {
+    public void scanning(List<InetSocketAddress> list) {
+        addresses.addAll(list);
+
         List<CompletableFuture<Optional<String>>> futures = new ArrayList<>();
         while (!addresses.isEmpty())
             futures.add(createCameraScanTask(addresses.poll()));
