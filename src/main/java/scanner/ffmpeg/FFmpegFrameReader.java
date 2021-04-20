@@ -2,7 +2,6 @@ package scanner.ffmpeg;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -15,7 +14,6 @@ import java.util.function.Supplier;
  *
  * @author inkarnadin
  */
-@Slf4j
 @RequiredArgsConstructor
 public class FFmpegFrameReader implements Supplier<FFmpegState> {
 
