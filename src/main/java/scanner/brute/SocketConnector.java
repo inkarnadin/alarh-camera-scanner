@@ -14,7 +14,7 @@ import java.net.Socket;
  */
 public class SocketConnector {
 
-    private final static int timeout = Integer.parseInt(Preferences.get("-bw")) * 1000;
+    private final static int timeout = Integer.parseInt(Preferences.get("-bw"));
 
     private final Socket socket = new Socket();
 

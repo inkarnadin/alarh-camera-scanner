@@ -18,8 +18,7 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class CameraScanTask implements Runnable {
 
-    @Setter
-    private int timeout = 200;
+    private final static int timeout = Integer.parseInt(Preferences.get("-w"));
 
     private final CompletableFuture<Optional<String>> future;
     private final InetSocketAddress address;

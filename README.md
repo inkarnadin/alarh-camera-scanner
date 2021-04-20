@@ -16,12 +16,14 @@ Execute command `mvn package`.
 * Command `java -jar port-scanner.jar -c source:/home/user/range.txt`. 
 * Add `-p` flag for set scanning port (554 by default).
 * Add `-t` flag for set parallel threads (10 by default).
+* Add `-w` flag for set time of waiting host response (200 ms by default).
 
 ### BruteForce RTSP
 * Command `java -jar port-scanner.jar -b source:/home/user/list.txt passwords:/home/user/pass.txt`.
 * Add `-uc` flag allows attempts to connect to untrusted hosts.
 * Add `-t` flag indicates the number of threads (10 by default).
 * Add `-screen` flag enables saving screenshots (experimental, need installed FFmpeg).
+* Add `-w` flag for set brute waiting timeout (2000 ms by default).
 
 ### BruteForce Auth
 * Command `java -jar port-scanner.jar -ba source:/home/user/list.txt passwords:/home/user/pass.txt`.
