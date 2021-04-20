@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - If CVE credentials not found return certain message instead list of all found words.
 - Changed the mechanism of counting all IP addresses that will be scanned.
 - Changed unit for timeout flags - `-w` and `-bw` for milliseconds instead second.
+- Changed default active threads value for 20 instead 10.
 
 ### Fixed
 - Fixed some log naming typos.
