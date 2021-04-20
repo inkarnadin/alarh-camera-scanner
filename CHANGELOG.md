@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated special RTSP path as 11 instead Streaming/Channels/101.
 - If CVE credentials not found return certain message instead list of all found words.
+- Changed the mechanism of counting all IP addresses that will be scanned.
 
 ### Fixed
 - Fixed some log naming typos.
@@ -16,7 +17,6 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Changed CVE credentials output format.
 - Increased socket connection timeout.
-- Changed the mechanism of counting all IP addresses that will be scanned.
 
 ### Added
 - Added BasicAuth scanner (flag `-ba`).
