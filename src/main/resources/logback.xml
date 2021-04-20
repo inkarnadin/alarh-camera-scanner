@@ -2,8 +2,16 @@
   <property name="LOG_DIR" value="logs"/>
   <property name="RESULT_DIR" value="result"/>
 
-  <appender name="COMMON_FILE" class="ch.qos.logback.core.FileAppender">
+  <appender name="COMMON" class="ch.qos.logback.core.FileAppender">
     <file>${LOG_DIR}/out.log</file>
+    <append>false</append>
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FFMPEG" class="ch.qos.logback.core.FileAppender">
+    <file>${LOG_DIR}/ffmpeg.log</file>
     <append>false</append>
     <encoder>
       <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
@@ -18,7 +26,7 @@
     </encoder>
   </appender>
 
-  <appender name="CVE_FILE" class="ch.qos.logback.core.FileAppender">
+  <appender name="CVE" class="ch.qos.logback.core.FileAppender">
     <file>${RESULT_DIR}/cve-2013-4975.log</file>
     <append>true</append>
     <encoder>
@@ -35,7 +43,11 @@
   </appender>
 
   <root name="scanner.Main" level="debug">
-    <appender-ref ref="COMMON_FILE"/>
+    <appender-ref ref="COMMON"/>
+  </root>
+
+  <root name="scanner.ffmpeg.FFmpegExecutor" level="info">
+    <appender-ref ref="FFMPEG"/>
   </root>
 
   <logger name="scanner.CameraScanner" level="info">
@@ -43,7 +55,7 @@
   </logger>
 
   <logger name="scanner.cve.CVEScanner" level="info">
-    <appender-ref ref="CVE_FILE"/>
+    <appender-ref ref="CVE"/>
   </logger>
 
   <logger name="scanner.brute.BruteForceScanner" level="info">

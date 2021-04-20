@@ -32,6 +32,7 @@ Execute command `mvn package`.
 * All results will be saved in the path `/results/...`.
 * All screenshots will be saved in the path `/results/screen/...`.
 * All common logs will be saved in the path `/logs/out.log`.
+* All ffmpeg logs will be saved in the path `/logs/ffmpeg.log`.
 
 ## Save stream
 * An example command for receiving a video stream:
