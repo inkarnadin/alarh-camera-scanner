@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,7 +34,7 @@ public class ConfigurationDecrypt {
      * @return union login & password values. If not found - return all valid words
      */
     @SneakyThrows
-    public static String decrypt(InputStream inputStream) {
+    public static Optional<String> decrypt(InputStream inputStream) {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, generateKey());
@@ -65,7 +66,7 @@ public class ConfigurationDecrypt {
      * @param input transformation config file.
      * @return finding potential credentials.
      */
-    public static String parse(String input) {
+    public static Optional<String> parse(String input) {
         Pattern ptn = Pattern.compile("[\\wА-яЁё$&+,:;=?@#.*]+");
         Matcher matcher = ptn.matcher(input);
 
@@ -97,9 +98,9 @@ public class ConfigurationDecrypt {
 
         // if login and pass not found - return message
         if (list.isEmpty())
-            return "password not found";
+            return Optional.empty();
 
-        return list.get(0);
+        return Optional.of(list.get(0));
     }
 
     @SneakyThrows

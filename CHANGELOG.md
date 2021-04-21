@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Added flag `-w` waiting timeout host response (sec, default 200 ms).
 - Added support for large ip ranges.
-- Added ffmpeg log dedicate file.
+- Added ffmpeg log.
 
 ### Changed
 - Updated special RTSP path as 11 instead Streaming/Channels/101.
@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Changed unit for timeout flags - `-w` and `-bw` for milliseconds instead second.
 - Changed default active threads value for 20 instead 10.
 - Optimized ip range working.
+- CVE log as part of brute log now.
 
 ### Fixed
 - Fixed some log naming typos.

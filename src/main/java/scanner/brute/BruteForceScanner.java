@@ -4,10 +4,13 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.Context;
 import scanner.Preferences;
+import scanner.cve.CVEScanner;
+import scanner.ffmpeg.FFmpegExecutor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,6 +38,13 @@ public class BruteForceScanner {
      */
     @SneakyThrows
     public void brute(String ip, String[] passwords) {
+        Optional<String> cveResult = CVEScanner.scanning(ip);
+        if (cveResult.isPresent()) {
+            log.info("{} => {}", ip, cveResult.get());
+            FFmpegExecutor.saveFrame(cveResult.get(), ip);
+            return;
+        }
+
         if (isEmptyBruteTask(ip))
             return;
 

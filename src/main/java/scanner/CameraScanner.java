@@ -48,8 +48,7 @@ public class CameraScanner {
         results.stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .peek(log::info)
-                .forEach(CVEScanner::scanning);
+                .forEach(log::info);
         executorService.awaitTermination(TERMINATION_TIMEOUT, TimeUnit.MILLISECONDS);
     }
 

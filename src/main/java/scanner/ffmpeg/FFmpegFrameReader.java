@@ -2,7 +2,10 @@ package scanner.ffmpeg;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -14,6 +17,7 @@ import java.util.function.Supplier;
  *
  * @author inkarnadin
  */
+@Slf4j
 @RequiredArgsConstructor
 public class FFmpegFrameReader implements Supplier<FFmpegState> {
 
@@ -30,8 +34,14 @@ public class FFmpegFrameReader implements Supplier<FFmpegState> {
     @SneakyThrows
     public FFmpegState get() {
         ProcessBuilder builder = createProcess();
-        builder.start();
+        Process process = builder.start();
 
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                log.info(line);
+            }
+        }
         return FFmpegState.COMPLETE;
     }
 
