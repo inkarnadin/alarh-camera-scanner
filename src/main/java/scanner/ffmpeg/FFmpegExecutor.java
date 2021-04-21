@@ -31,7 +31,7 @@ public class FFmpegExecutor {
                         .orTimeout(5, TimeUnit.SECONDS)
                         .get();
         } catch (Exception xep) {
-            log.warn("FFmpeg executor error: {}", xep.getMessage());
+            log.warn("FFmpeg executor error: {} {}", ip, xep.getMessage());
         }
     }
 
