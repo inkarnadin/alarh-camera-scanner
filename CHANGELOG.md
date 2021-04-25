@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Added flag `-w` waiting timeout host response (sec, default 200 ms).
 - Added support for large ip ranges.
 - Added ffmpeg log.
+- Added simple statistic info about ffmpeg frame saving.
 
 ### Changed
 - Updated special RTSP path as 11 instead Streaming/Channels/101.
