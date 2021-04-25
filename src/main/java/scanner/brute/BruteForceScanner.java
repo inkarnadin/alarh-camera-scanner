@@ -41,7 +41,8 @@ public class BruteForceScanner {
         Optional<String> cveResult = CVEScanner.scanning(ip);
         if (cveResult.isPresent()) {
             log.info("{} => {}", ip, cveResult.get());
-            FFmpegExecutor.saveFrame(cveResult.get(), ip);
+            if (Preferences.check("-screen"))
+                new FFmpegExecutor().saveFrame(cveResult.get(), ip);
             return;
         }
 

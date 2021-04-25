@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.Objects;
+import java.util.concurrent.*;
 import java.util.function.Supplier;
 
 /**
@@ -19,30 +18,35 @@ import java.util.function.Supplier;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class FFmpegFrameReader implements Supplier<FFmpegState> {
+public class FFmpegFrameSaver implements Supplier<Process> {
+
+    private final static int defaultTimeout = 15;
 
     private final String ip;
     private final String credentials;
     private final FFmpegState state;
 
     /**
-     * Save frame as JPG image.
+     * Save frame as JPG image. Kill ffmpeg process if run out of time.
      *
-     * @return true if complete without specified errors, else - false.
+     * @return state of subtask
      */
-    @Override
     @SneakyThrows
-    public FFmpegState get() {
+    public Process get() {
         ProcessBuilder builder = createProcess();
         Process process = builder.start();
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                log.info(line);
-            }
-        }
-        return FFmpegState.COMPLETE;
+        Thread.currentThread().setName(String.format("ffmpeg-%s-%s...-%s", ip, credentials, process.pid()));
+        log.info("==========================");
+
+        CompletableFuture.runAsync(() -> new FFmpegLogReader(process).run())
+                .orTimeout(defaultTimeout, TimeUnit.SECONDS)
+                .exceptionally(throwable -> {
+                    new FFmpegProcessKiller(process).kill();
+                    return null;
+                }).get();
+
+        return process;
     }
 
     private ProcessBuilder createProcess() {

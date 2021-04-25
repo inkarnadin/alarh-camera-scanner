@@ -11,8 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum FFmpegState {
 
-    SIMPLE("/11"),
-    COMPLETE("");
+    STANDARD("/11");
 
     @Getter
     private final String path;
