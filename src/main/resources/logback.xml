@@ -42,7 +42,15 @@
     <appender-ref ref="FFMPEG"/>
   </logger>
 
-  <logger name="scanner.ffmpeg.FFmpegFrameReader" level="info">
+  <logger name="scanner.ffmpeg.FFmpegFrameSaver" level="info">
+    <appender-ref ref="FFMPEG"/>
+  </logger>
+
+  <logger name="scanner.ffmpeg.FFmpegLogReader" level="info">
+    <appender-ref ref="FFMPEG"/>
+  </logger>
+
+  <logger name="scanner.ffmpeg.FFmpegProcessKiller" level="info">
     <appender-ref ref="FFMPEG"/>
   </logger>
 

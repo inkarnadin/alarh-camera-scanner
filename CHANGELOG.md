@@ -17,9 +17,11 @@ All notable changes to this project will be documented in this file.
 - Changed default active threads value for 20 instead 10.
 - Optimized ip range working.
 - CVE log as part of brute log now.
+- Global remake save frame via ffmpeg mechanism.
 
 ### Fixed
 - Fixed some log naming typos.
+- Fixed hanging external processes.
 
 ## [0.2.0] - 17-03-2021
 

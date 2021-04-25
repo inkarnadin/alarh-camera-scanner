@@ -98,7 +98,7 @@ public class RTSPCredentialVerifier implements Closeable {
             }
 
             if (statusCode == successCode && Preferences.check("-screen"))
-                FFmpegExecutor.saveFrame(credentials, ip);
+                new FFmpegExecutor().saveFrame(credentials, ip);
 
             return statusCode == successCode
                     ? AuthState.AUTH
