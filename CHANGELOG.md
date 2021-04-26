@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## UNRELEASED
 
 ### Added
-- Added flag `-w` waiting timeout host response (sec, default 200 ms).
+- Added flag `-w` waiting timeout host response (sec, default 500 ms).
 - Added support for large ip ranges.
 - Added ffmpeg log.
 - Added simple statistic info about ffmpeg frame saving.

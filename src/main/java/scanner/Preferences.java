@@ -17,7 +17,7 @@ public class Preferences {
         prefs.put("-t", "20");
         prefs.put("-a", "5");
         prefs.put("-bw", "2000");
-        prefs.put("-w", "200");
+        prefs.put("-w", "500");
     }
 
     /**
