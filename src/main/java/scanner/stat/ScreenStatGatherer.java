@@ -22,7 +22,8 @@ public class ScreenStatGatherer {
             WRONG_AUTH_ERROR,
             STREAM_NOT_FOUND,
             BAD_REQUEST,
-            UNEXPECTED_ERROR
+            UNEXPECTED_ERROR,
+            OTHER
     );
 
     private static final Map<ScreenStatEnum, Integer> screenStat = new HashMap<>() {{
@@ -50,7 +51,9 @@ public class ScreenStatGatherer {
 
     public static void print() {
         Integer other = screenStat.get(ALL) - screenStat.get(FAILURE) - screenStat.get(SUCCESS);
+
         screenStat.put(OTHER, other);
+        screenStat.computeIfPresent(FAILURE, (x, y) -> y + other);
 
         System.out.println(screenStat);
     }
