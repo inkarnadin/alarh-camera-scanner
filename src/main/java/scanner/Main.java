@@ -3,6 +3,7 @@ package scanner;
 import lombok.extern.slf4j.Slf4j;
 import scanner.brute.BruteForceScanner;
 import scanner.brute.basic.BasicAuthScanner;
+import scanner.stat.ReportPrinter;
 import scanner.stat.ScreenStatGatherer;
 
 import java.net.InetSocketAddress;
@@ -65,7 +66,7 @@ public class Main {
             }
         }
 
-        ScreenStatGatherer.print();
+        ReportPrinter.print();
         System.exit(0);
     }
 
