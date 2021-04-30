@@ -9,9 +9,10 @@ import lombok.RequiredArgsConstructor;
  * @author inkarnadin
  */
 @RequiredArgsConstructor
-public enum FFmpegState {
+public enum FFmpegPath {
 
-    STANDARD("/11");
+    STANDARD("/11"),
+    BASE("");
 
     @Getter
     private final String path;

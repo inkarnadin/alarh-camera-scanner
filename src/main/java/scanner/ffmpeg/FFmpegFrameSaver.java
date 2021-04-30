@@ -24,7 +24,7 @@ public class FFmpegFrameSaver implements Supplier<Process> {
 
     private final String ip;
     private final String credentials;
-    private final FFmpegState state;
+    private final FFmpegPath state;
 
     /**
      * Save frame as JPG image. Kill ffmpeg process if run out of time.
@@ -39,7 +39,7 @@ public class FFmpegFrameSaver implements Supplier<Process> {
         Thread.currentThread().setName(String.format("ffmpeg-%s-%s...-%s", ip, credentials, process.pid()));
         log.info("==========================");
 
-        CompletableFuture.runAsync(() -> new FFmpegLogReader(process).run())
+        CompletableFuture.runAsync(() -> new FFmpegLogReader(process, ip, credentials).run())
                 .orTimeout(defaultTimeout, TimeUnit.SECONDS)
                 .exceptionally(throwable -> {
                     new FFmpegProcessKiller(process).kill();

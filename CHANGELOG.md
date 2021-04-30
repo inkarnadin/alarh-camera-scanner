@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Added support for large ip ranges.
 - Added ffmpeg log.
 - Added statistic info about ffmpeg frame saving.
+- Analyze ffmpeg log and re-run some problems target.
 
 ### Changed
 - Updated special RTSP path as 11 instead Streaming/Channels/101.

@@ -19,6 +19,8 @@ import java.io.InputStreamReader;
 public class FFmpegLogReader implements Runnable {
 
     private final Process process;
+    private final String ip;
+    private final String credentials;
 
     /**
      * Read FFmpeg console output.
@@ -27,12 +29,12 @@ public class FFmpegLogReader implements Runnable {
     public void run() {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
             String line;
-            StringBuilder builder = new StringBuilder();
+            StringBuilder output = new StringBuilder();
             while ((line = br.readLine()) != null) {
                 log.info(line);
-                builder.append(line);
+                output.append(line);
             }
-            ScreenStatGatherer.gather(builder.toString());
+            FFmpegInspector.inspect(output.toString(), ip, credentials);
         } catch (IOException e) {
             ScreenStatGatherer.increment(ScreenStatEnum.UNEXPECTED_ERROR);
             log.warn("Read buffer error: pid = {}, message = {}", process.pid(), e.getMessage());
