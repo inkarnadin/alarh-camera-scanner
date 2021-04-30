@@ -15,10 +15,14 @@ public class ProblemHolder {
     @Getter
     private static final Set<ProblemTarget<?>> store = new HashSet<>();
 
+    /**
+     * Save problem target to store.
+     *
+     * @param target ip
+     * @return {@code true} if saved success
+     */
     public static boolean save(ProblemTarget<?> target) {
         return store.add(target);
     }
-
-
 
 }
