@@ -28,10 +28,10 @@ public class FFmpegInspector {
      * @param credentials target login and password
      */
     public static void inspect(String source, String ip, String credentials) {
-        checkError(source).ifPresent(x -> resolve(x, ip, credentials));
+        checkError(source).ifPresent(x -> process(x, ip, credentials));
     }
 
-    private static void resolve(ScreenStatEnum item, String ip, String credentials) {
+    private static void process(ScreenStatEnum item, String ip, String credentials) {
         boolean result;
         switch (item) {
             case STREAM_NOT_FOUND:
