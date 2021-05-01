@@ -1,5 +1,6 @@
 package scanner.analyze;
 
+import lombok.extern.slf4j.Slf4j;
 import scanner.ffmpeg.FFmpegExecutor;
 import scanner.ffmpeg.FFmpegPath;
 
@@ -10,6 +11,7 @@ import java.util.Set;
  *
  * @author inkarnadin
  */
+@Slf4j
 public class Resolver {
 
     /**
@@ -17,13 +19,17 @@ public class Resolver {
      */
     @SuppressWarnings({"rawtypes"})
     public static void run() {
-        Set<ProblemTarget<?>> localStore = ProblemHolder.getStore();
-        for (ProblemTarget target : localStore) {
-            Resolve value = target.getResolve();
-            if (value instanceof PathResolve)
-                new FFmpegExecutor().saveFrame(target.getCredentials(), target.getIp(), ((PathResolve) value).resolve());
-            if (value instanceof AuthResolve)
-                new FFmpegExecutor().saveFrame(((AuthResolve) value).resolve(), target.getIp(), FFmpegPath.STANDARD);
+        try {
+            Set<ProblemTarget<?>> localStore = ProblemHolder.getStore();
+            for (ProblemTarget target : localStore) {
+                Resolve value = target.getResolve();
+                if (value instanceof PathResolve)
+                    new FFmpegExecutor().saveFrame(target.getCredentials(), target.getIp(), ((PathResolve) value).resolve());
+                if (value instanceof AuthResolve)
+                    new FFmpegExecutor().saveFrame(((AuthResolve) value).resolve(), target.getIp(), FFmpegPath.STANDARD);
+            }
+        } catch (Exception xep) {
+            log.warn("Error during resolve problem addresses: {}", xep.getMessage());
         }
     }
 
