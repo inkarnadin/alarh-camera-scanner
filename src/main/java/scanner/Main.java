@@ -62,7 +62,7 @@ public class Main {
 
             int c = 0;
             for (List<InetSocketAddress> listOfIpAddresses : addressCache) {
-                log.info("progress: {} {}/{}", listOfIpAddresses.get(0), ++c, addressCache.size());
+                log.info("progress: ({}) {}/{}", listOfIpAddresses.get(0), ++c, addressCache.size());
                 scanner.scanning(listOfIpAddresses);
             }
         }
