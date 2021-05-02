@@ -12,7 +12,7 @@ import java.util.Set;
  * @author inkarnadin
  */
 @Slf4j
-public class Resolver {
+public class ProblemResolver {
 
     /**
      * Rerun problem target which was saved in {@code ProblemHolder} class.
