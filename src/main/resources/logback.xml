@@ -62,11 +62,11 @@
     <appender-ref ref="FFMPEG"/>
   </logger>
 
-  <logger name="scanner.stat.ReportPrinter" level="info">
+  <logger name="scanner.XReportRunner" level="info">
     <appender-ref ref="REPORT"/>
   </logger>
 
-  <logger name="scanner.CameraScanner" level="info">
+  <logger name="scanner.scan.CameraScanner" level="info">
     <appender-ref ref="CAMERA"/>
   </logger>
 

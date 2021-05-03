@@ -1,6 +1,5 @@
 package scanner.rtsp;
 
-import scanner.Context;
 import scanner.brute.TransportMode;
 
 import java.util.Objects;
@@ -30,7 +29,7 @@ public class RequestBuilder {
      * @return request body.
      */
     public String describe() {
-        return Context.get(ip) == TransportMode.ORTHODOX
+        return RTSPContext.get(ip) == TransportMode.ORTHODOX
                 ? new StringBuilder()
                     .append(RTSPMethod.DESCRIBE).append(space).append("rtsp://").append(credentials).append(ip).append(":").append(port)
                     .append("/").append(space).append("RTSP/1.0").append(crcl)

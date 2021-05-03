@@ -1,10 +1,8 @@
-package scanner;
+package scanner.scan;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import scanner.cve.CVEScanner;
-import scanner.http.IpV4Address;
-import scanner.http.IpV4Range;
+import scanner.Preferences;
 
 import java.net.InetSocketAddress;
 import java.util.*;

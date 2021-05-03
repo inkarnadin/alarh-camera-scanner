@@ -1,6 +1,7 @@
-package scanner;
+package scanner.scan;
 
 import lombok.Getter;
+import scanner.Preferences;
 import scanner.http.IpV4Address;
 import scanner.http.IpV4Range;
 
@@ -13,7 +14,7 @@ import java.util.List;
  *
  * @author inkarnadin
  */
-public class CameraRangeManager {
+public class CameraScanRangeManager {
 
     @Getter
     private static final List<List<InetSocketAddress>> addressCache = new ArrayList<>();

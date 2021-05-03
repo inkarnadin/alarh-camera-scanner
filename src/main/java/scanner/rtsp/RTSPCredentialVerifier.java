@@ -3,7 +3,6 @@ package scanner.rtsp;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import scanner.Context;
 import scanner.Preferences;
 import scanner.brute.AuthState;
 import scanner.brute.SocketConnector;
@@ -89,7 +88,7 @@ public class RTSPCredentialVerifier implements Closeable {
 
             int statusCode = send(builder.describe()).getCode();
             if (badCodes.contains(statusCode)) {
-                Context.set(ip, TransportMode.SPECIAL);
+                RTSPContext.set(ip, TransportMode.SPECIAL);
                 statusCode = send(builder.describe()).getCode();
                 if (!goodCodes.contains(statusCode)) {
                     log.warn("skipped wrong request");

@@ -1,4 +1,4 @@
-package scanner;
+package scanner.rtsp;
 
 import scanner.brute.TransportMode;
 
@@ -16,7 +16,7 @@ import java.util.Map;
  *
  * @author inkarnadin
  */
-public class Context {
+public class RTSPContext {
 
     private static final Map<String, TransportMode> storage = new HashMap<>();
 

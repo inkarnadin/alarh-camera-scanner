@@ -2,7 +2,7 @@ package scanner.brute;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import scanner.Context;
+import scanner.rtsp.RTSPContext;
 import scanner.Preferences;
 import scanner.cve.CVEScanner;
 import scanner.ffmpeg.FFmpegExecutor;
@@ -76,7 +76,7 @@ public class BruteForceScanner {
     }
 
     private boolean isEmptyBruteTask(String ip) {
-        Context.set(ip, TransportMode.ORTHODOX);
+        RTSPContext.set(ip, TransportMode.ORTHODOX);
         CompletableFuture<AuthContainer> bruteTask = createBruteTask(ip, new String[] { null });
         AuthContainer result = bruteTask.join();
 

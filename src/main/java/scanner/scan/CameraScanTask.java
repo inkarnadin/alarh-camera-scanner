@@ -1,8 +1,9 @@
-package scanner;
+package scanner.scan;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import scanner.Preferences;
 
 import java.net.InetSocketAddress;
 import java.net.Socket;
