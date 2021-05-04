@@ -1,9 +1,7 @@
-package scanner.scan;
+package scanner.http;
 
 import lombok.Getter;
 import scanner.Preferences;
-import scanner.http.IpV4Address;
-import scanner.http.IpV4Range;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -14,10 +12,10 @@ import java.util.List;
  *
  * @author inkarnadin
  */
-public class CameraScanRangeManager {
+public class RangeManager {
 
     @Getter
-    private static final List<List<InetSocketAddress>> addressCache = new ArrayList<>();
+    private static final List<InetSocketAddressRange> addressCache = new ArrayList<>();
 
     private final static int port = Integer.parseInt(Preferences.get("-p"));
 
@@ -27,12 +25,12 @@ public class CameraScanRangeManager {
      * @param rangeAsString range of IPs in string view, ex. 10.20.3.0-10.20.4.255
      */
     public static void prepareSinglePortScanning(String rangeAsString) {
-        List<InetSocketAddress> addresses = new ArrayList<>();
+        InetSocketAddressRange resultRange = new InetSocketAddressRange();
         IpV4Range rangeContainer = new IpV4Range(rangeAsString);
         List<IpV4Address> range = rangeContainer.disassembleRange();
         for (IpV4Address address : range)
-            addresses.add(new InetSocketAddress(address.toString(), port));
-        addressCache.add(addresses);
+            resultRange.add(new InetSocketAddress(address.toString(), port));
+        addressCache.add(resultRange);
     }
 
     /**
@@ -42,7 +40,7 @@ public class CameraScanRangeManager {
      */
     public static long count() {
         return addressCache.stream()
-                .map(List::size)
+                .map(InetSocketAddressRange::size)
                 .reduce(0, Integer::sum);
     }
 

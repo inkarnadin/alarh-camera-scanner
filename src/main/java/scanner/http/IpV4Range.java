@@ -2,6 +2,8 @@ package scanner.http;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import scanner.stat.ScanStatEnum;
+import scanner.stat.ScanStatGatherer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +72,8 @@ public class IpV4Range {
     }
 
     private List<IpV4Address> disassembleLargeRange() {
+        ScanStatGatherer.increment(ScanStatEnum.LARGE_RANGES);
+
         String rangeAsString = new StringBuilder()
                 .append(startAddress.toString())
                 .append("-")

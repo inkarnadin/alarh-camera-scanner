@@ -23,7 +23,7 @@ public class ScreenStatGatherer {
             OTHER
     );
 
-    private static final Map<ScreenStatEnum, Integer> screenStat = new HashMap<>() {{
+    private static final Map<ScreenStatEnum, Integer> screenStats = new HashMap<>() {{
         put(ALL, 0);
         put(SUCCESS, 0);
         put(FAILURE, 0);
@@ -70,20 +70,20 @@ public class ScreenStatGatherer {
      * @param item stats value
      */
     public static void increment(ScreenStatEnum item) {
-        screenStat.computeIfPresent(item, (x, y) -> ++y);
+        screenStats.computeIfPresent(item, (x, y) -> ++y);
         if (errorStateList.contains(item))
             increment(FAILURE);
     }
 
     private static String normalize(ScreenStatEnum item) {
-        return String.format("%s%s: %s", "\t".repeat(item.getOrder()), item, screenStat.get(item));
+        return String.format("%s%s: %s", "\t".repeat(item.getOrder()), item, screenStats.get(item));
     }
 
     private static void recalculate() {
-        Integer other = screenStat.get(ALL) - screenStat.get(FAILURE) - screenStat.get(SUCCESS);
+        Integer other = screenStats.get(ALL) - screenStats.get(FAILURE) - screenStats.get(SUCCESS);
 
-        screenStat.put(OTHER, other);
-        screenStat.computeIfPresent(FAILURE, (x, y) -> y + other);
+        screenStats.put(OTHER, other);
+        screenStats.computeIfPresent(FAILURE, (x, y) -> y + other);
     }
 
 }
