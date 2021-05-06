@@ -3,6 +3,7 @@ package scanner.http;
 import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import java.util.concurrent.TimeUnit;
@@ -21,7 +22,7 @@ public class HttpClient {
             .build();
 
     /**
-     * Execute usual request.
+     * Execute GET request.
      *
      * @param path url
      * @return response
@@ -35,6 +36,21 @@ public class HttpClient {
     }
 
     /**
+     * Execute POST request.
+     *
+     * @param path url
+     * @param body request body
+     * @return response
+     */
+    @SneakyThrows
+    public static Response executePost(String path, RequestBody body) {
+        Request request = new Request.Builder()
+                .url(path)
+                .post(body).build();
+        return client.newCall(request).execute();
+    }
+
+    /**
      * Execute basic auth request.
      *
      * @param path url
@@ -44,7 +60,7 @@ public class HttpClient {
     @SneakyThrows
     public static Response executeBasicAuth(String path, String auth) {
         Request request = new Request.Builder()
-                .url("http://" + path)
+                .url(path)
                 .addHeader("Authorization", "Basic " + auth)
                 .get().build();
         return client.newCall(request).execute();
