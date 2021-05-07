@@ -47,7 +47,7 @@ public class InetSocketAddressRange {
      */
     @Override
     public String toString() {
-        return String.format("%s - %s", range.getFirst().getHostString(), range.getLast().getHostString());
+        return String.format("%s-%s", range.getFirst().getHostString(), range.getLast().getHostString());
     }
 
 }
