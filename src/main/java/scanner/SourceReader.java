@@ -28,8 +28,7 @@ public class SourceReader {
             if (Objects.isNull(path))
                 return sources;
 
-            InputStream in = new FileInputStream(new File(path));
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(path))))) {
                 Stream<String> lines = reader.lines();
                 lines.forEach(sources::add);
                 lines.close();
