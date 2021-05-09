@@ -25,13 +25,6 @@ public class RangeManager {
     private static boolean isRestored = true;
 
     /**
-     * Ranges that have already been checked are skipped, that is, they were in the list before the address
-     * at which the check was interrupted and which was saved (the starting address of the range or sub-range,
-     * not the exact address of the stop).
-     *
-     * As soon as the method receives the range in which the check was paused,
-     * the restore flag is cleared and the ranges are considered active.
-     *
      * The method receives a textual representation of the range in the {@code 10.20.3.0-10.20.4.255} format,
      * which is then split into separate addresses and stored in {@code addressCache} variable as a list.
      *
@@ -40,6 +33,13 @@ public class RangeManager {
      *
      * If the first significant digit of the beginning and end of the range is different,
      * then it is skipped (too large, processing will take a long time).
+     *
+     * Ranges that have already been checked are skipped, that is, they were in the list before the address
+     * at which the check was interrupted and which was saved (the starting address of the range or sub-range,
+     * not the exact address of the stop).
+     *
+     * As soon as the method receives the range in which the check was paused,
+     * the restore flag is cleared and the ranges are considered active.
      *
      * @param rangeAsString range of IPs in string view, ex. {@code 10.20.3.0-10.20.4.255}
      */
