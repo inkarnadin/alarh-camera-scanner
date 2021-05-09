@@ -2,7 +2,6 @@ package scanner;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,7 +23,9 @@ public class Main {
         List<String> listPasswords = SourceReader.readSource(passwords);
 
         if (listPasswords.isEmpty())
-            listPasswords.addAll(Collections.singletonList("asdf1234"));
+            listPasswords.addAll(Preferences.getDefaultPasswordList());
+
+        RescueManager.restore();
 
         new XScanRunner(listSources).run();
         new XBruteRunner(listSources, listPasswords).run();

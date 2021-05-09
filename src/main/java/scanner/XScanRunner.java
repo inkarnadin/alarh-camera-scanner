@@ -25,6 +25,13 @@ public class XScanRunner implements Runner {
 
     /**
      * Execute scan ip range if set {@code -c} flag.
+     *
+     * The list of ranges passed as an argument is split into separate addresses,
+     * which are checked for the availability of the port specified in the settings (by default, 554).
+     *
+     * The check state is saved before processing each new range.
+     *
+     * During the audit, statistical data are collected, which at the end are provided in the form of a report.
      */
     @Override
     public void run() {
@@ -35,7 +42,7 @@ public class XScanRunner implements Runner {
 
                 ScanStatGatherer.set(RANGES, listSources.size());
                 for (String range : listSources)
-                    RangeManager.prepareSinglePortScanning(range);
+                    RangeManager.prepare(range);
 
                 ScanStatGatherer.set(ALL, RangeManager.count());
                 log.info("addresses will be checked = " + RangeManager.count());
@@ -45,6 +52,7 @@ public class XScanRunner implements Runner {
 
                 int c = 0;
                 for (InetSocketAddressRange range : addressCache) {
+                    RescueManager.save(range);
                     log.info("progress: ({}) {}/{}", range.toString(), ++c, addressCache.size());
                     scanner.scanning(range.list());
                 }

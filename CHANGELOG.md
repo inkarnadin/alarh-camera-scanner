@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
 - Added ffmpeg log.
 - Added statistic info about ffmpeg frame saving.
 - Added scanning statistic data to report.
-- Analyze ffmpeg log and re-run some problems target.
+- Added analyze ffmpeg log and re-run some problems target.
+- Added restore scanning if it was interrupted.
 
 ### Changed
 - Updated special RTSP path as 11 instead Streaming/Channels/101.

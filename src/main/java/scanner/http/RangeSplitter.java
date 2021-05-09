@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Getter
 @Slf4j
-public class IpV4Range {
+public class RangeSplitter {
 
     private final static int min = 0;
     private final static int max = 255;
@@ -23,7 +23,7 @@ public class IpV4Range {
     private final IpV4Address startAddress;
     private final IpV4Address endAddress;
 
-    public IpV4Range(String range) {
+    public RangeSplitter(String range) {
         String[] rangeAddresses = range.split("-");
 
         if (rangeAddresses.length == 1) {
@@ -79,7 +79,7 @@ public class IpV4Range {
                 .append("-")
                 .append(new IpV4Address(startAddress.getPart1(), startAddress.getPart2(), max, max).toString())
                 .toString();
-        List<IpV4Address> range = new ArrayList<>(new IpV4Range(rangeAsString).disassembleRange());
+        List<IpV4Address> range = new ArrayList<>(new RangeSplitter(rangeAsString).disassembleRange());
 
         for (int i = 1; i < endAddress.getPart2() - startAddress.getPart2(); i++) {
             rangeAsString = new StringBuilder()
@@ -87,7 +87,7 @@ public class IpV4Range {
                     .append("-")
                     .append(new IpV4Address(startAddress.getPart1(), startAddress.getPart2() + i, max, max).toString())
                     .toString();
-            range.addAll(new IpV4Range(rangeAsString).disassembleRange());
+            range.addAll(new RangeSplitter(rangeAsString).disassembleRange());
         }
 
         rangeAsString = new StringBuilder()
@@ -95,7 +95,7 @@ public class IpV4Range {
                 .append("-")
                 .append(endAddress.toString())
                 .toString();
-        range.addAll(new IpV4Range(rangeAsString).disassembleRange());
+        range.addAll(new RangeSplitter(rangeAsString).disassembleRange());
 
         return range;
     }

@@ -1,6 +1,10 @@
 package scanner;
 
+import lombok.Getter;
+
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,6 +23,9 @@ public class Preferences {
         prefs.put("-bw", "2000");
         prefs.put("-w", "500");
     }
+
+    @Getter
+    private static final List<String> defaultPasswordList = Collections.singletonList("asdf1234");
 
     /**
      * Save all start arguments as application preferences.

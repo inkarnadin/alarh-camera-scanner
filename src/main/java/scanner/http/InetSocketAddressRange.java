@@ -32,6 +32,15 @@ public class InetSocketAddressRange {
     }
 
     /**
+     * Get first ip in range.
+     *
+     * @return first target ip
+     */
+    public InetSocketAddress first() {
+        return range.getFirst();
+    }
+
+    /**
      * Get range ip count.
      *
      * @return count ip by range.
