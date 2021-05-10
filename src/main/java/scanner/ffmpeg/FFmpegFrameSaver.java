@@ -58,6 +58,7 @@ public class FFmpegFrameSaver implements Supplier<Process> {
                 .redirectErrorStream(true)
                 .command(
                         "ffmpeg",
+                        "-y",
                         "-hide_banner",
                         "-rtsp_transport", "tcp",
                         "-i", url,
