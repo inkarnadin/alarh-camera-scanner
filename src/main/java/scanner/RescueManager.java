@@ -6,10 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import scanner.http.InetSocketAddressRange;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.stream.Stream;
 

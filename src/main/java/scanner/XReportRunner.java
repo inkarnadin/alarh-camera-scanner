@@ -15,7 +15,6 @@ public class XReportRunner implements Runner {
     /**
      * Print report about checking.
      */
-    @Override
     public void run() {
         log.info(ScanStatGatherer.createReport());
         log.info(ScreenStatGatherer.createReport());

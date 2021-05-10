@@ -5,11 +5,4 @@ package scanner;
  *
  * @author inkarnadin
  */
-public interface Runner {
-
-    /**
-     * Execute runner logic.
-     */
-    void run();
-
-}
+public interface Runner {}

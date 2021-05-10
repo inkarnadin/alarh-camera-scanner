@@ -22,19 +22,21 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CameraScanner {
 
+    private final static long termination_timeout = 500L;
+
     private final Queue<InetSocketAddress> addresses = new ArrayDeque<>();
 
-    private final static int countThreads = Integer.parseInt(Preferences.get("-t"));
+    private final int countThreads = Integer.parseInt(Preferences.get("-t"));
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(countThreads);
 
-    private final static long TERMINATION_TIMEOUT = 500L;
-
     /**
      * Start scanning certain address by prepared IPs ranges and settings port.
+     *
+     * @return list of checked ip addresses
      */
     @SneakyThrows
-    public void scanning(List<InetSocketAddress> list) {
+    public List<String> scanning(List<InetSocketAddress> list) {
         addresses.addAll(list);
 
         List<CompletableFuture<Optional<String>>> futures = new ArrayList<>();
@@ -45,12 +47,15 @@ public class CameraScanner {
                 .map(CompletableFuture::join)
                 .collect(Collectors.toList());
 
-        results.stream()
+        List<String> targetList = results.stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .peek(x -> ScanStatGatherer.increment(ScanStatEnum.SUCCESS))
-                .forEach(log::info);
-        executorService.awaitTermination(TERMINATION_TIMEOUT, TimeUnit.MILLISECONDS);
+                .peek(log::info)
+                .collect(Collectors.toList());
+
+        executorService.awaitTermination(termination_timeout, TimeUnit.MILLISECONDS);
+        return targetList;
     }
 
     private CompletableFuture<Optional<String>> createCameraScanTask(InetSocketAddress address) {

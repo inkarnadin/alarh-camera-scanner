@@ -20,20 +20,17 @@ public class XBruteRunner implements Runner {
     private final List<String> listPasswords;
 
     /**
-     * Execute find password (brute, cve and other) if set {@code -b} flag.
+     * Execute find password (brute, cve and other).
      */
-    @Override
     public void run() {
         try {
-            if (Preferences.check("-b")) {
-                final BruteForceScanner bruteForceScanner = new BruteForceScanner();
-                int i = 0;
-                for (String ip : listSources) {
-                    log.info("progress: {} {}/{}", ip, ++i, listSources.size());
-                    bruteForceScanner.brute(ip, listPasswords.toArray(new String[0]));
-                }
-                ProblemResolver.run();
+            final BruteForceScanner bruteForceScanner = new BruteForceScanner();
+            int i = 0;
+            for (String ip : listSources) {
+                log.info("progress: {} {}/{}", ip, ++i, listSources.size());
+                bruteForceScanner.brute(ip, listPasswords.toArray(new String[0]));
             }
+            ProblemResolver.run();
         } catch (Exception xep) {
             log.error("Error during brute attack: {}", xep.getMessage());
         }

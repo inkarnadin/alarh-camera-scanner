@@ -2,10 +2,7 @@ package scanner;
 
 import lombok.Getter;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Global settings class.
@@ -24,19 +21,43 @@ public class Preferences {
         prefs.put("-w", "500");
     }
 
-    @Getter
     private static final List<String> defaultPasswordList = Collections.singletonList("asdf1234");
+
+    @Getter
+    private static List<String> rangesList;
+    @Getter
+    private static List<String> passwordsList;
 
     /**
      * Save all start arguments as application preferences.
      *
-     * @param values list of preferences.
+     * <p> Prepares a range of addresses for validation specified under the flag <b>-source</b>.
+     * If no range is specified, the application exits.
+     *
+     * <p> Prepares a list of passwords for brute force attack specified under the flag <b>-passwords</b>.
+     * If no range is specified, the application use single default password <b>asdf1234</b>.
+     *
+     * @param values input application args.
      */
     public static void configure(String[] values) {
         for (String value : values) {
             String[] params = value.split(":");
             prefs.put(params[0], params.length > 1 ? params[1] : "true");
         }
+
+        String source = Preferences.get("-source");
+        String passwords = Preferences.get("-passwords");
+
+        if (Objects.isNull(source)) {
+            System.out.println("Source list cannot be empty!");
+            System.exit(0);
+        }
+
+        rangesList = SourceReader.readSource(source);
+        passwordsList = SourceReader.readSource(passwords);
+
+        if (passwordsList.isEmpty())
+            passwordsList.addAll(defaultPasswordList);
     }
 
     /**
@@ -45,7 +66,7 @@ public class Preferences {
      * @param param property name.
      * @return property state - true/false.
      */
-    public static Boolean check(String param) {
+    public static boolean check(String param) {
         return Boolean.parseBoolean(prefs.get(param));
     }
 

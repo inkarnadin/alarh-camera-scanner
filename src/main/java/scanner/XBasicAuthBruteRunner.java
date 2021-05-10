@@ -22,7 +22,6 @@ public class XBasicAuthBruteRunner implements Runner {
     /**
      * Execute find basic auth password if set {@code -ba} flag.
      */
-    @Override
     public void run() {
         try {
             if (Preferences.check("-ba")) {

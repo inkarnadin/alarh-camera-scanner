@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
 - Added scanning statistic data to report.
 - Added analyze ffmpeg log and re-run some problems target.
 - Added restore scanning if it was interrupted.
+- Added `-nb` flag for disable brute.
+- Added `-nc` flag for disable scanning port.
 
 ### Changed
 - Updated special RTSP path as 11 instead Streaming/Channels/101.
@@ -22,10 +24,15 @@ All notable changes to this project will be documented in this file.
 - Optimized ip range working.
 - CVE log as part of brute log now.
 - Global remake save frame via ffmpeg mechanism.
+- The processing mechanism has been changed - now each range check is being for the presence of addresses, 
+and then immediately for password guessing (before, all ranges or all addresses check is being). 
 
 ### Fixed
 - Fixed some log naming typos.
 - Fixed hanging external processes.
+
+### Removed
+- Removed `-b` and `-c` flags.
 
 ## [0.2.0] - 17-03-2021
 
