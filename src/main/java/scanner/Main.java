@@ -29,9 +29,11 @@ public class Main {
         long checked = 0;
         long all = RangeManager.count();
 
-        if (Preferences.check("-nc") && !Preferences.check("-nb")) {
-            log.info("No checking start. All ip from list will be brute without check");
-            new XBruteRunner(listRanges, listPasswords).run();
+        if (Preferences.check("-nc")) {
+            if (!Preferences.check("-nb")) {
+                log.info("No checking start. All ip from list will be brute without check");
+                new XBruteRunner(listRanges, listPasswords).run();
+            }
         } else {
             ScanStatGatherer.set(ALL, RangeManager.count());
             ScanStatGatherer.set(RANGES, listRanges.size());
