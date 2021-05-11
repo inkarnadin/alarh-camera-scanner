@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import static scanner.Preferences.SOCKET_TIMEOUT;
+
 /**
  * Scan port subtask class.
  *
@@ -18,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class CameraScanTask implements Runnable {
 
-    private final static int timeout = Integer.parseInt(Preferences.get("-w"));
+    private final static int timeout = Integer.parseInt(Preferences.get(SOCKET_TIMEOUT));
 
     private final CompletableFuture<Optional<String>> future;
     private final InetSocketAddress address;

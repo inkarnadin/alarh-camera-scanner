@@ -14,6 +14,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static scanner.Preferences.THREADS;
+
 /**
  * Port scanning basic class.
  *
@@ -26,7 +28,7 @@ public class CameraScanner {
 
     private final Queue<InetSocketAddress> addresses = new ArrayDeque<>();
 
-    private final int countThreads = Integer.parseInt(Preferences.get("-t"));
+    private final int countThreads = Integer.parseInt(Preferences.get(THREADS));
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(countThreads);
 

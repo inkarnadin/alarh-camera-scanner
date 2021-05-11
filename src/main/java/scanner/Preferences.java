@@ -11,15 +11,30 @@ import java.util.*;
  */
 public class Preferences {
 
+    public static final String PORT = "-p";
+    public static final String THREADS = "-th";
+    public static final String SOCKET_WAITING = "-w";
+    public static final String SOCKET_TIMEOUT = "-t";
+    public static final String CONNECTION_ATTEMPT = "-a";
+
+    public static final String RANGE_PATH = "-source";
+    public static final String PASSWORD_PATH = "-passwords";
+
+    public static final String NO_SCANNING = "-nc";
+    public static final String NO_BRUTE = "-nb";
+    public static final String ALLOW_UNTRUSTED_HOST = "-uc";
+    public static final String ALLOW_FRAME_SAVING = "-sf";
+    public static final String ALLOW_RECOVERY_SCANNING = "-recovery_scanning";
+
     private static final Map<String, String> prefs = new HashMap<>();
 
     static {
-        prefs.put("-p", "554");
-        prefs.put("-t", "20");
-        prefs.put("-a", "5");
-        prefs.put("-bw", "2000");
-        prefs.put("-w", "500");
-        prefs.put("-recovery_scanning", "true");
+        prefs.put(PORT, "554");
+        prefs.put(THREADS, "10");
+        prefs.put(CONNECTION_ATTEMPT, "5");
+        prefs.put(SOCKET_WAITING, "2000");
+        prefs.put(SOCKET_TIMEOUT, "500");
+        prefs.put(ALLOW_RECOVERY_SCANNING, "true");
     }
 
     private static final List<String> defaultPasswordList = Collections.singletonList("asdf1234");
@@ -46,8 +61,8 @@ public class Preferences {
             prefs.put(params[0], params.length > 1 ? params[1] : "true");
         }
 
-        String source = prefs.get("-source");
-        String passwords = prefs.get("-passwords");
+        String source = prefs.get(RANGE_PATH);
+        String passwords = prefs.get(PASSWORD_PATH);
 
         if (Objects.isNull(source)) {
             System.out.println("Source list cannot be empty!");

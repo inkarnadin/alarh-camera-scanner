@@ -18,6 +18,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static scanner.Preferences.*;
+
 /**
  * Brute force attack basic class.
  *
@@ -28,7 +30,7 @@ public class BruteForceScanner {
 
     private final static long termination_timeout = 1000L;
 
-    private final static int countThreads = Integer.parseInt(Preferences.get("-t"));
+    private final static int countThreads = Integer.parseInt(Preferences.get(THREADS));
     private final ExecutorService executorService = Executors.newFixedThreadPool(countThreads);
 
     /**
@@ -42,7 +44,7 @@ public class BruteForceScanner {
         Optional<String> cveResult = CVEScanner.scanning(ip);
         if (cveResult.isPresent()) {
             log.info("{} => {}", ip, cveResult.get());
-            if (Preferences.check("-screen"))
+            if (Preferences.check(ALLOW_FRAME_SAVING))
                 new FFmpegExecutor().saveFrame(cveResult.get(), ip);
             return;
         }
@@ -81,12 +83,13 @@ public class BruteForceScanner {
         CompletableFuture<AuthContainer> bruteTask = createBruteTask(ip, new String[] { null });
         AuthContainer result = bruteTask.join();
 
+        // if true - skip further brute with credentials
         switch (result.getEmptyCredentialsAuth()) {
             case AUTH:
                 log.info("{} => {}", ip, "auth not required");
                 return true;
             case NOT_AVAILABLE:
-                return !Preferences.check("-uc");
+                return !Preferences.check(ALLOW_UNTRUSTED_HOST);
             case UNKNOWN_STATE:
                 return true;
             default:

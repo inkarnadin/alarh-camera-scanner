@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
+import static scanner.Preferences.NO_BRUTE;
+import static scanner.Preferences.NO_SCANNING;
 import static scanner.stat.ScanStatEnum.ALL;
 import static scanner.stat.ScanStatEnum.RANGES;
 
@@ -34,8 +36,8 @@ public class Main {
         long checked = 0;
         long all = RangeManager.count();
 
-        if (Preferences.check("-nc")) {
-            if (!Preferences.check("-nb")) {
+        if (Preferences.check(NO_SCANNING)) {
+            if (!Preferences.check(NO_BRUTE)) {
                 log.info("No checking start. All ip from list will be brute without check");
                 new XBruteRunner(listRanges, listPasswords).run();
             }
@@ -47,7 +49,7 @@ public class Main {
             for (IpV4AddressRange range : addressCache) {
                 List<String> targetList = new XScanRunner(range).run();
 
-                if (!Preferences.check("-nb"))
+                if (!Preferences.check(NO_BRUTE))
                     new XBruteRunner(targetList, listPasswords).run();
 
                 checked += range.size();

@@ -30,11 +30,11 @@ no brute, only scanning by default port, *range.txt* ranges list.
 
 ## Flags
 * Add `-p` flag for set scanning port (554 by default).
-* Add `-t` flag for set parallel threads (20 by default).
-* Add `-w` flag for set time of waiting host response (500 ms by default).
+* Add `-th` flag for set parallel threads (20 by default).
+* Add `-t` flag for set time of waiting host response (500 ms by default).
+* Add `-w` flag for set socket waiting timeout (2000 ms by default).
 * Add `-uc` flag allows attempts to connect to untrusted hosts.
 * Add `-screen` flag enables saving screenshots (experimental, need installed FFmpeg).
-* Add `-bw` flag for set brute waiting timeout (2000 ms by default).
 * Add `-nc` flag for start without checking port (only brute, source must be plain ip list).
 * Add `-nb` flag for disable brute.
 

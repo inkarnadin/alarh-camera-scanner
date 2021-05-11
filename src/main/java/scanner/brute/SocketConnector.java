@@ -7,6 +7,8 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+import static scanner.Preferences.SOCKET_WAITING;
+
 /**
  * Wrapper for socket management.
  *
@@ -14,7 +16,7 @@ import java.net.Socket;
  */
 public class SocketConnector {
 
-    private final static int timeout = Integer.parseInt(Preferences.get("-bw"));
+    private final static int timeout = Integer.parseInt(Preferences.get(SOCKET_WAITING));
 
     private final Socket socket = new Socket();
 

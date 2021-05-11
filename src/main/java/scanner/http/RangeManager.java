@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static scanner.Preferences.ALLOW_RECOVERY_SCANNING;
 import static scanner.recover.RecoveryElement.STOP_SCAN_POINT;
 
 /**
@@ -20,7 +21,7 @@ public class RangeManager {
     @Getter
     private static final List<IpV4AddressRange> addressCache = new ArrayList<>();
 
-    private static boolean isRecovered = Preferences.check("-recovery_scanning");
+    private static boolean isRecovered = Preferences.check(ALLOW_RECOVERY_SCANNING);
 
     private static final String stopScanAddress = RecoveryManager.getRestoredValue(STOP_SCAN_POINT);
 

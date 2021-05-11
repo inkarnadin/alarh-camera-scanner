@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static scanner.Preferences.PORT;
+
 /**
  * Standard IP addresses range container.
  *
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
  */
 public class IpV4AddressRange {
 
-    private static final int port = Integer.parseInt(Preferences.get("-p"));
+    private static final int port = Integer.parseInt(Preferences.get(PORT));
 
     private final LinkedList<IpV4Address> range = new LinkedList<>();
 

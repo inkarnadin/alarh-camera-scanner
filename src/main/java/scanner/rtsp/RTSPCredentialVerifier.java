@@ -16,6 +16,9 @@ import java.net.SocketException;
 import java.util.Arrays;
 import java.util.List;
 
+import static scanner.Preferences.CONNECTION_ATTEMPT;
+import static scanner.Preferences.PORT;
+
 /**
  * RTSP credential pair checking class.
  *
@@ -25,7 +28,7 @@ import java.util.List;
 @NoArgsConstructor
 public class RTSPCredentialVerifier implements Closeable {
 
-    private final static int port = 554;
+    private final static int port = Integer.parseInt(Preferences.get(PORT));
 
     private SocketConnector connector;
     private String ip;
@@ -50,7 +53,7 @@ public class RTSPCredentialVerifier implements Closeable {
      */
     public void connect(String ip) throws SocketException {
         this.ip = ip;
-        int repeatCount = Integer.parseInt(Preferences.get("-a"));
+        int repeatCount = Integer.parseInt(Preferences.get(CONNECTION_ATTEMPT));
         connector = new SocketConnector(ip, port);
         do {
             try {
@@ -95,7 +98,7 @@ public class RTSPCredentialVerifier implements Closeable {
                 }
             }
 
-            if (statusCode == successCode && Preferences.check("-screen"))
+            if (statusCode == successCode && Preferences.check(Preferences.ALLOW_FRAME_SAVING))
                 new FFmpegExecutor().saveFrame(credentials, ip);
 
             return statusCode == successCode

@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## UNRELEASED
 
 ### Added
-- Added flag `-w` waiting timeout host response (sec, default 500 ms).
+- Added flag `-t` waiting timeout host response (sec, default 500 ms).
 - Added support for large ip ranges.
 - Added ffmpeg log.
 - Added statistic info about ffmpeg frame saving.
@@ -16,16 +16,19 @@ All notable changes to this project will be documented in this file.
 - Added `-nc` flag for disable scanning port.
 
 ### Changed
-- Updated special RTSP path as 11 instead Streaming/Channels/101.
+- The flag `-th` instead `-t` now.
+- The flag `-sf` instead `-screen`.
+- The flag `-w` instead `-t`.
+- The flag `-bw` instead `-w`.
+- Updated special RTSP path as *11* instead *Streaming/Channels/101*.
 - If CVE credentials not found return certain message instead list of all found words.
 - Changed the mechanism of counting all IP addresses that will be scanned.
-- Changed unit for timeout flags - `-w` and `-bw` for milliseconds instead second.
-- Changed default active threads value for 20 instead 10.
+- Changed unit for timeout flags - `-t` and `-w` for milliseconds instead second.
 - Optimized ip range working.
 - CVE log as part of brute log now.
 - Global remake save frame via ffmpeg mechanism.
 - The processing mechanism has been changed - now each range check is being for the presence of addresses, 
-and then immediately for password guessing (before, all ranges or all addresses check is being). 
+and then immediately for password guessing (before, all ranges or all addresses check is being).
 
 ### Fixed
 - Fixed some log naming typos.
