@@ -34,20 +34,4 @@ public class HttpClient {
         return client.newCall(request).execute();
     }
 
-    /**
-     * Execute basic auth request.
-     *
-     * @param path url
-     * @param auth credentials as base64 string
-     * @return response
-     */
-    @SneakyThrows
-    public static Response executeBasicAuth(String path, String auth) {
-        Request request = new Request.Builder()
-                .url("http://" + path)
-                .addHeader("Authorization", "Basic " + auth)
-                .get().build();
-        return client.newCall(request).execute();
-    }
-
 }
