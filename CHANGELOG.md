@@ -32,7 +32,8 @@ and then immediately for password guessing (before, all ranges or all addresses 
 - Fixed hanging external processes.
 
 ### Removed
-- Removed `-b` and `-c` flags.
+- Removed `-b`, `-ba` and `-c` flags.
+- Removed auth basic brute.
 
 ## [0.2.0] - 17-03-2021
 
