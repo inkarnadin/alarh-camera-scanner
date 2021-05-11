@@ -6,6 +6,7 @@ import scanner.Preferences;
 import scanner.cve.CVEScanner;
 import scanner.ffmpeg.FFmpegExecutor;
 import scanner.rtsp.RTSPContext;
+import scanner.rtsp.TransportMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;

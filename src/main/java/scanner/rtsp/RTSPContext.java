@@ -1,7 +1,5 @@
 package scanner.rtsp;
 
-import scanner.brute.TransportMode;
-
 import java.util.HashMap;
 import java.util.Map;
 

@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import scanner.Preferences;
 import scanner.brute.AuthState;
 import scanner.brute.SocketConnector;
-import scanner.brute.TransportMode;
 import scanner.ffmpeg.FFmpegExecutor;
 
 import java.io.BufferedReader;

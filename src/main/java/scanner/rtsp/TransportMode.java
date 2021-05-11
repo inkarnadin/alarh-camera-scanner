@@ -1,4 +1,4 @@
-package scanner.brute;
+package scanner.rtsp;
 
 /**
  * Enum of possible RTSP request state.<br/>
