@@ -71,8 +71,6 @@ public class ConfigurationDecrypt {
         Matcher matcher = ptn.matcher(input);
 
         List<String> list = new ArrayList<>();
-        List<String> allValues = new ArrayList<>();
-
         String[] logins = new String[] { "admin" };
 
         boolean isLogin = false;
@@ -80,7 +78,6 @@ public class ConfigurationDecrypt {
 
         while (matcher.find()) {
             String val = matcher.group(0);
-            allValues.add(val);
 
             if (isLogin) {
                 list.add(String.format("%s:%s", activeLogin, val));
