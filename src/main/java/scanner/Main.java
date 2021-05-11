@@ -59,6 +59,8 @@ public class Main {
         }
         new XReportRunner().run();
 
+        RecoveryManager.drop();
+
         System.exit(0);
     }
 

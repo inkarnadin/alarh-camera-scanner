@@ -97,4 +97,12 @@ public class RecoveryManager {
         return restoredData.get(element);
     }
 
+    /**
+     * Drop backup file if successfully exit.
+     */
+    public static void drop() {
+        if (backup.delete())
+            log.info("Backup file was removed.");
+    }
+
 }
