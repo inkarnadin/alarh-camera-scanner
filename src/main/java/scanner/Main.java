@@ -6,6 +6,8 @@ import scanner.http.RangeManager;
 import scanner.recover.RecoveryManager;
 import scanner.stat.ScanStatGatherer;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import static scanner.stat.ScanStatEnum.ALL;
@@ -49,7 +51,7 @@ public class Main {
                     new XBruteRunner(targetList, listPasswords).run();
 
                 checked += range.size();
-                int percent = (int) ((double) checked / all * 100);
+                BigDecimal percent = new BigDecimal((double) checked / all * 100).setScale(2, RoundingMode.FLOOR);
                 log.info("progress {}%: (range = {}, ip count = {}) {}/{}", percent, range.toString(), range.size(), ++c, addressCache.size());
             }
         }
