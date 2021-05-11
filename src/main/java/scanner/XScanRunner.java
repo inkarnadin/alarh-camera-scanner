@@ -2,6 +2,8 @@ package scanner;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import scanner.recover.RecoveryManager;
+import scanner.recover.RecoveryElement;
 import scanner.scan.CameraScanner;
 import scanner.http.InetSocketAddressRange;
 
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Scan ip range logic class.
+ * Scanning ip range logic class.
  *
  * @author inkarnadin
  */
@@ -20,7 +22,7 @@ public class XScanRunner implements Runner {
     private final InetSocketAddressRange range;
 
     /**
-     * Execute scan ip range.
+     * Execute scanning ip range.
      *
      * <p> The check state is saved before processing each new range.
      *
@@ -31,7 +33,7 @@ public class XScanRunner implements Runner {
     public List<String> run() {
         List<String> result = new ArrayList<>();
         try {
-            RescueManager.save(range);
+            RecoveryManager.save(RecoveryElement.STOP_SCAN_POINT, range.first().getHostName());
             result = new CameraScanner().scanning(range.list());
         } catch (Exception xep) {
             log.error("Error during check ip range: {}", xep.getMessage());

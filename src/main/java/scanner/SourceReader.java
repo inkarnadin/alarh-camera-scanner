@@ -1,5 +1,8 @@
 package scanner;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+import com.google.common.io.Files;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -19,8 +22,8 @@ public class SourceReader {
     /**
      * Gets a list of values from the specified file.
      *
-     * @param path file location.
-     * @return list of values. Returns an empty list if the file is not found.
+     * @param path file location
+     * @return list of values. Returns an empty list if the file is not found
      */
     public static List<String> readSource(String path) {
         List<String> sources = new ArrayList<>();
@@ -35,9 +38,26 @@ public class SourceReader {
             }
             return sources;
         } catch (Exception xep) {
-            log.error("Error during file opening: {}", path);
+            log.error("Error during file {} opening: {}", path, xep.getMessage());
         }
+
         return sources;
+    }
+
+    /**
+     * Calculate file checksum.
+     *
+     * @param path file location
+     */
+    @SuppressWarnings({"UnstableApiUsage", "deprecation"})
+    public static String checksum(String path) {
+        try {
+            HashCode checksum = Files.asByteSource(new File(path)).hash(Hashing.md5());
+            return checksum.toString().toUpperCase();
+        } catch (Exception xep) {
+            log.error("Error during calculate checksum: {}", xep.getMessage());
+        }
+        return "";
     }
 
 }

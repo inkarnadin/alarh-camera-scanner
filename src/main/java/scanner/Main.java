@@ -3,6 +3,7 @@ package scanner;
 import lombok.extern.slf4j.Slf4j;
 import scanner.http.InetSocketAddressRange;
 import scanner.http.RangeManager;
+import scanner.recover.RecoveryManager;
 import scanner.stat.ScanStatGatherer;
 
 import java.util.List;
@@ -15,7 +16,9 @@ public class Main {
 
     public static void main(String[] args) {
         Preferences.configure(args);
-        RescueManager.restore();
+
+        RecoveryManager.recover();
+        RecoveryManager.initNewRestoreProcess();
 
         List<String> listRanges = Preferences.getRangesList();
         List<String> listPasswords = Preferences.getPasswordsList();

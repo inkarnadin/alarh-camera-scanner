@@ -19,6 +19,7 @@ public class Preferences {
         prefs.put("-a", "5");
         prefs.put("-bw", "2000");
         prefs.put("-w", "500");
+        prefs.put("-recovery_scanning", "true");
     }
 
     private static final List<String> defaultPasswordList = Collections.singletonList("asdf1234");
@@ -37,7 +38,7 @@ public class Preferences {
      * <p> Prepares a list of passwords for brute force attack specified under the flag <b>-passwords</b>.
      * If no range is specified, the application use single default password <b>asdf1234</b>.
      *
-     * @param values input application args.
+     * @param values input application args
      */
     public static void configure(String[] values) {
         for (String value : values) {
@@ -45,8 +46,8 @@ public class Preferences {
             prefs.put(params[0], params.length > 1 ? params[1] : "true");
         }
 
-        String source = Preferences.get("-source");
-        String passwords = Preferences.get("-passwords");
+        String source = prefs.get("-source");
+        String passwords = prefs.get("-passwords");
 
         if (Objects.isNull(source)) {
             System.out.println("Source list cannot be empty!");
@@ -63,21 +64,30 @@ public class Preferences {
     /**
      * Check some property value.
      *
-     * @param param property name.
-     * @return property state - true/false.
+     * @param value property name
+     * @return property state - true/false
      */
-    public static boolean check(String param) {
-        return Boolean.parseBoolean(prefs.get(param));
+    public static boolean check(String value) {
+        return Boolean.parseBoolean(prefs.get(value));
     }
 
     /**
      * Get some property value.
      *
-     * @param param property name.
-     * @return property value. If specified, then it, otherwise by default.
+     * @param value property name
+     * @return property value. If specified, then it, otherwise by default
      */
-    public static String get(String param) {
-        return prefs.get(param);
+    public static String get(String value) {
+        return prefs.get(value);
+    }
+
+    /**
+     * Change some property value.
+     *
+     * @param value property name
+     */
+    public static void change(String key, String value) {
+        prefs.put(key, value);
     }
 
 }
