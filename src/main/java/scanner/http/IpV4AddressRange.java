@@ -1,34 +1,41 @@
 package scanner.http;
 
+import scanner.Preferences;
+
 import java.net.InetSocketAddress;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Standard IP addresses range container.
  *
  * @author inkarnadin
  */
-public class InetSocketAddressRange {
+public class IpV4AddressRange {
 
-    private final LinkedList<InetSocketAddress> range = new LinkedList<>();
+    private static final int port = Integer.parseInt(Preferences.get("-p"));
+
+    private final LinkedList<IpV4Address> range = new LinkedList<>();
 
     /**
      * Add ip address to range list.
      *
      * @param address target ip
      */
-    public void add(InetSocketAddress address) {
+    public void add(IpV4Address address) {
         range.add(address);
     }
 
     /**
-     * Get all ip addresses by range.
+     * Get all ip addresses by range as {@code InetSocketAddress.class} list.
      *
      * @return target ip list
      */
     public List<InetSocketAddress> list() {
-        return range;
+        return range.stream()
+                .map(ip -> new InetSocketAddress(ip.toString(), port))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -36,7 +43,7 @@ public class InetSocketAddressRange {
      *
      * @return first target ip
      */
-    public InetSocketAddress first() {
+    public IpV4Address first() {
         return range.getFirst();
     }
 
@@ -56,7 +63,7 @@ public class InetSocketAddressRange {
      */
     @Override
     public String toString() {
-        return String.format("%s-%s", range.getFirst().getHostString(), range.getLast().getHostString());
+        return String.format("%s-%s", range.getFirst().toString(), range.getLast().toString());
     }
 
 }

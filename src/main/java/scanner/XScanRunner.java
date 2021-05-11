@@ -2,7 +2,7 @@ package scanner;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import scanner.http.InetSocketAddressRange;
+import scanner.http.IpV4AddressRange;
 import scanner.recover.RecoveryElement;
 import scanner.recover.RecoveryManager;
 import scanner.scan.CameraScanner;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class XScanRunner implements Runner {
 
-    private final InetSocketAddressRange range;
+    private final IpV4AddressRange range;
 
     /**
      * Execute scanning ip range.
@@ -33,7 +33,7 @@ public class XScanRunner implements Runner {
     public List<String> run() {
         List<String> result = new ArrayList<>();
         try {
-            RecoveryManager.save(RecoveryElement.STOP_SCAN_POINT, range.first().getHostName());
+            RecoveryManager.save(RecoveryElement.STOP_SCAN_POINT, range.first().toString());
             result = new CameraScanner().scanning(range.list());
         } catch (Exception xep) {
             log.error("Error during check ip range: {}", xep.getMessage());

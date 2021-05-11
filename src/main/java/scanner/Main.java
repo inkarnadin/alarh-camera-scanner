@@ -1,7 +1,7 @@
 package scanner;
 
 import lombok.extern.slf4j.Slf4j;
-import scanner.http.InetSocketAddressRange;
+import scanner.http.IpV4AddressRange;
 import scanner.http.RangeManager;
 import scanner.recover.RecoveryManager;
 import scanner.stat.ScanStatGatherer;
@@ -28,7 +28,7 @@ public class Main {
         for (String range : listRanges)
             RangeManager.prepare(range);
 
-        final List<InetSocketAddressRange> addressCache = RangeManager.getAddressCache();
+        final List<IpV4AddressRange> addressCache = RangeManager.getAddressCache();
 
         int c = 0;
         long checked = 0;
@@ -44,7 +44,7 @@ public class Main {
             ScanStatGatherer.set(RANGES, listRanges.size());
             log.info("addresses will be checked = " + RangeManager.count());
 
-            for (InetSocketAddressRange range : addressCache) {
+            for (IpV4AddressRange range : addressCache) {
                 List<String> targetList = new XScanRunner(range).run();
 
                 if (!Preferences.check("-nb"))
