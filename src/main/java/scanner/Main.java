@@ -52,7 +52,7 @@ public class Main {
 
                 checked += range.size();
                 BigDecimal percent = new BigDecimal((double) checked / all * 100).setScale(2, RoundingMode.FLOOR);
-                log.info("progress {}%: (range = {}, ip count = {}) {}/{}", percent, range.toString(), range.size(), ++c, addressCache.size());
+                log.info("complete {}/{} ({}%): range = {} (ip count = {})", ++c, addressCache.size(), percent, range.toString(), range.size());
             }
         }
         new XReportRunner().run();

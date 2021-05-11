@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import scanner.analyze.ProblemResolver;
 import scanner.brute.BruteForceScanner;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -27,8 +29,10 @@ public class XBruteRunner implements Runner {
             final BruteForceScanner bruteForceScanner = new BruteForceScanner();
             int i = 0;
             for (String ip : listSources) {
-                log.info("progress: {} {}/{}", ip, ++i, listSources.size());
                 bruteForceScanner.brute(ip, listPasswords.toArray(new String[0]));
+
+                BigDecimal percent = new BigDecimal(++i / listSources.size() * 100).setScale(2, RoundingMode.FLOOR);
+                log.info("subtask complete {}/{} ({}%): {}", i, listSources.size(), percent, ip);
             }
             ProblemResolver.run();
         } catch (Exception xep) {
