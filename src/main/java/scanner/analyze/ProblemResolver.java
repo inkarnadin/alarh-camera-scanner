@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import scanner.ffmpeg.FFmpegExecutor;
 import scanner.ffmpeg.FFmpegPath;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -20,7 +21,7 @@ public class ProblemResolver {
     @SuppressWarnings({"rawtypes"})
     public static void run() {
         try {
-            Set<ProblemTarget<?>> localStore = ProblemHolder.getStore();
+            Set<ProblemTarget<?>> localStore = new HashSet<>(ProblemHolder.getStore());
             for (ProblemTarget target : localStore) {
                 Resolve value = target.getResolve();
                 if (value instanceof PathResolve)
