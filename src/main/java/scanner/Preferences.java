@@ -2,6 +2,7 @@ package scanner;
 
 import lombok.Getter;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -53,6 +54,8 @@ public class Preferences {
      * <p> Prepares a list of passwords for brute force attack specified under the flag <b>-passwords</b>.
      * If no range is specified, the application use single default password <b>asdf1234</b>.
      *
+     * <p> Configure some application settings such as needed directory structures.
+     *
      * @param values input application args
      */
     public static void configure(String[] values) {
@@ -74,6 +77,8 @@ public class Preferences {
 
         if (passwordsList.isEmpty())
             passwordsList.addAll(defaultPasswordList);
+
+        createDirectories();
     }
 
     /**
@@ -103,6 +108,11 @@ public class Preferences {
      */
     public static void change(String key, String value) {
         prefs.put(key, value);
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private static void createDirectories() {
+        new File("result/screen").mkdir();
     }
 
 }
