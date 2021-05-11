@@ -2,10 +2,10 @@ package scanner;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import scanner.recover.RecoveryManager;
-import scanner.recover.RecoveryElement;
-import scanner.scan.CameraScanner;
 import scanner.http.InetSocketAddressRange;
+import scanner.recover.RecoveryElement;
+import scanner.recover.RecoveryManager;
+import scanner.scan.CameraScanner;
 
 import java.util.ArrayList;
 import java.util.List;

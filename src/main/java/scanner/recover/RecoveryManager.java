@@ -6,7 +6,8 @@ import scanner.Preferences;
 import scanner.SourceReader;
 
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static scanner.recover.RecoveryElement.SOURCE_CHECKSUM;

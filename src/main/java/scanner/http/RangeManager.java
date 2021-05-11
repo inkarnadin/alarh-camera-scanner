@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static scanner.recover.RecoveryElement.*;
+import static scanner.recover.RecoveryElement.STOP_SCAN_POINT;
 
 /**
  * Range manager class.

@@ -1,7 +1,6 @@
 package scanner.scan;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import scanner.Preferences;
 

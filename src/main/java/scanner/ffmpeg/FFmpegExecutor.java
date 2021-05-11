@@ -6,7 +6,7 @@ import scanner.stat.ScreenStatEnum;
 import scanner.stat.ScreenStatGatherer;
 
 import java.io.File;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
 
 import static scanner.ffmpeg.FFmpegPath.STANDARD;
 

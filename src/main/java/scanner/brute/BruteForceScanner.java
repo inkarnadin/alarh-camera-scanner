@@ -2,10 +2,10 @@ package scanner.brute;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import scanner.rtsp.RTSPContext;
 import scanner.Preferences;
 import scanner.cve.CVEScanner;
 import scanner.ffmpeg.FFmpegExecutor;
+import scanner.rtsp.RTSPContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
