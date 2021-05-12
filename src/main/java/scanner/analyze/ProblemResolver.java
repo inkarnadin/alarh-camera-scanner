@@ -32,6 +32,7 @@ public class ProblemResolver {
         } catch (Exception xep) {
             log.warn("Error during resolve problem addresses: {}", xep.getMessage());
         }
+        ProblemHolder.clear();
     }
 
 }

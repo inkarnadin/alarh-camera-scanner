@@ -25,4 +25,11 @@ public class ProblemHolder {
         return store.add(target);
     }
 
+    /**
+     * Clear problem target list.
+     */
+    public static void clear() {
+        store.clear();
+    }
+
 }
