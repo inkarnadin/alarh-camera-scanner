@@ -60,7 +60,7 @@ public class Main {
         }
         new XReportRunner().run();
 
-        RecoveryManager.drop();
+        RecoveryManager.dropBackup();
 
         System.exit(0);
     }

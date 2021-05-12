@@ -100,7 +100,7 @@ public class RecoveryManager {
     /**
      * Drop backup file if successfully exit.
      */
-    public static void drop() {
+    public static void dropBackup() {
         if (backup.delete())
             log.info("Backup file was removed.");
     }
