@@ -47,6 +47,7 @@ public class Main {
             log.info("addresses will be checked = " + RangeManager.count());
 
             for (IpV4AddressRange range : addressCache) {
+                log.info("in progress: range {} (ip count = {})", range.toString(), range.size());
                 List<String> targetList = new XScanRunner(range).run();
 
                 if (!Preferences.check(NO_BRUTE))
@@ -54,7 +55,7 @@ public class Main {
 
                 checked += range.size();
                 BigDecimal percent = new BigDecimal((double) checked / all * 100).setScale(2, RoundingMode.FLOOR);
-                log.info("complete {}/{} ({}%): range = {} (ip count = {})", ++c, addressCache.size(), percent, range.toString(), range.size());
+                log.info("complete {}/{} ({}%)", ++c, addressCache.size(), percent);
             }
         }
         new XReportRunner().run();
