@@ -43,20 +43,6 @@ public class RecoveryManager {
 
         if (!newSourceHash.equals(savedSourceHash))
             Preferences.change("-recovery_scanning", "false");
-
-        String scanStats = restoredData.get(SCANNING_STAT);
-        if (Objects.nonNull(scanStats)) {
-            String[] values = restoredData.get(SCANNING_STAT).split(";");
-            for (ScanStatEnum e : ScanStatEnum.values())
-                ScanStatGatherer.set(e, Long.parseLong(values[e.ordinal()]));
-        }
-
-        String screenStats = restoredData.get(SCREENING_STAT);
-        if (Objects.nonNull(screenStats)) {
-            String[] values = restoredData.get(SCREENING_STAT).split(";");
-            for (ScreenStatEnum e : ScreenStatEnum.values())
-                ScreenStatGatherer.set(e, Long.parseLong(values[e.ordinal()]));
-        }
     }
 
     /**
@@ -99,6 +85,21 @@ public class RecoveryManager {
                     .map(x -> x.split(splitter))
                     .filter(f -> f.length == 2)
                     .collect(Collectors.toMap(k -> RecoveryElement.find(k[0]), v -> v[1]));
+
+            String scanStats = restoredData.get(SCANNING_STAT);
+            if (Objects.nonNull(scanStats)) {
+                String[] values = restoredData.get(SCANNING_STAT).split(";");
+                for (ScanStatEnum e : ScanStatEnum.values())
+                    ScanStatGatherer.set(e, Long.parseLong(values[e.ordinal()]));
+            }
+
+            String screenStats = restoredData.get(SCREENING_STAT);
+            if (Objects.nonNull(screenStats)) {
+                String[] values = restoredData.get(SCREENING_STAT).split(";");
+                for (ScreenStatEnum e : ScreenStatEnum.values())
+                    ScreenStatGatherer.set(e, Long.parseLong(values[e.ordinal()]));
+            }
+
             log.info("Previous session was restored");
         } catch (FileNotFoundException ignored) {
         } catch (Exception xep) {
