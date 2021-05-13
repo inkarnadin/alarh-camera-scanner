@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 public enum RecoveryElement {
 
     SOURCE_CHECKSUM("sourceChecksum"),
-    STOP_SCAN_POINT("stopScanPoint");
+    STOP_SCAN_POINT("stopScanPoint"),
+    SCANNING_STAT("scanningStat"),
+    SCREENING_STAT("screeningStat");
 
     private final String description;
 

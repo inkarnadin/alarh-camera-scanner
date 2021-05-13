@@ -4,13 +4,18 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.Preferences;
 import scanner.SourceReader;
+import scanner.stat.ScanStatEnum;
+import scanner.stat.ScanStatGatherer;
+import scanner.stat.ScreenStatEnum;
+import scanner.stat.ScreenStatGatherer;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static scanner.recover.RecoveryElement.SOURCE_CHECKSUM;
+import static scanner.recover.RecoveryElement.*;
 
 /**
  * Save and load interrupted checking process.
@@ -38,6 +43,20 @@ public class RecoveryManager {
 
         if (!newSourceHash.equals(savedSourceHash))
             Preferences.change("-recovery_scanning", "false");
+
+        String scanStats = restoredData.get(SCANNING_STAT);
+        if (Objects.nonNull(scanStats)) {
+            String[] values = restoredData.get(SCANNING_STAT).split(";");
+            for (ScanStatEnum e : ScanStatEnum.values())
+                ScanStatGatherer.set(e, Long.parseLong(values[e.ordinal()]));
+        }
+
+        String screenStats = restoredData.get(SCREENING_STAT);
+        if (Objects.nonNull(screenStats)) {
+            String[] values = restoredData.get(SCREENING_STAT).split(";");
+            for (ScreenStatEnum e : ScreenStatEnum.values())
+                ScreenStatGatherer.set(e, Long.parseLong(values[e.ordinal()]));
+        }
     }
 
     /**

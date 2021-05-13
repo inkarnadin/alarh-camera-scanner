@@ -1,8 +1,9 @@
 package scanner.stat;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import static scanner.stat.ScanStatEnum.*;
 
@@ -13,7 +14,7 @@ import static scanner.stat.ScanStatEnum.*;
  */
 public class ScanStatGatherer {
 
-    private static final Map<ScanStatEnum, Long> scanStats = new HashMap<>() {{
+    private static final Map<ScanStatEnum, Long> scanStats = new TreeMap<>() {{
         put(ALL, 0L);
 
         put(RANGES, 0L);
@@ -58,6 +59,18 @@ public class ScanStatGatherer {
      */
     public static void increment(ScanStatEnum item) {
         scanStats.computeIfPresent(item, (x, y) -> ++y);
+    }
+
+    /**
+     * Get all statistic values in natural ordered with splitter.
+     *
+     * @return all values as string
+     */
+    public static String getStatsAsString() {
+        recalculate();
+        return scanStats.values().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(";"));
     }
 
     private static void recalculate() {

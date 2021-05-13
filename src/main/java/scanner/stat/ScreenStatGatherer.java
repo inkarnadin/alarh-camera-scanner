@@ -1,6 +1,7 @@
 package scanner.stat;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static scanner.stat.ScreenStatEnum.*;
 
@@ -23,20 +24,20 @@ public class ScreenStatGatherer {
             OTHER
     );
 
-    private static final Map<ScreenStatEnum, Integer> screenStats = new HashMap<>() {{
-        put(ALL, 0);
-        put(SUCCESS, 0);
-        put(FAILURE, 0);
+    private static final Map<ScreenStatEnum, Long> screenStats = new TreeMap<>() {{
+        put(ALL, 0L);
+        put(SUCCESS, 0L);
+        put(FAILURE, 0L);
 
-        put(INVALID_DATA_FOUND, 0);
-        put(WRONG_AUTH_ERROR, 0);
-        put(NOT_FOUND_CODEC_ERROR, 0);
-        put(STREAM_NOT_FOUND, 0);
-        put(BAD_REQUEST, 0);
-        put(PROTOCOL_NOT_SUPPORTED, 0);
-        put(PARAMETER_NOT_UNDERSTOOD, 0);
-        put(UNEXPECTED_ERROR, 0);
-        put(OTHER, 0);
+        put(INVALID_DATA_FOUND, 0L);
+        put(WRONG_AUTH_ERROR, 0L);
+        put(NOT_FOUND_CODEC_ERROR, 0L);
+        put(STREAM_NOT_FOUND, 0L);
+        put(BAD_REQUEST, 0L);
+        put(PROTOCOL_NOT_SUPPORTED, 0L);
+        put(PARAMETER_NOT_UNDERSTOOD, 0L);
+        put(UNEXPECTED_ERROR, 0L);
+        put(OTHER, 0L);
     }};
 
     /**
@@ -75,12 +76,34 @@ public class ScreenStatGatherer {
             increment(FAILURE);
     }
 
+    /**
+     * Set certain stats value.
+     *
+     * @param item stats value
+     * @param value explicitly meaning
+     */
+    public static void set(ScreenStatEnum item, long value) {
+        screenStats.put(item, value);
+    }
+
+    /**
+     * Get all statistic values in natural ordered with splitter.
+     *
+     * @return all values as string
+     */
+    public static String getStatsAsString() {
+        recalculate();
+        return screenStats.values().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(";"));
+    }
+
     private static String normalize(ScreenStatEnum item) {
         return String.format("%s%s: %s", "\t".repeat(item.getOrder()), item, screenStats.get(item));
     }
 
     private static void recalculate() {
-        Integer other = screenStats.get(ALL) - screenStats.get(FAILURE) - screenStats.get(SUCCESS);
+        Long other = screenStats.get(ALL) - screenStats.get(FAILURE) - screenStats.get(SUCCESS);
 
         screenStats.put(OTHER, other);
         screenStats.computeIfPresent(FAILURE, (x, y) -> y + other);
