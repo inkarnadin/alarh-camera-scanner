@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static scanner.Preferences.THREADS;
+import static scanner.stat.ScanStatGatherer.*;
 
 /**
  * Port scanning basic class.
@@ -52,7 +53,7 @@ public class CameraScanner {
         List<String> targetList = results.stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .peek(x -> ScanStatGatherer.increment(ScanStatEnum.SUCCESS))
+                .peek(x -> increment(ScanStatEnum.SUCCESS))
                 .peek(log::info)
                 .collect(Collectors.toList());
 

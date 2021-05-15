@@ -72,8 +72,6 @@ public class RangeSplitter {
     }
 
     private List<IpV4Address> disassembleLargeRange() {
-        ScanStatGatherer.increment(ScanStatEnum.LARGE_RANGES);
-
         String rangeAsString = new StringBuilder()
                 .append(startAddress.toString())
                 .append("-")

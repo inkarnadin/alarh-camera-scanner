@@ -12,6 +12,8 @@ import scanner.stat.ScreenStatGatherer;
 import java.util.ArrayList;
 import java.util.List;
 
+import static scanner.recover.RecoveryElement.*;
+
 /**
  * Scanning ip range logic class.
  *
@@ -35,9 +37,9 @@ public class XScanRunner implements Runner {
     public List<String> run() {
         List<String> result = new ArrayList<>();
         try {
-            RecoveryManager.save(RecoveryElement.STOP_SCAN_POINT, range.first().toString());
-            RecoveryManager.save(RecoveryElement.SCANNING_STAT, ScanStatGatherer.getStatsAsString());
-            RecoveryManager.save(RecoveryElement.SCREENING_STAT, ScreenStatGatherer.getStatsAsString());
+            RecoveryManager.save(STOP_SCAN_POINT, range.first().toString());
+            RecoveryManager.save(SCANNING_STAT, ScanStatGatherer.getStatsAsString());
+            RecoveryManager.save(SCREENING_STAT, ScreenStatGatherer.getStatsAsString());
 
             result = new CameraScanner().scanning(range.list());
 

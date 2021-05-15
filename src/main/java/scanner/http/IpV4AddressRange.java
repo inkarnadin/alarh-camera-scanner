@@ -59,6 +59,15 @@ public class IpV4AddressRange {
     }
 
     /**
+     * Check range size.
+     *
+     * @return {@code true} if large, {@code false} if usual
+     */
+    public boolean isLarge() {
+        return range.size() > 65535;
+    }
+
+    /**
      * Present ip range as string with first and last addresses by range.
      *
      * @return string presentation of range

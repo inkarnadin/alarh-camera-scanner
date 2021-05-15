@@ -12,8 +12,7 @@ import java.util.List;
 
 import static scanner.Preferences.NO_BRUTE;
 import static scanner.Preferences.NO_SCANNING;
-import static scanner.stat.ScanStatEnum.ALL;
-import static scanner.stat.ScanStatEnum.RANGES;
+import static scanner.stat.ScanStatEnum.*;
 
 @Slf4j
 public class Main {
@@ -42,8 +41,6 @@ public class Main {
                 new XBruteRunner(listRanges, listPasswords).run();
             }
         } else {
-            ScanStatGatherer.set(ALL, RangeManager.count());
-            ScanStatGatherer.set(RANGES, listRanges.size());
             log.info("addresses will be checked = " + RangeManager.count());
 
             for (IpV4AddressRange range : addressCache) {
@@ -56,6 +53,9 @@ public class Main {
                 checked += range.size();
                 BigDecimal percent = new BigDecimal((double) checked / all * 100).setScale(2, RoundingMode.FLOOR);
                 log.info("complete {}/{} ({}%)", ++c, addressCache.size(), percent);
+
+                ScanStatGatherer.increment(ALL);
+                ScanStatGatherer.increment(range.isLarge() ? LARGE_RANGES : RANGES);
             }
         }
         new XReportRunner().run();
