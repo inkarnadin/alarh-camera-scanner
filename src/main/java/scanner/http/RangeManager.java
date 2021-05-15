@@ -13,7 +13,7 @@ import static scanner.Preferences.ALLOW_RECOVERY_SCANNING;
 import static scanner.recover.RecoveryElement.STOP_SCAN_POINT;
 
 /**
- * Range manager class.
+ * Range manager parsing class.
  *
  * @author inkarnadin
  */
