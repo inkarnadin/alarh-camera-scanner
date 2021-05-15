@@ -1,6 +1,7 @@
 package scanner.http;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import scanner.Preferences;
 import scanner.recover.RecoveryManager;
 
@@ -16,7 +17,11 @@ import static scanner.recover.RecoveryElement.STOP_SCAN_POINT;
  *
  * @author inkarnadin
  */
+@Slf4j
 public class RangeManager {
+
+    private final static int min = 0;
+    private final static int max = 255;
 
     @Getter
     private static final List<IpV4AddressRange> addressCache = new ArrayList<>();
@@ -46,8 +51,7 @@ public class RangeManager {
      */
     public static void prepare(String rangeAsString) {
         IpV4AddressRange resultRange = new IpV4AddressRange();
-        RangeSplitter rangeContainer = new RangeSplitter(rangeAsString);
-        List<IpV4Address> range = rangeContainer.disassembleRange();
+        List<IpV4Address> range = parseRange(rangeAsString);
 
         if (needRestore(range))
             return;
@@ -74,6 +78,77 @@ public class RangeManager {
         if (isRecovered)
             isRecovered = Objects.nonNull(stopScanAddress) && !range.contains(new IpV4Address(stopScanAddress));
         return isRecovered;
+    }
+
+    private static List<IpV4Address> parseRange(String range) {
+        String[] rangeAddresses = range.split("-");
+
+        IpV4Address startAddress;
+        IpV4Address endAddress;
+
+        if (rangeAddresses.length == 1) {
+            startAddress = new IpV4Address(rangeAddresses[0]);
+            endAddress = new IpV4Address(rangeAddresses[0]);
+        } else {
+            startAddress = new IpV4Address(rangeAddresses[0]);
+            endAddress = new IpV4Address(rangeAddresses[1]);
+        }
+
+        int startPart1 = startAddress.getPart1();
+        int startPart2 = startAddress.getPart2();
+        int startPart3 = startAddress.getPart3();
+        int startPart4 = startAddress.getPart4();
+
+        int endPart3 = endAddress.getPart3();
+
+        if (startPart1 != endAddress.getPart1()) {
+            log.warn("{} - {}. This range too large and will be skipped", startAddress.toString(), endAddress.toString());
+            return new ArrayList<>();
+        }
+
+        if (startPart2 != endAddress.getPart2())
+            return parseLargeRange(startAddress, endAddress);
+
+        List<IpV4Address> addresses = new ArrayList<>();
+        while (startPart3 <= endPart3) {
+            int endPart4 = (startPart3 != endPart3) ? max : endAddress.getPart4();
+            while (startPart4 <= endPart4) {
+                IpV4Address ipV4Address = new IpV4Address(startPart1, startPart2, startPart3, startPart4);
+                addresses.add(ipV4Address);
+
+                startPart4++;
+            }
+            startPart3++;
+            startPart4 = min;
+        }
+        return addresses;
+    }
+
+    private static List<IpV4Address> parseLargeRange(IpV4Address startAddress, IpV4Address endAddress) {
+        String rangeAsString = new StringBuilder()
+                .append(startAddress.toString())
+                .append("-")
+                .append(new IpV4Address(startAddress.getPart1(), startAddress.getPart2(), max, max).toString())
+                .toString();
+        List<IpV4Address> range = new ArrayList<>(parseRange(rangeAsString));
+
+        for (int i = 1; i < endAddress.getPart2() - startAddress.getPart2(); i++) {
+            rangeAsString = new StringBuilder()
+                    .append(new IpV4Address(startAddress.getPart1(), startAddress.getPart2() + i, min, min).toString())
+                    .append("-")
+                    .append(new IpV4Address(startAddress.getPart1(), startAddress.getPart2() + i, max, max).toString())
+                    .toString();
+            range.addAll(parseRange(rangeAsString));
+        }
+
+        rangeAsString = new StringBuilder()
+                .append(new IpV4Address(endAddress.getPart1(), endAddress.getPart2(), min, min).toString())
+                .append("-")
+                .append(endAddress.toString())
+                .toString();
+        range.addAll(parseRange(rangeAsString));
+
+        return range;
     }
 
 }
