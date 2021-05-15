@@ -6,6 +6,7 @@ import scanner.http.IpV4AddressRange;
 import scanner.recover.RecoveryElement;
 import scanner.recover.RecoveryManager;
 import scanner.scan.CameraScanner;
+import scanner.stat.ExecutionTime;
 import scanner.stat.ScanStatGatherer;
 import scanner.stat.ScreenStatGatherer;
 
@@ -32,6 +33,7 @@ public class XScanRunner implements Runner {
      *
      * @return list of targets
      */
+    @ExecutionTime
     public List<String> run() {
         List<String> result = new ArrayList<>();
         try {
@@ -40,6 +42,9 @@ public class XScanRunner implements Runner {
             RecoveryManager.save(RecoveryElement.SCREENING_STAT, ScreenStatGatherer.getStatsAsString());
 
             result = new CameraScanner().scanning(range.list());
+
+            int nbThreads =  Thread.getAllStackTraces().keySet().size();
+            log.debug("active threads: " + nbThreads);
         } catch (Exception xep) {
             log.error("Error during check ip range: {}", xep.getMessage());
         }
