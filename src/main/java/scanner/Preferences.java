@@ -25,6 +25,7 @@ public class Preferences {
     public static final String NO_BRUTE = "-nb";
     public static final String ALLOW_UNTRUSTED_HOST = "-uc";
     public static final String ALLOW_FRAME_SAVING = "-sf";
+
     public static final String ALLOW_RECOVERY_SCANNING = "-recovery_scanning";
 
     private static final Map<String, String> prefs = new HashMap<>();
