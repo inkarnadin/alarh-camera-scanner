@@ -6,7 +6,6 @@ import scanner.http.IpV4AddressRange;
 import scanner.recover.RecoveryElement;
 import scanner.recover.RecoveryManager;
 import scanner.scan.CameraScanner;
-import scanner.stat.ExecutionTime;
 import scanner.stat.ScanStatGatherer;
 import scanner.stat.ScreenStatGatherer;
 
@@ -33,7 +32,6 @@ public class XScanRunner implements Runner {
      *
      * @return list of targets
      */
-    @ExecutionTime
     public List<String> run() {
         List<String> result = new ArrayList<>();
         try {
