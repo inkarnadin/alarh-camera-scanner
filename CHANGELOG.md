@@ -33,6 +33,7 @@ and then immediately for password guessing (before, all ranges or all addresses 
 ### Fixed
 - Fixed some log naming typos.
 - Fixed hanging external processes.
+- Fixed critical thread pool bug.
 
 ### Removed
 - Removed `-b`, `-ba` and `-c` flags.
