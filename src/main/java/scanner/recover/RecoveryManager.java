@@ -4,9 +4,9 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.Preferences;
 import scanner.SourceReader;
-import scanner.stat.ScanStatEnum;
+import scanner.stat.ScanStatItem;
 import scanner.stat.ScanStatGatherer;
-import scanner.stat.ScreenStatEnum;
+import scanner.stat.ScreenStatItem;
 import scanner.stat.ScreenStatGatherer;
 
 import java.io.*;
@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static scanner.Preferences.ALLOW_RECOVERY_SCANNING;
 import static scanner.recover.RecoveryElement.*;
 
 /**
@@ -30,20 +31,6 @@ public class RecoveryManager {
     private static final String splitter = "/";
 
     private static final File backup = new File("backup.tmp");
-
-    /**
-     * Initiate restore process for current executable session.
-     * Save checksum <b>source</b>-file.
-     */
-    public static void initNewRestoreProcess() {
-        String savedSourceHash = restoredData.get(SOURCE_CHECKSUM);
-        String newSourceHash = SourceReader.checksum(Preferences.get("-source"));
-
-        save(SOURCE_CHECKSUM, newSourceHash);
-
-        if (!newSourceHash.equals(savedSourceHash))
-            Preferences.change("-recovery_scanning", "false");
-    }
 
     /**
      * Save some value for later recovery.
@@ -86,18 +73,22 @@ public class RecoveryManager {
                     .filter(f -> f.length == 2)
                     .collect(Collectors.toMap(k -> RecoveryElement.find(k[0]), v -> v[1]));
 
-            String scanStats = restoredData.get(SCANNING_STAT);
-            if (Objects.nonNull(scanStats)) {
-                String[] values = restoredData.get(SCANNING_STAT).split(";");
-                for (ScanStatEnum e : ScanStatEnum.values())
-                    ScanStatGatherer.set(e, Long.parseLong(values[e.ordinal()]));
-            }
+            initSaveSession();
 
-            String screenStats = restoredData.get(SCREENING_STAT);
-            if (Objects.nonNull(screenStats)) {
-                String[] values = restoredData.get(SCREENING_STAT).split(";");
-                for (ScreenStatEnum e : ScreenStatEnum.values())
-                    ScreenStatGatherer.set(e, Long.parseLong(values[e.ordinal()]));
+            if (Preferences.check(ALLOW_RECOVERY_SCANNING)) {
+                String scanStats = restoredData.get(SCANNING_STAT);
+                if (Objects.nonNull(scanStats)) {
+                    String[] values = restoredData.get(SCANNING_STAT).split(";");
+                    for (ScanStatItem e : ScanStatItem.values())
+                        ScanStatGatherer.set(e, Long.parseLong(values[e.ordinal()]));
+                }
+
+                String screenStats = restoredData.get(SCREENING_STAT);
+                if (Objects.nonNull(screenStats)) {
+                    String[] values = restoredData.get(SCREENING_STAT).split(";");
+                    for (ScreenStatItem e : ScreenStatItem.values())
+                        ScreenStatGatherer.set(e, Long.parseLong(values[e.ordinal()]));
+                }
             }
 
             log.info("Previous session was restored");
@@ -123,6 +114,16 @@ public class RecoveryManager {
     public static void dropBackup() {
         if (backup.delete())
             log.info("Backup file was removed.");
+    }
+
+    private static void initSaveSession() {
+        String savedSourceHash = restoredData.get(SOURCE_CHECKSUM);
+        String newSourceHash = SourceReader.checksum(Preferences.get("-source"));
+
+        save(SOURCE_CHECKSUM, newSourceHash);
+
+        if (!newSourceHash.equals(savedSourceHash))
+            Preferences.change("-recovery_scanning", "false");
     }
 
 }
