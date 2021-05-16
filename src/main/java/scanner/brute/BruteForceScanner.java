@@ -2,6 +2,7 @@ package scanner.brute;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import scanner.ExecutorHolder;
 import scanner.Preferences;
 import scanner.cve.CVEScanner;
 import scanner.ffmpeg.FFmpegExecutor;
@@ -13,9 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static scanner.Preferences.*;
@@ -28,10 +26,7 @@ import static scanner.Preferences.*;
 @Slf4j
 public class BruteForceScanner {
 
-    private final static long termination_timeout = 1000L;
-
-    private final static int countThreads = Integer.parseInt(Preferences.get(THREADS));
-    private final ExecutorService executorService = Executors.newFixedThreadPool(countThreads);
+    private final static long terminationTimeout = 1000L;
 
     /**
      * Start brute certain address by prepared range passwords list.
@@ -52,7 +47,8 @@ public class BruteForceScanner {
         if (isEmptyBruteTask(ip))
             return;
 
-        int threshold = (countThreads - (passwords.length % countThreads) + passwords.length) / countThreads;
+        int threads = ExecutorHolder.getCountThreads();
+        int threshold = (threads - (passwords.length % threads) + passwords.length) / threads;
         List<CompletableFuture<AuthContainer>> futures = new ArrayList<>();
         for (int j = 0; j < passwords.length; j += threshold)
             futures.add(createBruteTask(ip, Arrays.copyOfRange(passwords, j, Math.min(j + threshold, passwords.length))));
@@ -69,12 +65,12 @@ public class BruteForceScanner {
                     ? results.get(0)
                     : "auth not required");
 
-        executorService.awaitTermination(termination_timeout, TimeUnit.MILLISECONDS);
+        ExecutorHolder.await(terminationTimeout);
     }
 
     private CompletableFuture<AuthContainer> createBruteTask(String ip, String[] passwords) {
         CompletableFuture<AuthContainer> future = new CompletableFuture<>();
-        CompletableFuture.runAsync(() -> new BruteTask(future, ip, passwords).run(), executorService);
+        CompletableFuture.runAsync(() -> new BruteTask(future, ip, passwords).run(), ExecutorHolder.getExecutorService());
         return future;
     }
 

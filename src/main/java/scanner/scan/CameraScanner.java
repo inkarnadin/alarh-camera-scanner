@@ -2,18 +2,14 @@ package scanner.scan;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import scanner.Preferences;
+import scanner.ExecutorHolder;
 import scanner.stat.ScanStatItem;
 
 import java.net.InetSocketAddress;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static scanner.Preferences.THREADS;
 import static scanner.stat.ScanStatGatherer.*;
 
 /**
@@ -24,13 +20,9 @@ import static scanner.stat.ScanStatGatherer.*;
 @Slf4j
 public class CameraScanner {
 
-    private final static long termination_timeout = 500L;
+    private static final long terminationTimeout = 500L;
 
     private final Queue<InetSocketAddress> addresses = new ArrayDeque<>();
-
-    private final int countThreads = Integer.parseInt(Preferences.get(THREADS));
-
-    private final ExecutorService executorService = Executors.newFixedThreadPool(countThreads);
 
     /**
      * Start scanning certain address by prepared IPs ranges and settings port.
@@ -56,13 +48,13 @@ public class CameraScanner {
                 .peek(log::info)
                 .collect(Collectors.toList());
 
-        executorService.awaitTermination(termination_timeout, TimeUnit.MILLISECONDS);
+        ExecutorHolder.await(terminationTimeout);
         return targetList;
     }
 
     private CompletableFuture<Optional<String>> createCameraScanTask(InetSocketAddress address) {
         CompletableFuture<Optional<String>> future = new CompletableFuture<>();
-        CompletableFuture.runAsync(() -> new CameraScanTask(future, address).run(), executorService);
+        CompletableFuture.runAsync(() -> new CameraScanTask(future, address).run(), ExecutorHolder.getExecutorService());
         return future;
     }
 
