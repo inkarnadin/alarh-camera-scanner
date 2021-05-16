@@ -1,6 +1,7 @@
 package scanner;
 
 import lombok.extern.slf4j.Slf4j;
+import scanner.stat.EfficiencyGatherer;
 import scanner.stat.ScanStatGatherer;
 import scanner.stat.ScreenStatGatherer;
 
@@ -17,6 +18,7 @@ public class XReportRunner implements Runner {
      */
     public void run() {
         log.info(ScanStatGatherer.createReport());
+        log.info(EfficiencyGatherer.createReport());
         log.info(ScreenStatGatherer.createReport());
     }
 

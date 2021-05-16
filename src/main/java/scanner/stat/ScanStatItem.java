@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum ScanStatEnum {
+public enum ScanStatItem {
 
     ALL(0),
 

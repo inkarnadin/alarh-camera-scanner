@@ -4,14 +4,14 @@ import scanner.analyze.AuthResolve;
 import scanner.analyze.PathResolve;
 import scanner.analyze.ProblemHolder;
 import scanner.analyze.ProblemTarget;
-import scanner.stat.ScreenStatEnum;
+import scanner.stat.ScreenStatItem;
 import scanner.stat.ScreenStatGatherer;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static scanner.stat.ScreenStatEnum.*;
+import static scanner.stat.ScreenStatItem.*;
 
 /**
  * Analyze FFmpeg log output.
@@ -31,7 +31,7 @@ public class FFmpegInspector {
         checkError(source).ifPresent(x -> process(x, ip, credentials));
     }
 
-    private static void process(ScreenStatEnum item, String ip, String credentials) {
+    private static void process(ScreenStatItem item, String ip, String credentials) {
         boolean result;
         switch (item) {
             case STREAM_NOT_FOUND:
@@ -48,7 +48,7 @@ public class FFmpegInspector {
             ScreenStatGatherer.increment(item);
     }
 
-    private static Optional<ScreenStatEnum> checkError(String source) {
+    private static Optional<ScreenStatItem> checkError(String source) {
         Matcher mather;
 
         mather = Pattern.compile("Could not find codec").matcher(source);

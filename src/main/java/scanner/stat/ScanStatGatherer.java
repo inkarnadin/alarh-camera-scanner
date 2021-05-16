@@ -5,7 +5,7 @@ import java.util.StringJoiner;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import static scanner.stat.ScanStatEnum.*;
+import static scanner.stat.ScanStatItem.*;
 
 /**
  * Scan save statistic class.
@@ -14,7 +14,7 @@ import static scanner.stat.ScanStatEnum.*;
  */
 public class ScanStatGatherer {
 
-    private static final Map<ScanStatEnum, Long> scanStats = new TreeMap<>() {{
+    private static final Map<ScanStatItem, Long> scanStats = new TreeMap<>() {{
         put(ALL, 0L);
 
         put(RANGES, 0L);
@@ -48,8 +48,18 @@ public class ScanStatGatherer {
      * @param item stats value
      * @param value explicitly meaning
      */
-    public static void set(ScanStatEnum item, long value) {
+    public static void set(ScanStatItem item, long value) {
         scanStats.put(item, value);
+    }
+
+    /**
+     * Get certain value.
+     *
+     * @param item stats value
+     * @return value by key
+     */
+    public static Long get(ScanStatItem item) {
+        return scanStats.getOrDefault(item, 0L);
     }
 
     /**
@@ -57,8 +67,18 @@ public class ScanStatGatherer {
      *
      * @param item stats value
      */
-    public static void increment(ScanStatEnum item) {
+    public static void increment(ScanStatItem item) {
         scanStats.computeIfPresent(item, (x, y) -> ++y);
+    }
+
+    /**
+     * Increment by value.
+     *
+     * @param item stats value
+     * @param value increase by value
+     */
+    public static void incrementBy(ScanStatItem item, long value) {
+        scanStats.computeIfPresent(item, (x, y) -> (y + value));
     }
 
     /**

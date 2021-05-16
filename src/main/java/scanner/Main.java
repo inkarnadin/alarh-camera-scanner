@@ -12,16 +12,14 @@ import java.util.List;
 
 import static scanner.Preferences.NO_BRUTE;
 import static scanner.Preferences.NO_SCANNING;
-import static scanner.stat.ScanStatEnum.*;
+import static scanner.stat.ScanStatItem.*;
 
 @Slf4j
 public class Main {
 
     public static void main(String[] args) {
         Preferences.configure(args);
-
         RecoveryManager.recover();
-        RecoveryManager.initNewRestoreProcess();
 
         List<String> listRanges = Preferences.getRangesList();
         List<String> listPasswords = Preferences.getPasswordsList();
@@ -54,8 +52,10 @@ public class Main {
                 BigDecimal percent = new BigDecimal((double) checked / all * 100).setScale(2, RoundingMode.FLOOR);
                 log.info("complete {}/{} ({}%)", ++c, addressCache.size(), percent);
 
-                ScanStatGatherer.increment(ALL);
-                ScanStatGatherer.increment(range.isLarge() ? LARGE_RANGES : RANGES);
+                ScanStatGatherer.incrementBy(ALL, range.size());
+                ScanStatGatherer.increment(RANGES);
+                if (range.isLarge())
+                    ScanStatGatherer.increment(LARGE_RANGES);
             }
         }
         new XReportRunner().run();

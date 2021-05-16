@@ -3,8 +3,7 @@ package scanner.scan;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.Preferences;
-import scanner.stat.ScanStatEnum;
-import scanner.stat.ScanStatGatherer;
+import scanner.stat.ScanStatItem;
 
 import java.net.InetSocketAddress;
 import java.util.*;
@@ -53,7 +52,7 @@ public class CameraScanner {
         List<String> targetList = results.stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .peek(x -> increment(ScanStatEnum.SUCCESS))
+                .peek(x -> increment(ScanStatItem.SUCCESS))
                 .peek(log::info)
                 .collect(Collectors.toList());
 

@@ -3,7 +3,7 @@ package scanner.stat;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static scanner.stat.ScreenStatEnum.*;
+import static scanner.stat.ScreenStatItem.*;
 
 public class ScreenStatGathererTest {
 

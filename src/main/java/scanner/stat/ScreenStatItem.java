@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum ScreenStatEnum {
+public enum ScreenStatItem {
 
     ALL(0),
     SUCCESS(1),

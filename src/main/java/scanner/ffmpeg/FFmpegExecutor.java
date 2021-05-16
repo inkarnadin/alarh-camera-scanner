@@ -2,7 +2,7 @@ package scanner.ffmpeg;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import scanner.stat.ScreenStatEnum;
+import scanner.stat.ScreenStatItem;
 import scanner.stat.ScreenStatGatherer;
 
 import java.io.File;
@@ -38,7 +38,7 @@ public class FFmpegExecutor {
 
         File file = new File(String.format("result/screen/%s.jpg", ip));
         if (file.exists())
-            ScreenStatGatherer.increment(ScreenStatEnum.SUCCESS);
+            ScreenStatGatherer.increment(ScreenStatItem.SUCCESS);
     }
 
     /**
@@ -51,7 +51,7 @@ public class FFmpegExecutor {
      */
     @SneakyThrows
     public void saveFrame(String credentials, String ip) {
-        ScreenStatGatherer.increment(ScreenStatEnum.ALL);
+        ScreenStatGatherer.increment(ScreenStatItem.ALL);
         this.saveFrame(credentials, ip, STANDARD);
     }
 

@@ -3,7 +3,7 @@ package scanner.stat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static scanner.stat.ScreenStatEnum.*;
+import static scanner.stat.ScreenStatItem.*;
 
 /**
  * Screenshot save statistic class.
@@ -12,7 +12,7 @@ import static scanner.stat.ScreenStatEnum.*;
  */
 public class ScreenStatGatherer {
 
-    private static final List<ScreenStatEnum> errorStateList = Arrays.asList(
+    private static final List<ScreenStatItem> errorStateList = Arrays.asList(
             NOT_FOUND_CODEC_ERROR,
             INVALID_DATA_FOUND,
             WRONG_AUTH_ERROR,
@@ -24,7 +24,7 @@ public class ScreenStatGatherer {
             OTHER
     );
 
-    private static final Map<ScreenStatEnum, Long> screenStats = new TreeMap<>() {{
+    private static final Map<ScreenStatItem, Long> screenStats = new TreeMap<>() {{
         put(ALL, 0L);
         put(SUCCESS, 0L);
         put(FAILURE, 0L);
@@ -70,7 +70,7 @@ public class ScreenStatGatherer {
      *
      * @param item stats value
      */
-    public static void increment(ScreenStatEnum item) {
+    public static void increment(ScreenStatItem item) {
         screenStats.computeIfPresent(item, (x, y) -> ++y);
         if (errorStateList.contains(item))
             increment(FAILURE);
@@ -82,8 +82,18 @@ public class ScreenStatGatherer {
      * @param item stats value
      * @param value explicitly meaning
      */
-    public static void set(ScreenStatEnum item, long value) {
+    public static void set(ScreenStatItem item, long value) {
         screenStats.put(item, value);
+    }
+
+    /**
+     * Get certain value.
+     *
+     * @param item stats value
+     * @return value by key
+     */
+    public static Long get(ScreenStatItem item) {
+        return screenStats.getOrDefault(item, 0L);
     }
 
     /**
@@ -98,7 +108,7 @@ public class ScreenStatGatherer {
                 .collect(Collectors.joining(";"));
     }
 
-    private static String normalize(ScreenStatEnum item) {
+    private static String normalize(ScreenStatItem item) {
         return String.format("%s%s: %s", "\t".repeat(item.getOrder()), item, screenStats.get(item));
     }
 

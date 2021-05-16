@@ -3,8 +3,8 @@ package scanner.stat;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static scanner.stat.ScanStatEnum.*;
-import static scanner.stat.ScanStatEnum.SUCCESS;
+import static scanner.stat.ScanStatItem.*;
+import static scanner.stat.ScanStatItem.SUCCESS;
 
 public class ScanStatGathererTest {
 
