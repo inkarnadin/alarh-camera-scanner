@@ -77,7 +77,7 @@ public class RecoveryManager {
 
             String savedSourceHash = restoredData.get(SOURCE_CHECKSUM);
             if (!currentSourceHash.equals(savedSourceHash))
-                Preferences.change("-recovery_scanning", "false");
+                Preferences.change(ALLOW_RECOVERY_SCANNING, Boolean.FALSE.toString());
 
             if (check(ALLOW_RECOVERY_SCANNING)) {
                 String scanStats = restoredData.get(SCANNING_STAT);
