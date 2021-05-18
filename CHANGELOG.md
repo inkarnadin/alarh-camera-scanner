@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 - Added ffmpeg log.
 - Added statistic info about ffmpeg frame saving.
 - Added scanning statistic data to report.
+- Added efficiency statistic.
+- Added time statistic.
 - Added analyze ffmpeg log and re-run some problems target.
 - Added restore scanning if it was interrupted.
 - Added `-nb` flag for disable brute.

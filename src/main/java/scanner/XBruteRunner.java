@@ -4,10 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import scanner.analyze.ProblemResolver;
 import scanner.brute.BruteForceScanner;
+import scanner.stat.TimeStatGatherer;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static scanner.stat.TimeStatItem.*;
 
 /**
  * Find password camera logic class.
@@ -16,7 +20,7 @@ import java.util.List;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class XBruteRunner implements Runner {
+public class XBruteRunner extends AbstractRunner {
 
     private final List<String> listSources;
     private final List<String> listPasswords;
@@ -38,6 +42,8 @@ public class XBruteRunner implements Runner {
         } catch (Exception xep) {
             log.error("Error during brute attack: {}", xep.getMessage());
         }
+        TimeStatGatherer.set(TOTAL_BRUTE_TIME, timer.elapsed(TimeUnit.MILLISECONDS));
+        timer.stop();
     }
 
 }

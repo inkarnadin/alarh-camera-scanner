@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import scanner.stat.EfficiencyGatherer;
 import scanner.stat.ScanStatGatherer;
 import scanner.stat.ScreenStatGatherer;
+import scanner.stat.TimeStatGatherer;
 
 /**
  * Create report logic class.
@@ -11,7 +12,7 @@ import scanner.stat.ScreenStatGatherer;
  * @author inkarnadin
  */
 @Slf4j
-public class XReportRunner implements Runner {
+public class XReportRunner extends AbstractRunner {
 
     /**
      * Print report about checking.
@@ -19,6 +20,7 @@ public class XReportRunner implements Runner {
     public void run() {
         log.info(ScanStatGatherer.createReport());
         log.info(EfficiencyGatherer.createReport());
+        log.info(TimeStatGatherer.createReport());
         log.info(ScreenStatGatherer.createReport());
     }
 

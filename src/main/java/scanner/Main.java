@@ -1,15 +1,19 @@
 package scanner;
 
+import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
 import scanner.http.IpV4AddressRange;
 import scanner.http.RangeManager;
 import scanner.recover.RecoveryManager;
 import scanner.stat.ScanStatGatherer;
+import scanner.stat.TimeStatGatherer;
+import scanner.stat.TimeStatItem;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import static java.math.RoundingMode.*;
 import static scanner.Preferences.NO_BRUTE;
 import static scanner.Preferences.NO_SCANNING;
 import static scanner.stat.ScanStatItem.*;
@@ -18,6 +22,8 @@ import static scanner.stat.ScanStatItem.*;
 public class Main {
 
     public static void main(String[] args) {
+        Stopwatch timer = Stopwatch.createStarted();
+
         Preferences.configure(args);
         RecoveryManager.recover();
 
@@ -39,7 +45,11 @@ public class Main {
                 new XBruteRunner(listRanges, listPasswords).run();
             }
         } else {
+            double expectedTime = BigDecimal.valueOf((0.035d * all) + ((double) all / 100 * 0.5d) * 1.6d).setScale(2, FLOOR).doubleValue();
+            TimeStatGatherer.set(TimeStatItem.EXPECTED_TIME, (long) expectedTime * 1000L);
+
             log.info("addresses will be checked = " + RangeManager.count());
+            log.info("expected time: {}", expectedTime);
 
             for (IpV4AddressRange range : addressCache) {
                 log.info("in progress: range {} (ip count = {})", range.toString(), range.size());
@@ -49,7 +59,7 @@ public class Main {
                     new XBruteRunner(targetList, listPasswords).run();
 
                 checked += range.size();
-                BigDecimal percent = new BigDecimal((double) checked / all * 100).setScale(2, RoundingMode.FLOOR);
+                BigDecimal percent = new BigDecimal((double) checked / all * 100).setScale(2, FLOOR);
                 log.info("complete {}/{} ({}%)", ++c, addressCache.size(), percent);
 
                 ScanStatGatherer.incrementBy(ALL, range.size());
@@ -58,6 +68,10 @@ public class Main {
                     ScanStatGatherer.increment(LARGE_RANGES);
             }
         }
+
+        TimeStatGatherer.set(TimeStatItem.TOTAL_TIME, timer.elapsed(TimeUnit.MILLISECONDS));
+        timer.stop();
+
         new XReportRunner().run();
 
         RecoveryManager.dropBackup();

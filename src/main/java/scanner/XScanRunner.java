@@ -3,16 +3,18 @@ package scanner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import scanner.http.IpV4AddressRange;
-import scanner.recover.RecoveryElement;
 import scanner.recover.RecoveryManager;
 import scanner.scan.CameraScanner;
 import scanner.stat.ScanStatGatherer;
 import scanner.stat.ScreenStatGatherer;
+import scanner.stat.TimeStatGatherer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static scanner.recover.RecoveryElement.*;
+import static scanner.stat.TimeStatItem.TOTAL_SCAN_TIME;
 
 /**
  * Scanning ip range logic class.
@@ -21,7 +23,7 @@ import static scanner.recover.RecoveryElement.*;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class XScanRunner implements Runner {
+public class XScanRunner extends AbstractRunner {
 
     private final IpV4AddressRange range;
 
@@ -48,6 +50,10 @@ public class XScanRunner implements Runner {
         } catch (Exception xep) {
             log.error("Error during check ip range: {}", xep.getMessage());
         }
+
+        TimeStatGatherer.set(TOTAL_SCAN_TIME, timer.elapsed(TimeUnit.MILLISECONDS));
+        timer.stop();
+
         return result;
     }
 
