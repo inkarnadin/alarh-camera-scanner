@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## UNRELEASED
 
+## [0.3.0] - 22-05-2021
+
 ### Added
 - Added flag `-t` waiting timeout host response (sec, default 500 ms).
 - Added support for large ip ranges.

@@ -19,13 +19,13 @@ After receiving a list of verified addresses, the password strength is checked u
 the application tries to fetch the frame from the vulnerable device (ffmpeg must be installed).
 
 Usage example:
-* `java -jar port-scanner.jar -source:range.txt -t:10 -p:8000 -passwords:pass.txt -screen`  
+* `java -jar camera-scanner.jar -source:range.txt -t:10 -p:8000 -passwords:pass.txt -sf`  
 scanning and brute ranges, thread = 10, checking port = 8000, save screen, *range.txt* ranges list, *pass.txt* plain passwords list.
-* `java -jar port-scanner.jar -source:range.txt -w:200 -passwords:pass.txt`  
+* `java -jar camera-scanner.jar -source:range.txt -w:200 -passwords:pass.txt`  
 scanning and brute ranges, wait socket connect 200 instead 500 ms, *range.txt* ranges list, *pass.txt* plain passwords list.
-* `java -jar port-scanner.jar -nc -source:list.txt -passwords:pass.txt -screen`  
+* `java -jar camera-scanner.jar -nc -source:list.txt -passwords:pass.txt -sf`  
 no scanning, only brute, save screen, *list.txt* plain ip list, *pass.txt* plain passwords list.
-* `java -jar port-scanner.jar -nb -source:range.txt`  
+* `java -jar camera-scanner.jar -nb -source:range.txt`  
 no brute, only scanning by default port, *range.txt* ranges list.
 
 ## Flags
@@ -34,7 +34,7 @@ no brute, only scanning by default port, *range.txt* ranges list.
 * Add `-t` flag for set time of waiting host response (500 ms by default).
 * Add `-w` flag for set socket waiting timeout (2000 ms by default).
 * Add `-uc` flag allows attempts to connect to untrusted hosts.
-* Add `-screen` flag enables saving screenshots (experimental, need installed FFmpeg).
+* Add `-sf` flag enables saving screenshots (experimental, need installed FFmpeg).
 * Add `-nc` flag for start without checking port (only brute, source must be plain ip list).
 * Add `-nb` flag for disable brute.
 
