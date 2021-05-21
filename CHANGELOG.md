@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## UNRELEASED
 
+### Added
+- Added Travis CI config file.
+
 ## [0.3.0] - 22-05-2021
 
 ### Added
