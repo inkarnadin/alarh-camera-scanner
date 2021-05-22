@@ -109,6 +109,6 @@ dictionaries without overloading the server. It is desirable that the connection
 - A partial fix for brute force blocking when server is not responding and read stream is empty.
 
 [unreleased]: https://github.com/inkarnadin/alarh-camera-scanner/compare/v0.3.0...HEAD
-[0.3.0]: https://github.com/inkarnadin/alarh-camera-scanner/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/inkarnadin/alarh-camera-scanner/compare/v0.1.0...v0.2.0
+[0.3.0]: https://github.com/inkarnadin/alarh-camera-scanner/releases/tag/v0.3.0
+[0.2.0]: https://github.com/inkarnadin/alarh-camera-scanner/releases/tag/v0.2.0
 [0.1.0]: https://github.com/inkarnadin/alarh-camera-scanner/releases/tag/v0.1.0
