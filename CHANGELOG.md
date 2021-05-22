@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Added Travis CI config file.
 
-## [0.3.0] - 22-05-2021
+## [v0.3.0] - 22-05-2021
 
 ### Added
 - Added flag `-t` waiting timeout host response (sec, default 500 ms).
