@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Added Travis CI config file.
+- Added LICENSE.txt.
 
 ## [0.3.0] - 22-05-2021
 
