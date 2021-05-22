@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/inkarnadin/alarh-camera-scanner.svg?branch=main)](https://travis-ci.org/inkarnadin/alarh-camera-scanner)
+
 # Camera Scanner
 
 ## Description
