@@ -22,6 +22,8 @@ import static scanner.stat.ScanStatItem.*;
 public class Main {
 
     public static void main(String[] args) {
+        new XReportRunner().make();
+
         Stopwatch timer = Stopwatch.createStarted();
 
         Preferences.configure(args);
@@ -60,7 +62,10 @@ public class Main {
 
                 checked += range.size();
                 BigDecimal percent = new BigDecimal((double) checked / all * 100).setScale(2, FLOOR);
-                log.info("complete {}/{} ({}%)", ++c, addressCache.size(), percent);
+
+                String completePercent = String.format("complete %s/%s (%s%%)", ++c, addressCache.size(), percent);
+                log.info(completePercent);
+                System.out.println(completePercent);
 
                 ScanStatGatherer.incrementBy(ALL, range.size());
                 ScanStatGatherer.increment(RANGES);
@@ -72,7 +77,7 @@ public class Main {
         TimeStatGatherer.set(TimeStatItem.TOTAL_TIME, timer.elapsed(TimeUnit.MILLISECONDS));
         timer.stop();
 
-        new XReportRunner().run();
+        new XReportRunner().make();
 
         RecoveryManager.dropBackup();
 
