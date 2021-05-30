@@ -22,8 +22,6 @@ import static scanner.stat.ScanStatItem.*;
 public class Main {
 
     public static void main(String[] args) {
-        new XReportRunner().make();
-
         Stopwatch timer = Stopwatch.createStarted();
 
         Preferences.configure(args);
