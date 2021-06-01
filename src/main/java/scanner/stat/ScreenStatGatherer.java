@@ -1,6 +1,7 @@
 package scanner.stat;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static scanner.stat.ScreenStatItem.*;
@@ -10,7 +11,7 @@ import static scanner.stat.ScreenStatItem.*;
  *
  * @author inkarnadin
  */
-public class ScreenStatGatherer {
+public class ScreenStatGatherer extends AbstractStatGatherer<ScreenStatItem, Long> {
 
     private static final List<ScreenStatItem> errorStateList = Arrays.asList(
             NOT_FOUND_CODEC_ERROR,
@@ -24,45 +25,20 @@ public class ScreenStatGatherer {
             OTHER
     );
 
-    private static final Map<ScreenStatItem, Long> screenStats = new TreeMap<>() {{
-        put(ALL, 0L);
-        put(SUCCESS, 0L);
-        put(FAILURE, 0L);
+    public ScreenStatGatherer() {
+        data.put(ALL, 0L);
+        data.put(SUCCESS, 0L);
+        data.put(FAILURE, 0L);
 
-        put(INVALID_DATA_FOUND, 0L);
-        put(WRONG_AUTH_ERROR, 0L);
-        put(NOT_FOUND_CODEC_ERROR, 0L);
-        put(STREAM_NOT_FOUND, 0L);
-        put(BAD_REQUEST, 0L);
-        put(PROTOCOL_NOT_SUPPORTED, 0L);
-        put(PARAMETER_NOT_UNDERSTOOD, 0L);
-        put(UNEXPECTED_ERROR, 0L);
-        put(OTHER, 0L);
-    }};
-
-    /**
-     * Create full report by gather statistic data.
-     *
-     * @return formatted report data
-     */
-    public static String createReport() {
-        recalculate();
-
-        return new StringJoiner("\n")
-                .add("Screen save stats =============================")
-                .add(normalize(ALL))
-                .add(normalize(SUCCESS))
-                .add(normalize(FAILURE))
-                .add(normalize(INVALID_DATA_FOUND))
-                .add(normalize(WRONG_AUTH_ERROR))
-                .add(normalize(NOT_FOUND_CODEC_ERROR))
-                .add(normalize(STREAM_NOT_FOUND))
-                .add(normalize(BAD_REQUEST))
-                .add(normalize(PROTOCOL_NOT_SUPPORTED))
-                .add(normalize(PARAMETER_NOT_UNDERSTOOD))
-                .add(normalize(UNEXPECTED_ERROR))
-                .add(normalize(OTHER))
-                .toString();
+        data.put(INVALID_DATA_FOUND, 0L);
+        data.put(WRONG_AUTH_ERROR, 0L);
+        data.put(NOT_FOUND_CODEC_ERROR, 0L);
+        data.put(STREAM_NOT_FOUND, 0L);
+        data.put(BAD_REQUEST, 0L);
+        data.put(PROTOCOL_NOT_SUPPORTED, 0L);
+        data.put(PARAMETER_NOT_UNDERSTOOD, 0L);
+        data.put(UNEXPECTED_ERROR, 0L);
+        data.put(OTHER, 0L);
     }
 
     /**
@@ -70,21 +46,21 @@ public class ScreenStatGatherer {
      *
      * @param item stats value
      */
-    public static void increment(ScreenStatItem item) {
-        screenStats.computeIfPresent(item, (x, y) -> ++y);
+    @Override
+    public void increment(ScreenStatItem item) {
+        data.computeIfPresent(item, (x, y) -> ++y);
         if (errorStateList.contains(item))
             increment(FAILURE);
     }
 
     /**
-     * Set certain stats value.
+     * Not used
      *
-     * @param item stats value
-     * @param value explicitly meaning
+     * @param item
+     * @param value
      */
-    public static void set(ScreenStatItem item, long value) {
-        screenStats.put(item, value);
-    }
+    @Override
+    public void incrementBy(ScreenStatItem item, Long value) {}
 
     /**
      * Get certain value.
@@ -92,8 +68,8 @@ public class ScreenStatGatherer {
      * @param item stats value
      * @return value by key
      */
-    public static Long get(ScreenStatItem item) {
-        return screenStats.getOrDefault(item, 0L);
+    public Long get(ScreenStatItem item) {
+        return data.getOrDefault(item, 0L);
     }
 
     /**
@@ -101,22 +77,18 @@ public class ScreenStatGatherer {
      *
      * @return all values as string
      */
-    public static String getStatsAsString() {
+    public String getStatsAsString() {
         recalculate();
-        return screenStats.values().stream()
+        return data.values().stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(";"));
     }
 
-    private static String normalize(ScreenStatItem item) {
-        return String.format("%s%s: %s", "\t".repeat(item.getOrder()), item, screenStats.get(item));
-    }
+    protected void recalculate() {
+        Long other = data.get(ALL) - data.get(FAILURE) - data.get(SUCCESS);
 
-    private static void recalculate() {
-        Long other = screenStats.get(ALL) - screenStats.get(FAILURE) - screenStats.get(SUCCESS);
-
-        screenStats.put(OTHER, other);
-        screenStats.computeIfPresent(FAILURE, (x, y) -> y + other);
+        data.put(OTHER, other);
+        data.computeIfPresent(FAILURE, (x, y) -> y + other);
     }
 
 }

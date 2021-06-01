@@ -2,11 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## UNRELEASED
+## [UNRELEASED]
 
 ### Added
 - Added Travis CI config file.
 - Added LICENSE.txt.
+
+### Changed
+- Substitute report format to HTML instead plain text.
 
 ## [0.3.0] - 22-05-2021
 

@@ -5,15 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import scanner.http.IpV4AddressRange;
 import scanner.recover.RecoveryManager;
 import scanner.scan.CameraScanner;
-import scanner.stat.ScanStatGatherer;
-import scanner.stat.ScreenStatGatherer;
-import scanner.stat.TimeStatGatherer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static scanner.recover.RecoveryElement.*;
+import static scanner.stat.StatDataHolder.*;
 import static scanner.stat.TimeStatItem.TOTAL_SCAN_TIME;
 
 /**
@@ -40,8 +38,8 @@ public class XScanRunner extends AbstractRunner {
         List<String> result = new ArrayList<>();
         try {
             RecoveryManager.save(STOP_SCAN_POINT, range.first().toString());
-            RecoveryManager.save(SCANNING_STAT, ScanStatGatherer.getStatsAsString());
-            RecoveryManager.save(SCREENING_STAT, ScreenStatGatherer.getStatsAsString());
+            RecoveryManager.save(SCANNING_STAT, SCAN_GATHERER.getStatsAsString());
+            RecoveryManager.save(SCREENING_STAT, SCREEN_GATHERER.getStatsAsString());
 
             result = new CameraScanner().scanning(range.list());
 
@@ -51,7 +49,7 @@ public class XScanRunner extends AbstractRunner {
             log.error("Error during check ip range: {}", xep.getMessage());
         }
 
-        TimeStatGatherer.set(TOTAL_SCAN_TIME, timer.elapsed(TimeUnit.MILLISECONDS));
+        TIME_GATHERER.set(TOTAL_SCAN_TIME, (double) timer.elapsed(TimeUnit.MILLISECONDS));
         timer.stop();
 
         return result;

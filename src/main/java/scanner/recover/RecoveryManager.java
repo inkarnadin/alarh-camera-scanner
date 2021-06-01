@@ -5,9 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import scanner.Preferences;
 import scanner.SourceReader;
 import scanner.stat.ScanStatItem;
-import scanner.stat.ScanStatGatherer;
 import scanner.stat.ScreenStatItem;
-import scanner.stat.ScreenStatGatherer;
 
 import java.io.*;
 import java.util.HashMap;
@@ -17,6 +15,8 @@ import java.util.stream.Collectors;
 
 import static scanner.Preferences.*;
 import static scanner.recover.RecoveryElement.*;
+import static scanner.stat.StatDataHolder.SCAN_GATHERER;
+import static scanner.stat.StatDataHolder.SCREEN_GATHERER;
 
 /**
  * Save and load interrupted checking process.
@@ -55,7 +55,7 @@ public class RecoveryManager {
                 bw.newLine();
             }
         } catch (Exception xep) {
-            log.warn("Error during save state: {}", xep.getMessage());
+            log.warn("error during save state: {}", xep.getMessage());
         }
     }
 
@@ -84,21 +84,21 @@ public class RecoveryManager {
                 if (Objects.nonNull(scanStats)) {
                     String[] values = restoredData.get(SCANNING_STAT).split(";");
                     for (ScanStatItem e : ScanStatItem.values())
-                        ScanStatGatherer.set(e, Long.parseLong(values[e.ordinal()]));
+                        SCAN_GATHERER.set(e, Long.parseLong(values[e.ordinal()]));
                 }
 
                 String screenStats = restoredData.get(SCREENING_STAT);
                 if (Objects.nonNull(screenStats)) {
                     String[] values = restoredData.get(SCREENING_STAT).split(";");
                     for (ScreenStatItem e : ScreenStatItem.values())
-                        ScreenStatGatherer.set(e, Long.parseLong(values[e.ordinal()]));
+                        SCREEN_GATHERER.set(e, Long.parseLong(values[e.ordinal()]));
                 }
             }
 
-            log.info("Previous session was restored");
+            log.info("previous session was restored");
         } catch (FileNotFoundException ignored) {
         } catch (Exception xep) {
-            log.warn("Error during restore state: {}", xep.getMessage());
+            log.warn("error during restore state: {}", xep.getMessage());
         }
         save(SOURCE_CHECKSUM, currentSourceHash);
     }
@@ -118,7 +118,7 @@ public class RecoveryManager {
      */
     public static void dropBackup() {
         if (backup.delete())
-            log.info("Backup file was removed.");
+            log.info("backup file was removed.");
     }
 
 }

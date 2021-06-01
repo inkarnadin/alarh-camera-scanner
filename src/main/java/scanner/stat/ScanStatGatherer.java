@@ -1,8 +1,5 @@
 package scanner.stat;
 
-import java.util.Map;
-import java.util.StringJoiner;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import static scanner.stat.ScanStatItem.*;
@@ -12,44 +9,16 @@ import static scanner.stat.ScanStatItem.*;
  *
  * @author inkarnadin
  */
-public class ScanStatGatherer {
+public class ScanStatGatherer extends AbstractStatGatherer<ScanStatItem, Long> {
 
-    private static final Map<ScanStatItem, Long> scanStats = new TreeMap<>() {{
-        put(ALL, 0L);
+    public ScanStatGatherer() {
+        data.put(ALL, 0L);
 
-        put(RANGES, 0L);
-        put(LARGE_RANGES, 0L);
+        data.put(RANGES, 0L);
+        data.put(LARGE_RANGES, 0L);
 
-        put(SUCCESS, 0L);
-        put(FAILURE, 0L);
-    }};
-
-    /**
-     * Create full report by gather statistic data.
-     *
-     * @return formatted report data
-     */
-    public static String createReport() {
-        recalculate();
-
-        return new StringJoiner("\n")
-                .add("Scanning stats =============================")
-                .add(String.format("All ip scanned: %s", scanStats.get(ALL)))
-                .add(String.format("Scanned range: %s", scanStats.get(RANGES)))
-                .add(String.format("Scanned large range: %s", scanStats.get(LARGE_RANGES)))
-                .add(String.format("Success scanned: %s", scanStats.get(SUCCESS)))
-                .add(String.format("Failure scanned: %s", scanStats.get(FAILURE)))
-                .toString();
-    }
-
-    /**
-     * Set certain stats value.
-     *
-     * @param item stats value
-     * @param value explicitly meaning
-     */
-    public static void set(ScanStatItem item, long value) {
-        scanStats.put(item, value);
+        data.put(SUCCESS, 0L);
+        data.put(FAILURE, 0L);
     }
 
     /**
@@ -58,8 +27,9 @@ public class ScanStatGatherer {
      * @param item stats value
      * @return value by key
      */
-    public static Long get(ScanStatItem item) {
-        return scanStats.getOrDefault(item, 0L);
+    @Override
+    public Long get(ScanStatItem item) {
+        return data.getOrDefault(item, 0L);
     }
 
     /**
@@ -67,8 +37,9 @@ public class ScanStatGatherer {
      *
      * @param item stats value
      */
-    public static void increment(ScanStatItem item) {
-        scanStats.computeIfPresent(item, (x, y) -> ++y);
+    @Override
+    public void increment(ScanStatItem item) {
+        data.computeIfPresent(item, (x, y) -> ++y);
     }
 
     /**
@@ -77,8 +48,9 @@ public class ScanStatGatherer {
      * @param item stats value
      * @param value increase by value
      */
-    public static void incrementBy(ScanStatItem item, long value) {
-        scanStats.computeIfPresent(item, (x, y) -> (y + value));
+    @Override
+    public void incrementBy(ScanStatItem item, Long value) {
+        data.computeIfPresent(item, (x, y) -> (y + value));
     }
 
     /**
@@ -86,15 +58,16 @@ public class ScanStatGatherer {
      *
      * @return all values as string
      */
-    public static String getStatsAsString() {
+    public String getStatsAsString() {
         recalculate();
-        return scanStats.values().stream()
+        return data.values().stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(";"));
     }
 
-    private static void recalculate() {
-        scanStats.put(FAILURE, scanStats.get(ALL) - scanStats.get(SUCCESS));
+    @Override
+    protected void recalculate() {
+        data.put(FAILURE, data.get(ALL) - data.get(SUCCESS));
     }
 
 }

@@ -5,13 +5,13 @@ import scanner.analyze.PathResolve;
 import scanner.analyze.ProblemHolder;
 import scanner.analyze.ProblemTarget;
 import scanner.stat.ScreenStatItem;
-import scanner.stat.ScreenStatGatherer;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static scanner.stat.ScreenStatItem.*;
+import static scanner.stat.StatDataHolder.SCREEN_GATHERER;
 
 /**
  * Analyze FFmpeg log output.
@@ -45,7 +45,7 @@ public class FFmpegInspector {
         }
 
         if (!result)
-            ScreenStatGatherer.increment(item);
+            SCREEN_GATHERER.increment(item);
     }
 
     private static Optional<ScreenStatItem> checkError(String source) {

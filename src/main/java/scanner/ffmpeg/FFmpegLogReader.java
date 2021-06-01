@@ -3,11 +3,12 @@ package scanner.ffmpeg;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import scanner.stat.ScreenStatItem;
-import scanner.stat.ScreenStatGatherer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import static scanner.stat.StatDataHolder.SCREEN_GATHERER;
 
 /**
  * FFmpeg console output reader.
@@ -36,7 +37,7 @@ public class FFmpegLogReader implements Runnable {
             }
             FFmpegInspector.inspect(output.toString(), ip, credentials);
         } catch (IOException e) {
-            ScreenStatGatherer.increment(ScreenStatItem.UNEXPECTED_ERROR);
+            SCREEN_GATHERER.increment(ScreenStatItem.UNEXPECTED_ERROR);
             log.warn("Read buffer error: pid = {}, message = {}", process.pid(), e.getMessage());
         }
     }

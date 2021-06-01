@@ -12,14 +12,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ScanStatItem {
 
-    ALL(0),
-
-    RANGES(1),
-    LARGE_RANGES(1),
-
-    SUCCESS(2),
-    FAILURE(2);
-
-    private final int order;
+    ALL { @Override public String toString() { return "All ip scanned"; } },
+    RANGES { @Override public String toString() { return "Scanned range"; } },
+    LARGE_RANGES { @Override public String toString() { return "Scanned large range"; } },
+    SUCCESS { @Override public String toString() { return "Success scanned"; } },
+    FAILURE { @Override public String toString() { return "Failure scanned"; } }
 
 }

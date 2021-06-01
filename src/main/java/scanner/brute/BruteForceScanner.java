@@ -16,7 +16,8 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static scanner.Preferences.*;
+import static scanner.Preferences.ALLOW_FRAME_SAVING;
+import static scanner.Preferences.ALLOW_UNTRUSTED_HOST;
 
 /**
  * Brute force attack basic class.

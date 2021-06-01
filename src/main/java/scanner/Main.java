@@ -5,24 +5,27 @@ import lombok.extern.slf4j.Slf4j;
 import scanner.http.IpV4AddressRange;
 import scanner.http.RangeManager;
 import scanner.recover.RecoveryManager;
-import scanner.stat.ScanStatGatherer;
-import scanner.stat.TimeStatGatherer;
 import scanner.stat.TimeStatItem;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static java.math.RoundingMode.*;
+import static java.math.RoundingMode.FLOOR;
 import static scanner.Preferences.NO_BRUTE;
 import static scanner.Preferences.NO_SCANNING;
 import static scanner.stat.ScanStatItem.*;
+import static scanner.stat.StatDataHolder.SCAN_GATHERER;
+import static scanner.stat.StatDataHolder.TIME_GATHERER;
 
 @Slf4j
 public class Main {
 
     public static void main(String[] args) {
         Stopwatch timer = Stopwatch.createStarted();
+
+        new XReportRunner().run();
+        if (1 == 1) return;
 
         Preferences.configure(args);
         RecoveryManager.recover();
@@ -46,7 +49,7 @@ public class Main {
             }
         } else {
             double expectedTime = BigDecimal.valueOf((0.035d * all) + ((double) all / 100 * 0.5d) * 1.6d).setScale(2, FLOOR).doubleValue();
-            TimeStatGatherer.set(TimeStatItem.EXPECTED_TIME, (long) expectedTime * 1000L);
+            TIME_GATHERER.set(TimeStatItem.EXPECTED_TIME, expectedTime * 1000L);
 
             log.info("addresses will be checked = " + RangeManager.count());
             log.info("expected time: {}", expectedTime);
@@ -65,17 +68,17 @@ public class Main {
                 log.info(completePercent);
                 System.out.println(completePercent);
 
-                ScanStatGatherer.incrementBy(ALL, range.size());
-                ScanStatGatherer.increment(RANGES);
+                SCAN_GATHERER.incrementBy(ALL, (long) range.size());
+                SCAN_GATHERER.increment(RANGES);
                 if (range.isLarge())
-                    ScanStatGatherer.increment(LARGE_RANGES);
+                    SCAN_GATHERER.increment(LARGE_RANGES);
             }
         }
 
-        TimeStatGatherer.set(TimeStatItem.TOTAL_TIME, timer.elapsed(TimeUnit.MILLISECONDS));
+        TIME_GATHERER.set(TimeStatItem.TOTAL_TIME, (double) timer.elapsed(TimeUnit.MILLISECONDS));
         timer.stop();
 
-        new XReportRunner().make();
+        new XReportRunner().run();
 
         RecoveryManager.dropBackup();
 

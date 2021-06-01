@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static scanner.stat.ScanStatGatherer.*;
+import static scanner.stat.StatDataHolder.SCAN_GATHERER;
 
 /**
  * Port scanning basic class.
@@ -44,7 +44,7 @@ public class CameraScanner {
         List<String> targetList = results.stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .peek(x -> increment(ScanStatItem.SUCCESS))
+                .peek(x -> SCAN_GATHERER.increment(ScanStatItem.SUCCESS))
                 .peek(log::info)
                 .collect(Collectors.toList());
 
