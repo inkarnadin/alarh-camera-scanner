@@ -24,18 +24,22 @@ public class XReportRunner extends AbstractRunner {
      * Create report in HTML format.
      */
     public void run() {
-        String template = openTemplate();
+        try {
+            String template = openTemplate();
 
-        if (template.length() == 0)
-            return;
+            if (template.length() == 0)
+                return;
 
-        String report = template.replace("$title", "Report")
-                .replace("$scanReport", MapToHTMLTableConverter.convert(SCAN_GATHERER.getData()))
-                .replace("$timeReport", MapToHTMLTableConverter.convert(TIME_GATHERER.getData()))
-                .replace("$effectiveReport", MapToHTMLTableConverter.convert(EFFICIENCY_GATHERER.getData()))
-                .replace("$ffmpegReport", MapToHTMLTableConverter.convert(SCREEN_GATHERER.getData()));
+            String report = template.replace("$title", "Report")
+                    .replace("$scanReport", MapToHTMLTableConverter.convert(SCAN_GATHERER.getData()))
+                    .replace("$timeReport", MapToHTMLTableConverter.convert(TIME_GATHERER.getData()))
+                    .replace("$effectiveReport", MapToHTMLTableConverter.convert(EFFICIENCY_GATHERER.getData()))
+                    .replace("$ffmpegReport", MapToHTMLTableConverter.convert(SCREEN_GATHERER.getData()));
 
-        saveReport(report);
+            saveReport(report);
+        } catch (Exception xep) {
+            log.warn("report creating error: {}", xep.getMessage());
+        }
     }
 
     private String openTemplate() {
