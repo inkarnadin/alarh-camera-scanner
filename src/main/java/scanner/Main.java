@@ -25,7 +25,6 @@ public class Main {
         Stopwatch timer = Stopwatch.createStarted();
 
         new XReportRunner().run();
-        if (1 == 1) return;
 
         Preferences.configure(args);
         RecoveryManager.recover();
