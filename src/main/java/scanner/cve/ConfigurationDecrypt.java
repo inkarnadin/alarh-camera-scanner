@@ -91,7 +91,7 @@ public class ConfigurationDecrypt {
 
         // if login-pass pair more then two - remove default
         if (list.size() > 1)
-            list.remove("admin: 12345");
+            list.remove("admin:12345");
 
         // if login and pass not found - return message
         if (list.isEmpty())
