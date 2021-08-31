@@ -26,14 +26,6 @@
     </encoder>
   </appender>
 
-  <appender name="REPORT" class="ch.qos.logback.core.FileAppender">
-    <file>${RESULT_DIR}/report.log</file>
-    <append>false</append>
-    <encoder>
-      <pattern>%msg%n</pattern>
-    </encoder>
-  </appender>
-
   <appender name="BRUTE" class="ch.qos.logback.core.FileAppender">
     <file>${RESULT_DIR}/bruted.log</file>
     <append>true</append>
@@ -60,10 +52,6 @@
 
   <logger name="scanner.ffmpeg.FFmpegProcessKiller" level="info">
     <appender-ref ref="FFMPEG"/>
-  </logger>
-
-  <logger name="scanner.XReportRunner" level="info">
-    <appender-ref ref="REPORT"/>
   </logger>
 
   <logger name="scanner.scan.CameraScanner" level="info">

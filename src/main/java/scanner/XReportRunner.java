@@ -3,10 +3,15 @@ package scanner;
 import lombok.extern.slf4j.Slf4j;
 import scanner.report.MapToHTMLTableConverter;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.nio.file.*;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static scanner.stat.StatDataHolder.*;
 
@@ -44,9 +49,12 @@ public class XReportRunner extends AbstractRunner {
 
     private String openTemplate() {
         try {
-            Path path = Paths.get(ClassLoader.getSystemResource("report.html").toURI());
-            return Files.readString(path);
+            InputStream in = getClass().getResourceAsStream("/report.html");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+            return reader.lines().collect(Collectors.joining());
         } catch (Exception xep) {
+            xep.printStackTrace();
             log.warn("error during opening report template: {}", xep.getMessage());
         }
         return emptyTemplate;

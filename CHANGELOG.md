@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
 - Substitute report format to HTML instead plain text.
 
 ### Fixed
-- Wrong deleting default credentials when using CVE vulnerability.
+- Fixed wrong deleting default credentials when using CVE vulnerability.
+- Fixed wrong report template loading.
 
 ## [0.3.0] - 22-05-2021
 
