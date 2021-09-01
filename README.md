@@ -34,7 +34,7 @@ no brute, only scanning by default port, *range.txt* ranges list.
 
 ## Flags
 * Add `-p` flag for set scanning port (554 by default).
-* Add `-th` flag for set parallel threads (20 by default).
+* Add `-th` flag for set parallel threads (10 by default).
 * Add `-t` flag for set time of waiting host response (500 ms by default).
 * Add `-w` flag for set socket waiting timeout (2000 ms by default).
 * Add `-uc` flag allows attempts to connect to untrusted hosts.
