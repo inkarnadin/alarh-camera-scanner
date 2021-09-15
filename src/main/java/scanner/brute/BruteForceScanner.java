@@ -9,10 +9,7 @@ import scanner.ffmpeg.FFmpegExecutor;
 import scanner.rtsp.RTSPContext;
 import scanner.rtsp.TransportMode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -39,7 +36,7 @@ public class BruteForceScanner {
     public void brute(String ip, String[] passwords) {
         Optional<String> cveResult = CVEScanner.scanning(ip);
         if (cveResult.isPresent()) {
-            log.info("{} => {}", ip, cveResult.get());
+            writeLog(ip, Collections.singletonList(cveResult.get()), "<cve empty name>");
             if (Preferences.check(ALLOW_FRAME_SAVING))
                 new FFmpegExecutor().saveFrame(cveResult.get(), ip);
             return;
@@ -59,12 +56,8 @@ public class BruteForceScanner {
                 .filter(i -> i.getIp().equals(ip))
                 .flatMap(x -> x.getOnlyAuth().stream())
                 .collect(Collectors.toList());
-        int size = results.size();
 
-        if (size > 0)
-            log.info("{} => {}", ip, (size == 1)
-                    ? results.get(0)
-                    : "auth not required");
+        writeLog(ip, results, null);
 
         ExecutorHolder.await(terminationTimeout);
     }
@@ -83,7 +76,7 @@ public class BruteForceScanner {
         // if true - skip further brute with credentials
         switch (result.getEmptyCredentialsAuth()) {
             case AUTH:
-                log.info("{} => {}", ip, "auth not required");
+                writeLog(ip, new ArrayList<>(), null);
                 return true;
             case NOT_AVAILABLE:
                 return !Preferences.check(ALLOW_UNTRUSTED_HOST);
@@ -92,6 +85,14 @@ public class BruteForceScanner {
             default:
                 return false;
         }
+    }
+
+    private void writeLog(String ip, List<String> results, String name) {
+        String credentials = results.size() == 1 ? results.get(0) : ":";
+        String path = "11";
+        String localName = (Objects.isNull(name)) ? "<empty name>" : name;
+
+        log.info("{}:{}:{}:{}", ip, path, credentials, localName);
     }
 
 }

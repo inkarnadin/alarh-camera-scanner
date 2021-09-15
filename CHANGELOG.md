@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Substitute report format to HTML instead plain text.
+- Change bruted data format.
 
 ### Fixed
 - Fixed wrong deleting default credentials when using CVE vulnerability.

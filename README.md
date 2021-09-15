@@ -49,6 +49,13 @@ no brute, only scanning by default port, *range.txt* ranges list.
 * All ffmpeg logs will be saved in the path `/logs/ffmpeg.log`.
 * Statistic report about scanning results will be saved in the path `/results/report.log`.
 
+Bruted data presents as:
+
+|IP address    |Path      |Login    |Password     |Name               |
+|:------------:|:--------:|:-------:|:-----------:|:-----------------:|
+|12.44.3.103   |11        |admin    |12345        |\<empty name\>     |
+|12.44.3.105   |11        |admin    |Wre%6ss_     |\<cve empty name\> |
+ 
 ## Save stream
 * An example command for receiving a video stream:
 
