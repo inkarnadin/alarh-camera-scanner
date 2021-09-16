@@ -16,7 +16,7 @@ import java.util.Set;
 public class ProblemResolver {
 
     /**
-     * Rerun problem target which was saved in {@code ProblemHolder} class.
+     * Rerun problem target which was saved in {@link ProblemHolder} class.
      */
     @SuppressWarnings({"rawtypes"})
     public static void run() {
