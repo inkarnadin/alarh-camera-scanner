@@ -25,9 +25,9 @@ public class ProblemResolver {
             for (ProblemTarget target : localStore) {
                 Resolve value = target.getResolve();
                 if (value instanceof PathResolve)
-                    new FFmpegExecutor().saveFrame(target.getCredentials(), target.getIp(), ((PathResolve) value).resolve());
+                    FFmpegExecutor.saveFrame(target.getCredentials(), target.getIp(), ((PathResolve) value).resolve());
                 if (value instanceof AuthResolve)
-                    new FFmpegExecutor().saveFrame(((AuthResolve) value).resolve(), target.getIp(), FFmpegPath.STANDARD);
+                    FFmpegExecutor.saveFrame(((AuthResolve) value).resolve(), target.getIp(), FFmpegPath.STANDARD);
             }
         } catch (Exception xep) {
             log.warn("Error during resolve problem addresses: {}", xep.getMessage());

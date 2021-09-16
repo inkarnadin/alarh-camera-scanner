@@ -38,7 +38,7 @@ public class BruteForceScanner {
         if (cveResult.isPresent()) {
             writeLog(ip, Collections.singletonList(cveResult.get()), "<cve empty name>");
             if (Preferences.check(ALLOW_FRAME_SAVING))
-                new FFmpegExecutor().saveFrame(cveResult.get(), ip);
+                FFmpegExecutor.saveFrame(cveResult.get(), ip);
             return;
         }
 

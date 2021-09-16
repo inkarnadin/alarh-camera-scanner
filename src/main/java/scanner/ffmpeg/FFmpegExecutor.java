@@ -27,7 +27,7 @@ public class FFmpegExecutor {
      * @param path rtsp stream path
      */
     @SneakyThrows
-    public void saveFrame(String credentials, String ip, FFmpegPath path) {
+    public static void saveFrame(String credentials, String ip, FFmpegPath path) {
         CompletableFuture.supplyAsync(() -> new FFmpegFrameSaver(ip, credentials, path).get())
                 .thenAccept(x -> {
                     if (x.isAlive())
@@ -50,9 +50,9 @@ public class FFmpegExecutor {
      * @param ip target address
      */
     @SneakyThrows
-    public void saveFrame(String credentials, String ip) {
+    public static void saveFrame(String credentials, String ip) {
         SCREEN_GATHERER.increment(ScreenStatItem.ALL);
-        this.saveFrame(credentials, ip, STANDARD);
+        saveFrame(credentials, ip, STANDARD);
     }
 
 }
