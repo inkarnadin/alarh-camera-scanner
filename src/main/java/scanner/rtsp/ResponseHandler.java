@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 @Slf4j
 public class ResponseHandler {
 
-    private static String eos = "";
+    private static final String eos = "";
 
     private static final String cSeq = "CSeq";
     private static final String wwwAuthenticate = "WWW-Authenticate";

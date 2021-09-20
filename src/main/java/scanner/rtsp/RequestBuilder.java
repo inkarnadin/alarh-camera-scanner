@@ -49,6 +49,7 @@ public class RequestBuilder {
      *
      * @return request body.
      */
+    @Deprecated
     public String setup() {
         return new StringBuilder()
                 .append(RTSPMethod.SETUP).append(space).append("rtsp://").append(credentials).append(ip).append(":").append(port)
@@ -66,6 +67,7 @@ public class RequestBuilder {
      * @param session active socket session
      * @return request body.
      */
+    @Deprecated
     public String play(String session) {
         return new StringBuilder()
                 .append(RTSPMethod.PLAY).append(space).append("rtsp://").append(credentials).append(ip).append(":").append(port)

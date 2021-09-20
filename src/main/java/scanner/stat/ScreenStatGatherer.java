@@ -56,8 +56,8 @@ public class ScreenStatGatherer extends AbstractStatGatherer<ScreenStatItem, Lon
     /**
      * Not used
      *
-     * @param item
-     * @param value
+     * @param item stats value
+     * @param value by key
      */
     @Override
     public void incrementBy(ScreenStatItem item, Long value) {}
