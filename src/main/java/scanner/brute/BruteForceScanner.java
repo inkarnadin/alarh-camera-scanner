@@ -36,9 +36,10 @@ public class BruteForceScanner {
     public void brute(String ip, String[] passwords) {
         Optional<String> cveResult = CVEScanner.scanning(ip);
         if (cveResult.isPresent()) {
-            writeLog(ip, Collections.singletonList(cveResult.get()), "<cve empty name>");
+            String credentials = cveResult.get();
+            writeLog(ip, Collections.singletonList(credentials), "<cve empty name>");
             if (Preferences.check(ALLOW_FRAME_SAVING))
-                FFmpegExecutor.saveFrame(cveResult.get(), ip);
+                FFmpegExecutor.saveFrame(credentials, ip);
             return;
         }
 
