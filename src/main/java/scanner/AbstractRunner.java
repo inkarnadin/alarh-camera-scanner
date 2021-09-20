@@ -9,6 +9,6 @@ import com.google.common.base.Stopwatch;
  */
 public abstract class AbstractRunner {
 
-    protected Stopwatch timer = Stopwatch.createStarted();
+    protected final Stopwatch timer = Stopwatch.createStarted();
 
 }
