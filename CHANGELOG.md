@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Added Travis CI config file.
 - Added LICENSE.txt.
+- Added additional check password from CVE for the same range.
 
 ### Changed
 - Substitute report format to HTML instead plain text.

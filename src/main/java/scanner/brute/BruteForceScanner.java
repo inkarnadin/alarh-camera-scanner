@@ -1,5 +1,6 @@
 package scanner.brute;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.ExecutorHolder;
@@ -26,6 +27,9 @@ public class BruteForceScanner {
 
     private final static long terminationTimeout = 1000L;
 
+    @Getter
+    private final PostCheckCVEContainer checkCVEContainer = new PostCheckCVEContainer();
+
     /**
      * Start brute certain address by prepared range passwords list.
      *
@@ -38,6 +42,9 @@ public class BruteForceScanner {
         if (cveResult.isPresent()) {
             String credentials = cveResult.get();
             writeLog(ip, Collections.singletonList(credentials), "<cve empty name>");
+
+            checkCVEContainer.add(ip, credentials);
+
             if (Preferences.check(ALLOW_FRAME_SAVING))
                 FFmpegExecutor.saveFrame(credentials, ip);
             return;
@@ -70,6 +77,9 @@ public class BruteForceScanner {
     }
 
     private boolean isEmptyBruteTask(String ip) {
+        if (!checkCVEContainer.isEmpty())
+            return false;
+
         RTSPContext.set(ip, TransportMode.ORTHODOX);
         CompletableFuture<AuthContainer> bruteTask = createBruteTask(ip, new String[] { null });
         AuthContainer result = bruteTask.join();
