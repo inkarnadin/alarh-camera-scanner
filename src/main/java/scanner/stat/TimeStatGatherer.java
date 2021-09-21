@@ -2,13 +2,11 @@ package scanner.stat;
 
 import com.google.common.base.Strings;
 
-import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static java.math.RoundingMode.UP;
 import static scanner.stat.ScanStatItem.ALL;
 import static scanner.stat.ScanStatItem.SUCCESS;
 import static scanner.stat.StatDataHolder.SCAN_GATHERER;
@@ -69,9 +67,5 @@ public class TimeStatGatherer extends AbstractStatGatherer<TimeStatItem, Long> {
         if (SCAN_GATHERER.get(SUCCESS) > 0)
             data.put(AVG_BRUTE_TIME, data.get(TOTAL_BRUTE_TIME) / SCAN_GATHERER.get(SUCCESS));
     }
-
-//    private static double normalize(double val) {
-//        return BigDecimal.valueOf(val).setScale(2, UP).doubleValue();
-//    }
 
 }
