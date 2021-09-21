@@ -62,7 +62,7 @@ public class XBruteRunner extends AbstractRunner {
         } catch (Exception xep) {
             log.error("error during brute attack: {}", xep.getMessage());
         }
-        TIME_GATHERER.set(TOTAL_BRUTE_TIME, (double) timer.elapsed(TimeUnit.MILLISECONDS));
+        TIME_GATHERER.set(TOTAL_BRUTE_TIME, timer.elapsed(TimeUnit.MILLISECONDS));
         timer.stop();
     }
 

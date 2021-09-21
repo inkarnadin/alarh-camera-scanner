@@ -45,8 +45,8 @@ public class Main {
                 new XBruteRunner(listRanges, listPasswords).run();
             }
         } else {
-            double expectedTime = BigDecimal.valueOf((0.035d * all) + ((double) all / 100 * 0.5d) * 1.6d).setScale(2, FLOOR).doubleValue();
-            TIME_GATHERER.set(TimeStatItem.EXPECTED_TIME, expectedTime * 1000L);
+            Long expectedTime = ExpectedTimeCalculator.expectedTime(all);
+            TIME_GATHERER.set(TimeStatItem.EXPECTED_TIME, expectedTime);
 
             log.info("addresses will be checked = " + RangeManager.count());
             log.info("expected time: {}", expectedTime);
@@ -72,7 +72,7 @@ public class Main {
             }
         }
 
-        TIME_GATHERER.set(TimeStatItem.TOTAL_TIME, (double) timer.elapsed(TimeUnit.MILLISECONDS));
+        TIME_GATHERER.set(TimeStatItem.TOTAL_TIME, timer.elapsed(TimeUnit.MILLISECONDS));
         timer.stop();
 
         new XReportRunner().run();

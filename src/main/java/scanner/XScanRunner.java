@@ -49,7 +49,7 @@ public class XScanRunner extends AbstractRunner {
             log.error("Error during check ip range: {}", xep.getMessage());
         }
 
-        TIME_GATHERER.set(TOTAL_SCAN_TIME, (double) timer.elapsed(TimeUnit.MILLISECONDS));
+        TIME_GATHERER.set(TOTAL_SCAN_TIME, timer.elapsed(TimeUnit.MILLISECONDS));
         timer.stop();
 
         return result;
