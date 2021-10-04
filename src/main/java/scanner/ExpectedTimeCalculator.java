@@ -3,7 +3,7 @@ package scanner;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Class for calculate expected time.
+ * Class for calculating the expected scan execution time.
  *
  * @author inkarnadin
  */
