@@ -41,7 +41,7 @@ public class BruteForceScanner {
         Optional<String> cveResult = CVEScanner.scanning(ip);
         if (cveResult.isPresent()) {
             String credentials = cveResult.get();
-            writeLog(ip, Collections.singletonList(credentials), "<cve empty name>");
+            writeLog(ip, Collections.singletonList(credentials), "<cve>");
 
             checkCVEContainer.add(ip, credentials);
 
@@ -65,7 +65,7 @@ public class BruteForceScanner {
                 .flatMap(x -> x.getOnlyAuth().stream())
                 .collect(Collectors.toList());
 
-        writeLog(ip, results, null);
+        writeLog(ip, results, "<brute>");
 
         ExecutorHolder.await(terminationTimeout);
     }
@@ -87,7 +87,7 @@ public class BruteForceScanner {
         // if true - skip further brute with credentials
         switch (result.getEmptyCredentialsAuth()) {
             case AUTH:
-                writeLog(ip, new ArrayList<>(), null);
+                writeLog(ip, new ArrayList<>(), "<brute>");
                 return true;
             case NOT_AVAILABLE:
                 return !Preferences.check(ALLOW_UNTRUSTED_HOST);
