@@ -53,9 +53,11 @@ public class XBruteRunner extends AbstractRunner {
             }
 
             String[] passwords = bruteForceScanner.getCheckCVEContainer().getAdditionalPasswords().toArray(new String[0]);
-            log.info("check additional passwords {}", Arrays.asList(passwords).toString());
-            for (String ip : bruteForceScanner.getCheckCVEContainer().updateAddressList(listSources))
-                bruteForceScanner.brute(ip, passwords);
+            if (passwords.length > 0) {
+                log.info("check additional passwords {}", Arrays.asList(passwords).toString());
+                for (String ip : bruteForceScanner.getCheckCVEContainer().updateAddressList(listSources))
+                    bruteForceScanner.brute(ip, passwords);
+            }
 
             if (Preferences.check(ALLOW_FRAME_SAVING))
                 ProblemResolver.run();
