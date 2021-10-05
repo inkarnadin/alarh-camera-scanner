@@ -1,9 +1,5 @@
 package scanner.stat;
 
-import com.google.common.base.Strings;
-
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -40,12 +36,11 @@ public class TimeStatGatherer extends AbstractStatGatherer<TimeStatItem, Long> {
                             long clearMilliseconds = entry.getValue() % 1000;
                             long timeInSeconds = entry.getValue() / 1000;
 
-                            LocalTime time = LocalTime.ofSecondOfDay(timeInSeconds);
+                            long hours = timeInSeconds / 3600;
+                            long minutes = (timeInSeconds % 3600) / 60;
+                            long seconds = timeInSeconds % 60;
 
-                            String msAsString = Strings.padEnd(Long.toString(clearMilliseconds), 3, '0');
-                            String timeAsString = time.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-
-                            return String.format("%s.%s", timeAsString, msAsString);
+                            return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, clearMilliseconds);
                         })
                 );
     }
