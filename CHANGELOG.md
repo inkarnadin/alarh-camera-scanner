@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Added Travis CI config file.
 - Added LICENSE.txt.
 - Added additional check password from CVE for the same range.
+- Added preliminary total addresses count checking. 
 
 ### Changed
 - Substitute report format to HTML instead plain text.
@@ -16,6 +17,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Fixed wrong deleting default credentials when using CVE vulnerability.
 - Fixed wrong report template loading.
+- Fixed OOM if too many addresses trying check per time.
 
 ## [0.3.0] - 22-05-2021
 
