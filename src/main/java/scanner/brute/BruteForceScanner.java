@@ -27,6 +27,11 @@ public class BruteForceScanner {
 
     private final static long terminationTimeout = 1000L;
 
+    private final static String bruteConstName = "<brute>";
+    private final static String repeatConstName = "<repeat>";
+    private final static String cveConstName = "<cve>";
+    private final static String emptyConstName = "<empty>";
+
     @Getter
     private final PostCheckCVEContainer checkCVEContainer = new PostCheckCVEContainer();
 
@@ -38,10 +43,12 @@ public class BruteForceScanner {
      */
     @SneakyThrows
     public void brute(String ip, String[] passwords) {
-        Optional<String> cveResult = CVEScanner.scanning(ip);
+        Optional<String> cveResult = isRepeat()
+                ? Optional.empty()
+                : CVEScanner.scanning(ip);
         if (cveResult.isPresent()) {
             String credentials = cveResult.get();
-            writeLog(ip, Collections.singletonList(credentials), "<cve>");
+            writeLog(ip, Collections.singletonList(credentials), cveConstName);
 
             checkCVEContainer.add(ip, credentials);
 
@@ -65,9 +72,13 @@ public class BruteForceScanner {
                 .flatMap(x -> x.getOnlyAuth().stream())
                 .collect(Collectors.toList());
 
-        writeLog(ip, results, "<brute>");
+        writeLog(ip, results, isRepeat() ? repeatConstName : bruteConstName);
 
         ExecutorHolder.await(terminationTimeout);
+    }
+
+    private boolean isRepeat() {
+        return !checkCVEContainer.isEmpty();
     }
 
     private CompletableFuture<AuthContainer> createBruteTask(String ip, String[] passwords) {
@@ -77,7 +88,7 @@ public class BruteForceScanner {
     }
 
     private boolean isEmptyBruteTask(String ip) {
-        if (!checkCVEContainer.isEmpty())
+        if (isRepeat())
             return false;
 
         RTSPContext.set(ip, TransportMode.ORTHODOX);
@@ -87,7 +98,7 @@ public class BruteForceScanner {
         // if true - skip further brute with credentials
         switch (result.getEmptyCredentialsAuth()) {
             case AUTH:
-                writeLog(ip, new ArrayList<>(), "<brute>");
+                writeLog(ip, new ArrayList<>(), bruteConstName);
                 return true;
             case NOT_AVAILABLE:
                 return !Preferences.check(ALLOW_UNTRUSTED_HOST);
@@ -101,7 +112,7 @@ public class BruteForceScanner {
     private void writeLog(String ip, List<String> results, String name) {
         String credentials = results.size() == 1 ? results.get(0) : ":";
         String path = "11";
-        String localName = (Objects.isNull(name)) ? "<empty name>" : name;
+        String localName = (Objects.isNull(name)) ? emptyConstName : name;
 
         log.info("{}:{}:{}:{}", ip, path, credentials, localName);
     }
