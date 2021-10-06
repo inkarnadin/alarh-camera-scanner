@@ -30,6 +30,8 @@ public class Main {
         List<String> listRanges = Preferences.getRangesList();
         List<String> listPasswords = Preferences.getPasswordsList();
 
+        RangeManager.validateMaxAddressesCount(listRanges);
+
         for (String range : listRanges)
             RangeManager.prepare(range);
 

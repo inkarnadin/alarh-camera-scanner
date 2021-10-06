@@ -23,6 +23,8 @@ public class RangeManager {
     private final static int min = 0;
     private final static int max = 255;
 
+    private final static int limitCount = 30_000_000;
+
     @Getter
     private static final List<IpV4AddressRange> addressCache = new ArrayList<>();
 
@@ -68,8 +70,31 @@ public class RangeManager {
     }
 
     /**
-     * Get count of all IP addresses by all ranges.
+     * The method for checking if the number of addresses is exceeded. If the limit is exceeded, there is a risk of
+     * receiving a memory overflow error with standard JVM settings (heap size).
      *
+     * In order to avoid problems, the application ends its work with code 2.
+     *
+     * The current limit is 30 million addresses at a time.
+     *
+     * @param ranges list of all ranges
+     */
+    public static void validateMaxAddressesCount(List<String> ranges) {
+        long totalCount = 0;
+        for (String rangeAsString : ranges) {
+            totalCount += parseRange(rangeAsString).size();
+        }
+
+        log.debug("total IP addresses count {}", totalCount);
+
+        if (totalCount > limitCount) {
+            log.warn("addresses limit count was overflowed - total {}, expected {}", totalCount, limitCount);
+            System.exit(2);
+        }
+    }
+
+    /**
+     * Get count of all IP addresses by all ranges.
      * The total number of addresses contained in each range is calculated.
      *
      * @return count of IP addresses
@@ -136,7 +161,7 @@ public class RangeManager {
     }
 
     private static List<IpV4Address> parseLargeRange(IpV4Address startAddress, IpV4Address endAddress) {
-        log.debug("start processing large range {} - {}", startAddress.getIpAsString(),endAddress.getIpAsString());
+        log.trace("start processing large range {} - {}", startAddress.getIpAsString(),endAddress.getIpAsString());
 
         String rangeAsString = new StringBuilder()
                 .append(startAddress.toString())
@@ -161,7 +186,7 @@ public class RangeManager {
                 .toString();
         range.addAll(parseRange(rangeAsString));
 
-        log.debug("stop processing large range {} - {}", startAddress.getIpAsString(),endAddress.getIpAsString());
+        log.trace("stop processing large range {} - {}", startAddress.getIpAsString(),endAddress.getIpAsString());
 
         return range;
     }
