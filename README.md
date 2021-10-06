@@ -53,10 +53,17 @@ Bruted data presents as:
 
 |IP address    |Path      |Login    |Password     |Name               |
 |:------------:|:--------:|:-------:|:-----------:|:-----------------:|
-|12.44.3.103   |11        |admin    |12345        |\<empty name\>     |
-|12.44.3.105   |11        |admin    |Wre%6ss_     |\<cve empty name\> |
+|12.44.3.103   |11        |admin    |12345        |\<brute\>          |
+|12.44.3.105   |11        |admin    |Wre%6ss_     |\<cve\>            |
  
 ## Save stream
 * An example command for receiving a video stream:
 
  `ffmpeg -i rtsp://${login}:${password}@${host}/Streaming/Channels/101 -acodec copy -vcodec copy /home/user/video.mp4`.
+ 
+## Constraints
+At the moment, the application can handle about 20-30 million addresses for the foreseeable future. For large volumes, 
+memory issues can occur, and the expected execution time will exceed acceptable limits.
+
+If you need to process many of ranges, it is recommended to run them sequentially or on several, different 
+application instances. 
