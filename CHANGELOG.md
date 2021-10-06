@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Fixed wrong deleting default credentials when using CVE vulnerability.
 - Fixed wrong report template loading.
 - Fixed OOM if too many addresses trying check per time.
+- Fixed issue when creation report when expected time was too big.
 
 ## [0.3.0] - 22-05-2021
 
