@@ -50,14 +50,20 @@ public class RangeManager {
      * @param rangeAsString range of IPs in string view, ex. <b>10.20.3.0-10.20.4.255</b>
      */
     public static void prepare(String rangeAsString) {
+        log.debug("processing range {}", rangeAsString);
+
         IpV4AddressRange resultRange = new IpV4AddressRange();
         List<IpV4Address> range = parseRange(rangeAsString);
 
-        if (needRestore(range))
+        if (needRestore(range)) {
+            log.debug("need restore flag is active, prepare this range was skipped");
             return;
+        }
 
         for (IpV4Address address : range)
             resultRange.add(address);
+
+        log.debug("current addresses count in cache list: {}", count());
         addressCache.add(resultRange);
     }
 
@@ -81,50 +87,57 @@ public class RangeManager {
     }
 
     private static List<IpV4Address> parseRange(String range) {
-        String[] rangeAddresses = range.split("-");
+        try {
+            String[] rangeAddresses = range.split("-");
 
-        IpV4Address startAddress;
-        IpV4Address endAddress;
+            IpV4Address startAddress;
+            IpV4Address endAddress;
 
-        if (rangeAddresses.length == 1) {
-            startAddress = new IpV4Address(rangeAddresses[0]);
-            endAddress = new IpV4Address(rangeAddresses[0]);
-        } else {
-            startAddress = new IpV4Address(rangeAddresses[0]);
-            endAddress = new IpV4Address(rangeAddresses[1]);
-        }
-
-        int startPart1 = startAddress.getPart1();
-        int startPart2 = startAddress.getPart2();
-        int startPart3 = startAddress.getPart3();
-        int startPart4 = startAddress.getPart4();
-
-        int endPart3 = endAddress.getPart3();
-
-        if (startPart1 != endAddress.getPart1()) {
-            log.warn("{} - {}. This range too large and will be skipped", startAddress.toString(), endAddress.toString());
-            return new ArrayList<>();
-        }
-
-        if (startPart2 != endAddress.getPart2())
-            return parseLargeRange(startAddress, endAddress);
-
-        List<IpV4Address> addresses = new ArrayList<>();
-        while (startPart3 <= endPart3) {
-            int endPart4 = (startPart3 != endPart3) ? max : endAddress.getPart4();
-            while (startPart4 <= endPart4) {
-                IpV4Address ipV4Address = new IpV4Address(startPart1, startPart2, startPart3, startPart4);
-                addresses.add(ipV4Address);
-
-                startPart4++;
+            if (rangeAddresses.length == 1) {
+                startAddress = new IpV4Address(rangeAddresses[0]);
+                endAddress = new IpV4Address(rangeAddresses[0]);
+            } else {
+                startAddress = new IpV4Address(rangeAddresses[0]);
+                endAddress = new IpV4Address(rangeAddresses[1]);
             }
-            startPart3++;
-            startPart4 = min;
+
+            int startPart1 = startAddress.getPart1();
+            int startPart2 = startAddress.getPart2();
+            int startPart3 = startAddress.getPart3();
+            int startPart4 = startAddress.getPart4();
+
+            int endPart3 = endAddress.getPart3();
+
+            if (startPart1 != endAddress.getPart1()) {
+                log.warn("{} - {}. This range too large and will be skipped", startAddress.toString(), endAddress.toString());
+                return new ArrayList<>();
+            }
+
+            if (startPart2 != endAddress.getPart2())
+                return parseLargeRange(startAddress, endAddress);
+
+            List<IpV4Address> addresses = new ArrayList<>();
+            while (startPart3 <= endPart3) {
+                int endPart4 = (startPart3 != endPart3) ? max : endAddress.getPart4();
+                while (startPart4 <= endPart4) {
+                    IpV4Address ipV4Address = new IpV4Address(startPart1, startPart2, startPart3, startPart4);
+                    addresses.add(ipV4Address);
+
+                    startPart4++;
+                }
+                startPart3++;
+                startPart4 = min;
+            }
+            return addresses;
+        } catch (Exception xep) {
+            log.error("error during calculation range {}, message {}", range, xep.getMessage());
         }
-        return addresses;
+        return new ArrayList<>();
     }
 
     private static List<IpV4Address> parseLargeRange(IpV4Address startAddress, IpV4Address endAddress) {
+        log.debug("start processing large range {} - {}", startAddress.getIpAsString(),endAddress.getIpAsString());
+
         String rangeAsString = new StringBuilder()
                 .append(startAddress.toString())
                 .append("-")
@@ -147,6 +160,8 @@ public class RangeManager {
                 .append(endAddress.toString())
                 .toString();
         range.addAll(parseRange(rangeAsString));
+
+        log.debug("stop processing large range {} - {}", startAddress.getIpAsString(),endAddress.getIpAsString());
 
         return range;
     }
