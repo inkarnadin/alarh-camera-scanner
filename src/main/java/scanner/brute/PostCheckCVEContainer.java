@@ -52,6 +52,11 @@ public class PostCheckCVEContainer {
             additionalPasswords.add(pair[1]);
     }
 
+    /**
+     * Exclude ip from repeat check list.
+     *
+     * @param ip target address
+     */
     void excludeAddress(String ip) {
         excludeAddresses.add(ip);
     }
