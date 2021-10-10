@@ -14,7 +14,7 @@ public class PostCheckCVEContainerTest {
     @Test
     public void testNonEmpty() {
         PostCheckCVEContainer checkCVEContainer = new PostCheckCVEContainer();
-        checkCVEContainer.add("8.10.20.11", "check:check");
+        checkCVEContainer.addCredentials("check:check");
 
         assertFalse(checkCVEContainer.isEmpty());
     }
@@ -29,9 +29,9 @@ public class PostCheckCVEContainerTest {
     @Test
     public void testAddPassword() {
         PostCheckCVEContainer checkCVEContainer = new PostCheckCVEContainer();
-        checkCVEContainer.add("8.10.20.11", "check:check");
-        checkCVEContainer.add("8.10.20.1", "check:check");
-        checkCVEContainer.add("8.10.20.12", "test:password");
+        checkCVEContainer.addCredentials("check:check");
+        checkCVEContainer.addCredentials("check:check");
+        checkCVEContainer.addCredentials("test:password");
 
         Set<String> passwords = new HashSet<>();
         passwords.add("check");
@@ -41,10 +41,10 @@ public class PostCheckCVEContainerTest {
     }
 
     @Test
-    public void testUpdateAddressList() {
+    public void testExcludeAddress() {
         PostCheckCVEContainer checkCVEContainer = new PostCheckCVEContainer();
-        checkCVEContainer.add("8.10.20.1", "check:check");
-        checkCVEContainer.add("8.10.20.12", "test:password");
+        checkCVEContainer.excludeAddress("8.10.20.1");
+        checkCVEContainer.excludeAddress("8.10.20.12");
 
         List<String> addresses = new ArrayList<>();
         addresses.add("8.10.20.1");

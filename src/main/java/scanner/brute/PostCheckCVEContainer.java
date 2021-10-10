@@ -40,17 +40,20 @@ public class PostCheckCVEContainer {
     /**
      * Add a password that will be used when re-running the range.
      *
-     * @param ip address target
      * @param credentials login and password as string "login:password"
      */
-    void add(String ip, String credentials) {
+    void addCredentials(String credentials) {
         if (Objects.isNull(credentials))
             return;
 
         String[] pair = credentials.split(":");
 
+        if (pair.length == 2)
+            additionalPasswords.add(pair[1]);
+    }
+
+    void excludeAddress(String ip) {
         excludeAddresses.add(ip);
-        additionalPasswords.add(pair[1]);
     }
 
     /**

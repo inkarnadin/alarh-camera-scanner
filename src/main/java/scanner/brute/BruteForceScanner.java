@@ -50,7 +50,8 @@ public class BruteForceScanner {
             String credentials = cveResult.get();
             writeLog(ip, Collections.singletonList(credentials), cveConstName);
 
-            checkCVEContainer.add(ip, credentials);
+            checkCVEContainer.addCredentials(credentials);
+            checkCVEContainer.excludeAddress(ip);
 
             if (Preferences.check(ALLOW_FRAME_SAVING))
                 FFmpegExecutor.saveFrame(credentials, ip);
@@ -70,9 +71,11 @@ public class BruteForceScanner {
                 .map(CompletableFuture::join)
                 .filter(i -> i.getIp().equals(ip))
                 .flatMap(x -> x.getOnlyAuth().stream())
+                .peek(checkCVEContainer::excludeAddress)
                 .collect(Collectors.toList());
 
-        writeLog(ip, results, isRepeat() ? repeatConstName : bruteConstName);
+        if (results.size() > 0)
+            writeLog(ip, results, isRepeat() ? repeatConstName : bruteConstName);
 
         ExecutorHolder.await(terminationTimeout);
     }
@@ -98,6 +101,7 @@ public class BruteForceScanner {
         // if true - skip further brute with credentials
         switch (result.getEmptyCredentialsAuth()) {
             case AUTH:
+                checkCVEContainer.excludeAddress(ip);
                 writeLog(ip, new ArrayList<>(), bruteConstName);
                 return true;
             case NOT_AVAILABLE:
