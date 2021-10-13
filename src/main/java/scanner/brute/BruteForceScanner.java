@@ -7,6 +7,7 @@ import scanner.ExecutorHolder;
 import scanner.Preferences;
 import scanner.cve.CVEScanner;
 import scanner.ffmpeg.FFmpegExecutor;
+import scanner.onvif.OnvifScreenSaver;
 import scanner.rtsp.RTSPContext;
 import scanner.rtsp.TransportMode;
 
@@ -53,8 +54,11 @@ public class BruteForceScanner {
             checkCVEContainer.addCredentials(credentials);
             checkCVEContainer.excludeAddress(ip);
 
-            if (Preferences.check(ALLOW_FRAME_SAVING))
-                FFmpegExecutor.saveFrame(credentials, ip);
+            if (Preferences.check(ALLOW_FRAME_SAVING)) {
+                boolean isSuccess = OnvifScreenSaver.saveSnapshot(ip);
+                if (!isSuccess)
+                    FFmpegExecutor.saveFrame(credentials, ip);
+            }
             return;
         }
 
