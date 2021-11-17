@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.com/inkarnadin/alarh-camera-scanner.svg?branch=main)](https://travis-ci.com/inkarnadin/alarh-camera-scanner)
-[![version](https://img.shields.io/badge/version-0.3.0-orange)](https://github.com/inkarnadin/alarh-camera-scanner/releases/tag/v0.3.0)
+[![version](https://img.shields.io/badge/version-0.4.0-orange)](https://github.com/inkarnadin/alarh-camera-scanner/releases/tag/v0.4.0)
 [![version](https://img.shields.io/badge/license-apache-yellow.svg)](https://github.com/inkarnadin/alarh-camera-scanner/blob/main/LICENSE.txt)
 
 # Camera Scanner
