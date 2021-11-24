@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [UNRELEASED]
 
+### Changed
+- Changed result output camera file: camera.txt to hosts.txt.
+
 ## [0.4.0] - 17-11-2021
 
 ### Added
@@ -15,7 +18,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Substitute report format to HTML instead plain text.
-- Change bruted data format.
+- Changed bruted data format.
 
 ### Fixed
 - Fixed wrong deleting default credentials when using CVE vulnerability.

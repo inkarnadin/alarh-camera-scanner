@@ -19,7 +19,7 @@
   </appender>
 
   <appender name="CAMERA" class="ch.qos.logback.core.FileAppender">
-    <file>${RESULT_DIR}/camera.log</file>
+    <file>${RESULT_DIR}/hosts.log</file>
     <append>true</append>
     <encoder>
       <pattern>%msg%n</pattern>
