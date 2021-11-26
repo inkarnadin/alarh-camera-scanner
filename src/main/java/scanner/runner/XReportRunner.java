@@ -1,4 +1,4 @@
-package scanner;
+package scanner.runner;
 
 import lombok.extern.slf4j.Slf4j;
 import scanner.report.MapToHTMLTableConverter;

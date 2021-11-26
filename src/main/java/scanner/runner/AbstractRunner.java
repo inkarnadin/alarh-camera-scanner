@@ -1,4 +1,4 @@
-package scanner;
+package scanner.runner;
 
 import com.google.common.base.Stopwatch;
 

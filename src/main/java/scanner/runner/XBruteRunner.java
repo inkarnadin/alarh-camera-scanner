@@ -1,7 +1,8 @@
-package scanner;
+package scanner.runner;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import scanner.Preferences;
 import scanner.analyze.ProblemResolver;
 import scanner.brute.BruteForceScanner;
 
