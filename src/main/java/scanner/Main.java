@@ -53,7 +53,7 @@ public class Main {
             Long expectedTime = ExpectedTimeCalculator.expectedTime(all);
             TIME_GATHERER.set(TimeStatItem.EXPECTED_TIME, expectedTime);
 
-            log.info("addresses will be checked = " + RangeManager.count());
+            log.info("addresses will be checked = " + all);
             log.info("expected time: {}", expectedTime);
 
             for (IpV4AddressRange range : addressCache) {
