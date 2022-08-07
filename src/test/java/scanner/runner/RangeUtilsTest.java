@@ -67,7 +67,6 @@ public class RangeUtilsTest {
         field.setAccessible(true);
         Map<RecoveryElement, String> map = (Map<RecoveryElement, String>) field.get(RecoveryManager.class);
         map.put(STOP_SCAN_RANGE, stopScanValue);
-        System.out.println(map);
         field.set(RecoveryManager.class, map);
         field.setAccessible(false);
     }
