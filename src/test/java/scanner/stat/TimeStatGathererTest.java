@@ -8,7 +8,7 @@ import static scanner.stat.TimeStatItem.TOTAL_TIME;
 public class TimeStatGathererTest {
 
     @Test
-    public void testGetData() {
+    public void get_time_from_mills() {
         TimeStatGatherer gatherer = new TimeStatGatherer();
         gatherer.set(TOTAL_TIME, 5000000005L);
 

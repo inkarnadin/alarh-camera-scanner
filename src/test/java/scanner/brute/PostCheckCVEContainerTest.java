@@ -2,9 +2,7 @@ package scanner.brute;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -12,7 +10,7 @@ import static org.junit.Assert.*;
 public class PostCheckCVEContainerTest {
 
     @Test
-    public void testNonEmpty() {
+    public void cve_non_empty() {
         PostCheckCVEContainer checkCVEContainer = new PostCheckCVEContainer();
         checkCVEContainer.addCredentials("check:check");
 
@@ -20,14 +18,14 @@ public class PostCheckCVEContainerTest {
     }
 
     @Test
-    public void testIsEmpty() {
+    public void cve_is_empty() {
         PostCheckCVEContainer checkCVEContainer = new PostCheckCVEContainer();
 
         assertTrue(checkCVEContainer.isEmpty());
     }
 
     @Test
-    public void testAddPassword() {
+    public void cve_add_password() {
         PostCheckCVEContainer checkCVEContainer = new PostCheckCVEContainer();
         checkCVEContainer.addCredentials("check:check");
         checkCVEContainer.addCredentials("check:check");
@@ -41,18 +39,18 @@ public class PostCheckCVEContainerTest {
     }
 
     @Test
-    public void testExcludeAddress() {
+    public void cve_exclude_address() {
         PostCheckCVEContainer checkCVEContainer = new PostCheckCVEContainer();
         checkCVEContainer.excludeAddress("8.10.20.1");
         checkCVEContainer.excludeAddress("8.10.20.12");
 
-        List<String> addresses = new ArrayList<>();
+        Set<String> addresses = new HashSet<>();
         addresses.add("8.10.20.1");
         addresses.add("8.10.20.12");
         addresses.add("8.10.20.13");
         addresses.add("8.10.20.18");
 
-        List<String> remain = new ArrayList<>();
+        Set<String> remain = new HashSet<>();
         remain.add("8.10.20.13");
         remain.add("8.10.20.18");
 

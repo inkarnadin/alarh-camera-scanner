@@ -4,14 +4,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import static scanner.stat.ScanStatItem.*;
-import static scanner.stat.ScanStatItem.SUCCESS;
-import static scanner.stat.StatDataHolder.*;
+import static scanner.stat.StatDataHolder.SCAN_GATHERER;
 
 public class ScanStatGathererTest {
 
     @Test
-    public void getStatsAsString_success() {
-        SCAN_GATHERER.set(ALL, 10L);
+    public void get_stats_as_string_success() {
+        SCAN_GATHERER.set(TOTAL, 10L);
         SCAN_GATHERER.increment(SUCCESS);
         SCAN_GATHERER.increment(SUCCESS);
         SCAN_GATHERER.increment(FAILURE);

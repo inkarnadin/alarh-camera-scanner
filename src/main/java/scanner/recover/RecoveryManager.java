@@ -19,38 +19,43 @@ import static scanner.stat.StatDataHolder.SCAN_GATHERER;
 import static scanner.stat.StatDataHolder.SCREEN_GATHERER;
 
 /**
- * Save and load interrupted checking process.
+ * Class for save and load interrupted checking process.
+ *
  * @author inkarnadin
+ * on 11-05-2021
  */
 @Slf4j
-public class RecoveryManager {
+public final class RecoveryManager {
 
-    private static final Map<RecoveryElement, String> bufferedData = new HashMap<>();
+    private static final Map<RecoveryElement, String> BUFFERED_DATA = new HashMap<>();
     private static Map<RecoveryElement, String> restoredData = new HashMap<>();
 
-    private static final String splitter = "/";
+    private static final String SPLITTER = "/";
+    private static final File BACKUP = new File("backup.tmp");
 
-    private static final File backup = new File("backup.tmp");
+    private RecoveryManager() {
+        throw new AssertionError("Utility class can't be instantiate");
+    }
 
     /**
-     * Save some value for later recovery.
+     * Method for saving some value for later recovery.
      *
      * @param element recover element
      * @param value checking range
      */
     public static void save(RecoveryElement element, String value) {
-        bufferedData.put(element, value);
+        BUFFERED_DATA.put(element, value);
         flush();
     }
 
     /**
-     * Write data to backup file.
+     * Method for writing data to a backup file.
      */
     public static void flush() {
-        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(backup)))) {
-            for (Map.Entry<RecoveryElement, String> item : bufferedData.entrySet()) {
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(BACKUP)))) {
+            for (Map.Entry<RecoveryElement, String> item : BUFFERED_DATA.entrySet()) {
                 bw.write(item.getKey().getDescription());
-                bw.write(splitter);
+                bw.write(SPLITTER);
                 bw.write(item.getValue());
                 bw.newLine();
             }
@@ -60,7 +65,7 @@ public class RecoveryManager {
     }
 
     /**
-     * Recovers data from a backup file to restore the state of the application.
+     * Method for recovering data from a backup file to restore the state of the application.
      * Only if checksum source file equals.
      *
      * After restoring, the backup file will be overwritten.
@@ -69,9 +74,9 @@ public class RecoveryManager {
     public static void recover() {
         String currentSourceHash = SourceReader.checksum(get("-source"));
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(backup)))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(BACKUP)))) {
             restoredData = reader.lines()
-                    .map(x -> x.split(splitter))
+                    .map(x -> x.split(SPLITTER))
                     .filter(f -> f.length == 2)
                     .collect(Collectors.toMap(k -> RecoveryElement.find(k[0]), v -> v[1]));
 
@@ -94,7 +99,6 @@ public class RecoveryManager {
                         SCREEN_GATHERER.set(e, Long.parseLong(values[e.ordinal()]));
                 }
             }
-
             log.info("previous session was restored");
         } catch (FileNotFoundException ignored) {
         } catch (Exception xep) {
@@ -104,7 +108,7 @@ public class RecoveryManager {
     }
 
     /**
-     * Get recovered value by recovery key.
+     * Method to getting recovered value by recovery key.
      *
      * @param element recovery key
      * @return recovered element
@@ -114,10 +118,10 @@ public class RecoveryManager {
     }
 
     /**
-     * Drop backup file if successfully exit.
+     * Method for Drop backup file if successfully exit.
      */
     public static void dropBackup() {
-        if (backup.delete())
+        if (BACKUP.delete())
             log.info("backup file was removed.");
     }
 

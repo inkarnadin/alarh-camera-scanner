@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 public class ParseTest {
 
     @Test
-    @Ignore
     @SneakyThrows
+    @Ignore("Functionality checking test")
     public void parse() {
         File file = new File("output");
         byte[] fileContents = Files.readAllBytes(file.toPath());
@@ -22,9 +22,10 @@ public class ParseTest {
         Matcher matcher = ptn.matcher(new String(fileContents));
 
         List<String> list = new ArrayList<>();
-        while (matcher.find())
+        while (matcher.find()) {
             list.add(matcher.group(0));
-        System.out.println(list.toString());
+        }
+        System.out.println(list);
     }
 
 }

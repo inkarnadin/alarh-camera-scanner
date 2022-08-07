@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Changed result output camera file: camera.txt to hosts.txt.
+- The process of working from a range of addresses has been optimized - the application consumes much less memory now.
+- The limit on the maximum number of addresses during processing has been removed.
 
 ## [0.4.0] - 17-11-2021
 

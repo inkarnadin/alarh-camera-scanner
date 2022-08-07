@@ -20,7 +20,7 @@ import static scanner.Preferences.SOCKET_TIMEOUT;
 @Slf4j
 public class CameraScanTask implements Runnable {
 
-    private final static int timeout = Integer.parseInt(Preferences.get(SOCKET_TIMEOUT));
+    private final static int TIMEOUT = Integer.parseInt(Preferences.get(SOCKET_TIMEOUT));
 
     private final CompletableFuture<Optional<String>> future;
     private final InetSocketAddress address;
@@ -32,7 +32,7 @@ public class CameraScanTask implements Runnable {
     public void run() {
         Thread.currentThread().setName(String.format("scan-%s", address));
         try (Socket socket = new Socket()) {
-            socket.connect(address, timeout);
+            socket.connect(address, TIMEOUT);
             socket.close();
             log.debug("success checked");
             future.complete(Optional.of(address.getAddress().toString().replace("/", "")));

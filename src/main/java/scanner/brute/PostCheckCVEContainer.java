@@ -3,7 +3,6 @@ package scanner.brute;
 import lombok.Getter;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -68,10 +67,10 @@ public class PostCheckCVEContainer {
      * @param sources list of addresses
      * @return a new list of addresses
      */
-    public List<String> updateAddressList(List<String> sources) {
+    public Set<String> updateAddressList(Set<String> sources) {
         return sources.stream()
                 .filter(f -> !excludeAddresses.contains(f))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
 }

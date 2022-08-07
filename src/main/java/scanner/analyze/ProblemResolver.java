@@ -21,7 +21,7 @@ public class ProblemResolver {
     @SuppressWarnings({"rawtypes"})
     public static void run() {
         try {
-            Set<ProblemTarget<?>> localStore = new HashSet<>(ProblemHolder.getStore());
+            Set<ProblemTarget<?>> localStore = new HashSet<>(ProblemHolder.STORE);
             for (ProblemTarget target : localStore) {
                 Resolve value = target.getResolve();
                 if (value instanceof PathResolve)

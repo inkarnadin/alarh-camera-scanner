@@ -9,8 +9,8 @@ import java.nio.file.Files;
 public class XorTest {
 
     @Test
-    @Ignore
     @SneakyThrows
+    @Ignore("Functionality checking test")
     public void xor() {
         File file = new File("decrypted");
         byte[] fileContents = Files.readAllBytes(file.toPath());

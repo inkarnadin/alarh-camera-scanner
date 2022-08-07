@@ -26,12 +26,12 @@ import static scanner.Preferences.ALLOW_UNTRUSTED_HOST;
 @Slf4j
 public class BruteForceScanner {
 
-    private final static long terminationTimeout = 1000L;
+    private final static long TERMINATION_TIMEOUT = 1000L;
 
-    private final static String bruteConstName = "<brute>";
-    private final static String repeatConstName = "<repeat>";
-    private final static String cveConstName = "<cve>";
-    private final static String emptyConstName = "<empty>";
+    private final static String BRUTE_CONST_NAME = "<brute>";
+    private final static String REPEAT_CONST_NAME = "<repeat>";
+    private final static String CVE_CONST_NAME = "<cve>";
+    private final static String EMPTY_CONST_NAME = "<empty>";
 
     @Getter
     private final PostCheckCVEContainer checkCVEContainer = new PostCheckCVEContainer();
@@ -49,7 +49,7 @@ public class BruteForceScanner {
                 : CVEScanner.scanning(ip);
         if (cveResult.isPresent()) {
             String credentials = cveResult.get();
-            writeLog(ip, Collections.singletonList(credentials), cveConstName);
+            writeLog(ip, Collections.singletonList(credentials), CVE_CONST_NAME);
 
             checkCVEContainer.addCredentials(credentials);
             checkCVEContainer.excludeAddress(ip);
@@ -65,7 +65,7 @@ public class BruteForceScanner {
         if (isEmptyBruteTask(ip))
             return;
 
-        int threads = ExecutorHolder.getCountThreads();
+        int threads = ExecutorHolder.COUNT_THREADS;
         int threshold = (threads - (passwords.length % threads) + passwords.length) / threads;
         List<CompletableFuture<AuthContainer>> futures = new ArrayList<>();
         for (int j = 0; j < passwords.length; j += threshold)
@@ -79,9 +79,9 @@ public class BruteForceScanner {
                 .collect(Collectors.toList());
 
         if (results.size() > 0)
-            writeLog(ip, results, isRepeat() ? repeatConstName : bruteConstName);
+            writeLog(ip, results, isRepeat() ? REPEAT_CONST_NAME : BRUTE_CONST_NAME);
 
-        ExecutorHolder.await(terminationTimeout);
+        ExecutorHolder.await(TERMINATION_TIMEOUT);
     }
 
     private boolean isRepeat() {
@@ -90,7 +90,7 @@ public class BruteForceScanner {
 
     private CompletableFuture<AuthContainer> createBruteTask(String ip, String[] passwords) {
         CompletableFuture<AuthContainer> future = new CompletableFuture<>();
-        CompletableFuture.runAsync(() -> new BruteTask(future, ip, passwords).run(), ExecutorHolder.getExecutorService());
+        CompletableFuture.runAsync(() -> new BruteTask(future, ip, passwords).run(), ExecutorHolder.EXECUTOR_SERVICE);
         return future;
     }
 
@@ -106,7 +106,7 @@ public class BruteForceScanner {
         switch (result.getEmptyCredentialsAuth()) {
             case AUTH:
                 checkCVEContainer.excludeAddress(ip);
-                writeLog(ip, new ArrayList<>(), bruteConstName);
+                writeLog(ip, new ArrayList<>(), EMPTY_CONST_NAME);
                 return true;
             case NOT_AVAILABLE:
                 return !Preferences.check(ALLOW_UNTRUSTED_HOST);
@@ -120,7 +120,7 @@ public class BruteForceScanner {
     private void writeLog(String ip, List<String> results, String name) {
         String credentials = results.size() == 1 ? results.get(0) : ":";
         String path = "11";
-        String localName = (Objects.isNull(name)) ? emptyConstName : name;
+        String localName = (Objects.isNull(name)) ? EMPTY_CONST_NAME : name;
 
         log.info("{}:{}:{}:{}", ip, path, credentials, localName);
     }

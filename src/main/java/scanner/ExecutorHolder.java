@@ -1,6 +1,5 @@
 package scanner;
 
-import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.util.concurrent.ExecutorService;
@@ -16,15 +15,12 @@ import static scanner.Preferences.THREADS;
  */
 public class ExecutorHolder {
 
-    @Getter
-    private static final int countThreads = Integer.parseInt(Preferences.get(THREADS));
-
-    @Getter
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(countThreads);
+    public static final int COUNT_THREADS = Integer.parseInt(Preferences.get(THREADS));
+    public static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(COUNT_THREADS);
 
     @SneakyThrows
     public static void await(Long timeout) {
-        executorService.awaitTermination(timeout, TimeUnit.MILLISECONDS);
+        EXECUTOR_SERVICE.awaitTermination(timeout, TimeUnit.MILLISECONDS);
     }
 
 

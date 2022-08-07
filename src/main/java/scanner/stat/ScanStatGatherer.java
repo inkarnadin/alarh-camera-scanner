@@ -12,7 +12,7 @@ import static scanner.stat.ScanStatItem.*;
 public class ScanStatGatherer extends AbstractStatGatherer<ScanStatItem, Long> {
 
     public ScanStatGatherer() {
-        data.put(ALL, 0L);
+        data.put(TOTAL, 0L);
 
         data.put(RANGES, 0L);
         data.put(LARGE_RANGES, 0L);
@@ -67,7 +67,7 @@ public class ScanStatGatherer extends AbstractStatGatherer<ScanStatItem, Long> {
 
     @Override
     protected void recalculate() {
-        data.put(FAILURE, data.get(ALL) - data.get(SUCCESS));
+        data.put(FAILURE, data.get(TOTAL) - data.get(SUCCESS));
     }
 
 }

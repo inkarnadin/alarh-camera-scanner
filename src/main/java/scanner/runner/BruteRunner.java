@@ -1,6 +1,6 @@
 package scanner.runner;
 
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import scanner.Preferences;
 import scanner.analyze.ProblemResolver;
@@ -9,7 +9,7 @@ import scanner.brute.BruteForceScanner;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static scanner.Preferences.ALLOW_FRAME_SAVING;
@@ -22,11 +22,8 @@ import static scanner.stat.TimeStatItem.TOTAL_BRUTE_TIME;
  * @author inkarnadin
  */
 @Slf4j
-@RequiredArgsConstructor
-public class XBruteRunner extends AbstractRunner {
-
-    private final List<String> listSources;
-    private final List<String> listPasswords;
+@NoArgsConstructor
+public class BruteRunner extends AbstractRunner {
 
     /**
      * Execute find password (brute, cve and other).
@@ -42,7 +39,7 @@ public class XBruteRunner extends AbstractRunner {
      * for some reason, they were not received and these addresses were added to the list of known and resolved
      * problems.
      */
-    public void run() {
+    public void run(Set<String> listSources, Set<String> listPasswords) {
         try {
             final BruteForceScanner bruteForceScanner = new BruteForceScanner();
             int i = 0;
@@ -55,7 +52,7 @@ public class XBruteRunner extends AbstractRunner {
 
             String[] passwords = bruteForceScanner.getCheckCVEContainer().getAdditionalPasswords().toArray(new String[0]);
             if (passwords.length > 0) {
-                log.info("check additional passwords {}", Arrays.asList(passwords).toString());
+                log.info("check additional passwords {}", Arrays.asList(passwords));
                 for (String ip : bruteForceScanner.getCheckCVEContainer().updateAddressList(listSources))
                     bruteForceScanner.brute(ip, passwords);
             }

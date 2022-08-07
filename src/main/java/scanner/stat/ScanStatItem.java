@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ScanStatItem {
 
-    ALL { @Override public String toString() { return "All ip scanned"; } },
+    TOTAL { @Override public String toString() { return "Total ip scanned"; } },
     RANGES { @Override public String toString() { return "Scanned range"; } },
     LARGE_RANGES { @Override public String toString() { return "Scanned large range"; } },
     SUCCESS { @Override public String toString() { return "Success scanned"; } },

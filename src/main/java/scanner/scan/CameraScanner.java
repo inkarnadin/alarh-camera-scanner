@@ -20,7 +20,7 @@ import static scanner.stat.StatDataHolder.SCAN_GATHERER;
 @Slf4j
 public class CameraScanner {
 
-    private static final long terminationTimeout = 500L;
+    private static final long TERMINATION_TIMEOUT = 500L;
 
     private final Queue<InetSocketAddress> addresses = new ArrayDeque<>();
 
@@ -30,7 +30,7 @@ public class CameraScanner {
      * @return list of checked ip addresses
      */
     @SneakyThrows
-    public List<String> scanning(List<InetSocketAddress> list) {
+    public Set<String> scanning(Set<InetSocketAddress> list) {
         addresses.addAll(list);
 
         List<CompletableFuture<Optional<String>>> futures = new ArrayList<>();
@@ -41,20 +41,20 @@ public class CameraScanner {
                 .map(CompletableFuture::join)
                 .collect(Collectors.toList());
 
-        List<String> targetList = results.stream()
+        Set<String> targetList = results.stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .peek(x -> SCAN_GATHERER.increment(ScanStatItem.SUCCESS))
                 .peek(log::info)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
-        ExecutorHolder.await(terminationTimeout);
+        ExecutorHolder.await(TERMINATION_TIMEOUT);
         return targetList;
     }
 
     private CompletableFuture<Optional<String>> createCameraScanTask(InetSocketAddress address) {
         CompletableFuture<Optional<String>> future = new CompletableFuture<>();
-        CompletableFuture.runAsync(() -> new CameraScanTask(future, address).run(), ExecutorHolder.getExecutorService());
+        CompletableFuture.runAsync(() -> new CameraScanTask(future, address).run(), ExecutorHolder.EXECUTOR_SERVICE);
         return future;
     }
 

@@ -3,7 +3,7 @@ package scanner.stat;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static scanner.stat.ScanStatItem.ALL;
+import static scanner.stat.ScanStatItem.TOTAL;
 import static scanner.stat.ScanStatItem.SUCCESS;
 import static scanner.stat.StatDataHolder.SCAN_GATHERER;
 import static scanner.stat.TimeStatItem.*;
@@ -57,8 +57,8 @@ public class TimeStatGatherer extends AbstractStatGatherer<TimeStatItem, Long> {
     }
 
     protected void recalculate() {
-        if (SCAN_GATHERER.get(ALL) > 0)
-            data.put(AVG_SCAN_TIME, data.get(TOTAL_SCAN_TIME) / SCAN_GATHERER.get(ALL));
+        if (SCAN_GATHERER.get(TOTAL) > 0)
+            data.put(AVG_SCAN_TIME, data.get(TOTAL_SCAN_TIME) / SCAN_GATHERER.get(TOTAL));
         if (SCAN_GATHERER.get(SUCCESS) > 0)
             data.put(AVG_BRUTE_TIME, data.get(TOTAL_BRUTE_TIME) / SCAN_GATHERER.get(SUCCESS));
     }

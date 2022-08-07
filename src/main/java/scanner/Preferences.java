@@ -1,6 +1,7 @@
 package scanner;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.*;
@@ -10,6 +11,7 @@ import java.util.*;
  *
  * @author inkarnadin
  */
+@Slf4j
 public class Preferences {
 
     public static final String PORT = "-p";
@@ -42,9 +44,9 @@ public class Preferences {
     private static final List<String> defaultPasswordList = Collections.singletonList("asdf1234");
 
     @Getter
-    private static List<String> rangesList;
+    private static Set<String> rangesList;
     @Getter
-    private static List<String> passwordsList;
+    private static Set<String> passwordsList;
 
     /**
      * Save all start arguments as application preferences.
@@ -70,6 +72,7 @@ public class Preferences {
 
         if (Objects.isNull(source)) {
             System.out.println("Source list cannot be empty!");
+            log.warn("source list is empty - exit");
             System.exit(0);
         }
 

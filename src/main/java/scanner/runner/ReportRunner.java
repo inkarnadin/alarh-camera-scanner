@@ -1,6 +1,7 @@
 package scanner.runner;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import scanner.report.MapToHTMLTableConverter;
 
 import java.io.BufferedReader;
@@ -10,22 +11,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static scanner.stat.StatDataHolder.*;
 
 /**
- * Create report logic class.
+ * Creation report logic class.
  *
  * @author inkarnadin
  */
 @Slf4j
-public class XReportRunner extends AbstractRunner {
-
-    private final static String emptyTemplate = "";
+public class ReportRunner extends AbstractRunner {
 
     /**
-     * Create report in HTML format.
+     * Method for creation report in HTML format.
      */
     public void run() {
         try {
@@ -46,19 +46,28 @@ public class XReportRunner extends AbstractRunner {
         }
     }
 
+    /**
+     * Method for open report template from file by fixed path {@code /report.html}.
+     *
+     * @return report as string or empty string if template not found
+     */
     private String openTemplate() {
         try {
-            InputStream in = getClass().getResourceAsStream("/report.html");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
-            return reader.lines().collect(Collectors.joining());
+            InputStream is = getClass().getResourceAsStream("/report.html");
+            if (Objects.nonNull(is)) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                return reader.lines().collect(Collectors.joining());
+            }
         } catch (Exception xep) {
             xep.printStackTrace();
             log.warn("error during opening report template: {}", xep.getMessage());
         }
-        return emptyTemplate;
+        return "";
     }
 
+    /**
+     * Method for save filled data report.
+     */
     private void saveReport(String report) {
         try {
             Path path = Paths.get(String.format("result//report-%s.html", Instant.now().toString()));

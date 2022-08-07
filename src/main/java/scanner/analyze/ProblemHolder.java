@@ -12,8 +12,7 @@ import java.util.Set;
  */
 public class ProblemHolder {
 
-    @Getter
-    private static final Set<ProblemTarget<?>> store = new HashSet<>();
+    public static final Set<ProblemTarget<?>> STORE = new HashSet<>();
 
     /**
      * Save problem target to store.
@@ -22,14 +21,14 @@ public class ProblemHolder {
      * @return {@code true} if saved success
      */
     public static boolean save(ProblemTarget<?> target) {
-        return store.add(target);
+        return STORE.add(target);
     }
 
     /**
      * Clear problem target list.
      */
     public static void clear() {
-        store.clear();
+        STORE.clear();
     }
 
 }

@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @RequiredArgsConstructor
 public class BruteTask implements Runnable {
 
-    private final static String defaultLogin = "admin";
+    private final static String DEFAULT_LOGIN = "admin";
 
     private final CompletableFuture<AuthContainer> future;
     private final String ip;
@@ -35,7 +35,7 @@ public class BruteTask implements Runnable {
             sender.connect(ip);
             for (String password : passwords) {
                 String credentials = Objects.nonNull(password)
-                        ? String.format("%s:%s", defaultLogin, password)
+                        ? String.format("%s:%s", DEFAULT_LOGIN, password)
                         : null;
                 auth.put(credentials, sender.check(credentials));
             }

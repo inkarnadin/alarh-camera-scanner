@@ -13,7 +13,7 @@ public class PreferencesTest {
     }
 
     @Test
-    public void testCheckPreferences() {
+    public void check_preferences() {
         Boolean rCheck = Preferences.check("-exists_flag");
         Assert.assertEquals(true, rCheck);
 
@@ -22,7 +22,7 @@ public class PreferencesTest {
     }
 
     @Test
-    public void testGetPreferences() {
+    public void get_preferences() {
         String sources = Preferences.get(RANGE_PATH);
         Assert.assertEquals("list.txt", sources);
 

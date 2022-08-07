@@ -9,9 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -20,7 +18,11 @@ import java.util.stream.Stream;
  * @author inkarnadin
  */
 @Slf4j
-public class SourceReader {
+public final class SourceReader {
+
+    private SourceReader() {
+        throw new AssertionError("Utility class can't be instantiate");
+    }
 
     /**
      * Gets a list of values from the specified file.
@@ -28,13 +30,13 @@ public class SourceReader {
      * @param path file location
      * @return list of values. Returns an empty list if the file is not found
      */
-    public static List<String> readSource(String path) {
-        List<String> sources = new ArrayList<>();
+    public static Set<String> readSource(String path) {
+        Set<String> sources = new TreeSet<>();
         try {
             if (Objects.isNull(path))
                 return sources;
 
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(path))))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
                 Stream<String> lines = reader.lines();
                 lines.forEach(sources::add);
                 lines.close();

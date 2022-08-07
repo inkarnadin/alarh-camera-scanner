@@ -3,7 +3,9 @@ package scanner.stat;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import static scanner.stat.EfficiencyItem.*;
+import static scanner.stat.EfficiencyItem.BRUTE_EFFICIENCY;
+import static scanner.stat.EfficiencyItem.GET_FRAME_EFFICIENCY;
+import static scanner.stat.EfficiencyItem.SCAN_EFFICIENCY;
 import static scanner.stat.StatDataHolder.SCAN_GATHERER;
 import static scanner.stat.StatDataHolder.SCREEN_GATHERER;
 
@@ -20,9 +22,12 @@ public class EfficiencyGatherer extends AbstractStatGatherer<EfficiencyItem, Dou
         data.put(GET_FRAME_EFFICIENCY, 0.0d);
     }
 
+    /**
+     * Method recalculate amd renew statistic.
+     */
     protected void recalculate() {
-        if (SCAN_GATHERER.get(ScanStatItem.ALL) > 0) {
-            double scanEff = (double) SCAN_GATHERER.get(ScanStatItem.SUCCESS) / SCAN_GATHERER.get(ScanStatItem.ALL) * 100;
+        if (SCAN_GATHERER.get(ScanStatItem.TOTAL) > 0) {
+            double scanEff = (double) SCAN_GATHERER.get(ScanStatItem.SUCCESS) / SCAN_GATHERER.get(ScanStatItem.TOTAL) * 100;
             data.put(SCAN_EFFICIENCY, BigDecimal.valueOf(scanEff).setScale(2, RoundingMode.FLOOR).doubleValue());
         }
 

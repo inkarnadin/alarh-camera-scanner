@@ -16,7 +16,7 @@ import static scanner.Preferences.SOCKET_WAITING;
  */
 public class SocketConnector {
 
-    private final static int timeout = Integer.parseInt(Preferences.get(SOCKET_WAITING));
+    private final static int TIMEOUT = Integer.parseInt(Preferences.get(SOCKET_WAITING));
 
     private final Socket socket = new Socket();
 
@@ -32,8 +32,8 @@ public class SocketConnector {
      * @throws IOException if problem with connection.
      */
     public void open() throws IOException {
-        socket.setSoTimeout(timeout);
-        socket.connect(this.address, timeout);
+        socket.setSoTimeout(TIMEOUT);
+        socket.connect(this.address, TIMEOUT);
     }
 
     /**
