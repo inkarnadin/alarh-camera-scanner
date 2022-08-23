@@ -20,12 +20,18 @@ public class AuthContainer {
     private final String ip;
     private final Map<String, AuthState> auth = new HashMap<>();
 
+    /**
+     * Method put auth data.
+     *
+     * @param password checking password
+     * @param state result of checking
+     */
     public void put(String password, AuthState state) {
         auth.put(password, state);
     }
 
     /**
-     * Return all success auth results.
+     * Method return all success auth results.
      *
      * @return list of successfully verified passwords
      */
@@ -37,7 +43,7 @@ public class AuthContainer {
     }
 
     /**
-     * Return state of empty credentials auth.
+     * Method return state of empty credentials auth.
      *
      * @return The first successfully result - empty credentials. If missing returns {@link AuthState#NOT_AVAILABLE} state.
      */
