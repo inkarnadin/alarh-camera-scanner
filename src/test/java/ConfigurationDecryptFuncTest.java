@@ -11,7 +11,7 @@ public class ConfigurationDecryptFuncTest {
     @Test
     @Ignore("Functionality checking test")
     public void test_decrypt() {
-        Response response = HttpClient.execute("http://host/System/configurationFile?auth=YWRtaW46MTEK");
+        Response response = HttpClient.execute("http://83.66.117.135/System/configurationFile?auth=YWRtaW46MTEK");
         InputStream inputStream = response.body().byteStream();
         System.out.println(ConfigurationDecrypt.decrypt(inputStream));
     }

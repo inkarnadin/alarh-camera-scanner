@@ -11,7 +11,12 @@ import scanner.onvif.OnvifScreenSaver;
 import scanner.rtsp.RTSPContext;
 import scanner.rtsp.TransportMode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 

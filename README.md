@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.com/inkarnadin/alarh-camera-scanner.svg?branch=main)](https://app.travis-ci.com/github/inkarnadin/alarh-camera-scanner)
-[![version](https://img.shields.io/badge/version-0.4.0-orange)](https://github.com/inkarnadin/alarh-camera-scanner/releases/tag/v0.4.0)
+[![version](https://img.shields.io/badge/version-0.4.2-orange)](https://github.com/inkarnadin/alarh-camera-scanner/releases/tag/v0.4.2)
 [![version](https://img.shields.io/badge/license-apache-yellow.svg)](https://github.com/inkarnadin/alarh-camera-scanner/blob/main/LICENSE.txt)
 
 # Camera Scanner
@@ -23,7 +23,7 @@ After receiving a list of verified addresses, the password strength is checked u
 the application tries to fetch the frame from the vulnerable device (ffmpeg must be installed).
 
 Usage example:
-* `java -jar camera-scanner.jar -source:range.txt -t:10 -p:8000 -passwords:pass.txt -sf`  
+* `java -jar camera-scanner.jar -source:range.txt -th:10 -p:8000 -passwords:pass.txt -sf`  
 scanning and brute ranges, thread = 10, checking port = 8000, save screen, *range.txt* ranges list, *pass.txt* plain passwords list.
 * `java -jar camera-scanner.jar -source:range.txt -w:200 -passwords:pass.txt`  
 scanning and brute ranges, wait socket connect 200 instead 500 ms, *range.txt* ranges list, *pass.txt* plain passwords list.
@@ -62,8 +62,5 @@ Bruted data presents as:
  `ffmpeg -i rtsp://${login}:${password}@${host}/Streaming/Channels/101 -acodec copy -vcodec copy /home/user/video.mp4`.
  
 ## Constraints
-At the moment, the application can handle about 20-30 million addresses for the foreseeable future. For large volumes, 
-memory issues can occur, and the expected execution time will exceed acceptable limits.
-
 If you need to process many of ranges, it is recommended to run them sequentially or on several, different 
 application instances. 

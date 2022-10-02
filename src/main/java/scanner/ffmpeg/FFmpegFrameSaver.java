@@ -38,7 +38,7 @@ public class FFmpegFrameSaver implements Supplier<Process> {
         Process process = builder.start();
 
         Thread.currentThread().setName(String.format("ffmpeg-%s-%s...-%s", ip, credentials, process.pid()));
-        log.info("==========================");
+        //log.info("==========================");
 
         CompletableFuture.runAsync(() -> new FFmpegLogReader(process, ip, credentials).run())
                 .orTimeout(defaultTimeout, TimeUnit.SECONDS)

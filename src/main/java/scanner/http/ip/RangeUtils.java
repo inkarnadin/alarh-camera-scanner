@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import scanner.Preferences;
 import scanner.recover.RecoveryManager;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static scanner.Preferences.ALLOW_RECOVERY_SCANNING;
 import static scanner.recover.RecoveryElement.STOP_SCAN_RANGE;
@@ -30,9 +27,9 @@ public final class RangeUtils {
      *
      * @param listSources list of IP addresses as string
      */
-    public static List<IpV4AddressRange> prepare(Set<String> listSources) {
-        log.debug("count of ranges: {}", listSources.size());
-        List<IpV4AddressRange> result = new ArrayList<>();
+    public static Set<IpV4AddressRange> prepare(Set<String> listSources) {
+        log.info("count of ranges: {}", listSources.size());
+        Set<IpV4AddressRange> result = new TreeSet<>();
         for (String rangeAsString : listSources) {
             log.trace("prepare range: {}", rangeAsString);
             IpV4AddressRange ipV4AddressRange = new IpV4AddressRange(rangeAsString);
@@ -43,10 +40,12 @@ public final class RangeUtils {
             }
             result.add(ipV4AddressRange);
         }
+
+        log.info("total addresses for scanning: {}", RangeUtils.count(result));
         return result;
     }
 
-    public static long count(List<IpV4AddressRange> ranges) {
+    public static long count(Set<IpV4AddressRange> ranges) {
         return ranges.stream()
                 .mapToLong(IpV4AddressRange::getCount)
                 .sum();

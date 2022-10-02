@@ -32,7 +32,7 @@ public class FFmpegExecutor {
                 .thenAccept(x -> {
                     if (x.isAlive())
                         x.destroy();
-                    log.info("Process ({}) was ended successfully", x.pid());
+                    //log.info("Process ({}) was ended successfully", x.pid());
                 })
                 .get();
 

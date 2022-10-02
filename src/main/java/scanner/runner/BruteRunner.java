@@ -40,6 +40,10 @@ public class BruteRunner extends AbstractRunner {
      * problems.
      */
     public void run(Set<String> listSources, Set<String> listPasswords) {
+        if (!timer.isRunning()) {
+            timer.start();
+        }
+
         try {
             final BruteForceScanner bruteForceScanner = new BruteForceScanner();
             int i = 0;
@@ -53,8 +57,9 @@ public class BruteRunner extends AbstractRunner {
             String[] passwords = bruteForceScanner.getCheckCVEContainer().getAdditionalPasswords().toArray(new String[0]);
             if (passwords.length > 0) {
                 log.info("check additional passwords {}", Arrays.asList(passwords));
-                for (String ip : bruteForceScanner.getCheckCVEContainer().updateAddressList(listSources))
+                for (String ip : bruteForceScanner.getCheckCVEContainer().updateAddressList(listSources)) {
                     bruteForceScanner.brute(ip, passwords);
+                }
             }
 
             if (Preferences.check(ALLOW_FRAME_SAVING))

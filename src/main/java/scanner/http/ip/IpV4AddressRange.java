@@ -1,9 +1,11 @@
 package scanner.http.ip;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -22,9 +24,11 @@ import java.util.Set;
 @Slf4j
 @Getter
 @RequiredArgsConstructor
-public class IpV4AddressRange {
+@EqualsAndHashCode
+public class IpV4AddressRange implements Comparable<IpV4AddressRange> {
 
     private String sourceRange;
+    private String name;
     private BigInteger startIp;
     private BigInteger stopIp;
     private long count;
@@ -32,8 +36,10 @@ public class IpV4AddressRange {
 
     @SneakyThrows
     public IpV4AddressRange(String range) {
-        sourceRange = range;
         String[] rangeAddresses = range.split("-");
+
+        sourceRange = range;
+        name = rangeAddresses[0];
 
         byte[] start = InetAddress.getByName(rangeAddresses[0]).getAddress();
         startIp = new BigInteger(1, start);
@@ -98,6 +104,11 @@ public class IpV4AddressRange {
             log.warn("wrong byte array of IP address: {}", xep.getMessage());
             throw xep;
         }
+    }
+
+    @Override
+    public int compareTo(@NotNull IpV4AddressRange o) {
+        return this.startIp.compareTo(o.startIp);
     }
 
 }

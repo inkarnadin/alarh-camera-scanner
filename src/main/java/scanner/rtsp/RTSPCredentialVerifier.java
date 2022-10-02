@@ -33,16 +33,16 @@ public class RTSPCredentialVerifier implements Closeable {
     private SocketConnector connector;
     private String ip;
 
-    private final static int successCode = 200;
-    private final static int failureCode = 401;
-    private final static int notFoundCode = 404;
-    private final static int sessionNotFoundCode = 454;
-    private final static int badRequestCode = 400;
-    private final static int invalidParamCode = 451;
-    private final static int unknownStateCode = 418;
+    private final static int SUCCESS_CODE = 200;
+    private final static int FAILURE_CODE = 401;
+    private final static int NOT_FOUND_CODE = 404;
+    private final static int SESSION_NOT_FOUND_CODE = 454;
+    private final static int BAD_REQUEST_CODE = 400;
+    private final static int INVALID_PARAM_CODE = 451;
+    private final static int UNKNOWN_STATE_CODE = 418;
 
-    private final static List<Integer> badCodes = Arrays.asList(notFoundCode, badRequestCode, invalidParamCode, unknownStateCode, sessionNotFoundCode);
-    private final static List<Integer> goodCodes = Arrays.asList(successCode, failureCode);
+    private final static List<Integer> BAD_CODES = Arrays.asList(NOT_FOUND_CODE, BAD_REQUEST_CODE, INVALID_PARAM_CODE, UNKNOWN_STATE_CODE, SESSION_NOT_FOUND_CODE);
+    private final static List<Integer> GOOD_CODES = Arrays.asList(SUCCESS_CODE, FAILURE_CODE);
 
     /**
      * Wrapper for create socket connection.
@@ -86,22 +86,23 @@ public class RTSPCredentialVerifier implements Closeable {
     @SneakyThrows
     public AuthState check(String credentials) {
         try {
-            RequestBuilder builder = new RequestBuilder(ip, credentials);
+            RequestBuilder request = new RequestBuilder(ip, credentials);
 
-            int statusCode = send(builder.describe()).getCode();
-            if (badCodes.contains(statusCode)) {
+            int statusCode = send(request).getCode();
+            if (BAD_CODES.contains(statusCode)) {
                 RTSPContext.set(ip, TransportMode.SPECIAL);
-                statusCode = send(builder.describe()).getCode();
-                if (!goodCodes.contains(statusCode)) {
+                statusCode = send(request).getCode();
+                if (!GOOD_CODES.contains(statusCode)) {
                     log.warn("skipped wrong request");
                     return AuthState.UNKNOWN_STATE;
                 }
             }
 
-            if (statusCode == successCode && Preferences.check(Preferences.ALLOW_FRAME_SAVING))
+            if (statusCode == SUCCESS_CODE && Preferences.check(Preferences.ALLOW_FRAME_SAVING)) {
                 FFmpegExecutor.saveFrame(credentials, ip);
+            }
 
-            return statusCode == successCode
+            return statusCode == SUCCESS_CODE
                     ? AuthState.AUTH
                     : AuthState.NOT_AUTH;
         } catch (IOException xep) {
@@ -110,15 +111,15 @@ public class RTSPCredentialVerifier implements Closeable {
         }
     }
 
-    private RTSPStateStore send(String request) throws IOException {
+    private RTSPStateStore send(RequestBuilder request) throws IOException {
         BufferedReader bufferedReader = connector.input();
         BufferedWriter bufferedWriter = connector.output();
 
-        bufferedWriter.write(request);
+        bufferedWriter.write(request.describe());
         bufferedWriter.flush();
 
         RTSPStateStore store = ResponseHandler.handle(bufferedReader);
-        log.debug("response => {}", store.getStatusLine());
+        log.debug("[{}] response code => {}", request.getCredentials(), store.getStatusLine());
 
         return store;
     }

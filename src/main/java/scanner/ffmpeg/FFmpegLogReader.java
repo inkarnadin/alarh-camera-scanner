@@ -32,7 +32,7 @@ public class FFmpegLogReader implements Runnable {
             String line;
             StringBuilder output = new StringBuilder();
             while ((line = br.readLine()) != null) {
-                log.info(line);
+                //log.info(line);
                 output.append(line);
             }
             FFmpegInspector.inspect(output.toString(), ip, credentials);

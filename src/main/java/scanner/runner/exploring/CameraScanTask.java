@@ -1,4 +1,4 @@
-package scanner.scan;
+package scanner.runner.exploring;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class CameraScanTask implements Runnable {
         try (Socket socket = new Socket()) {
             socket.connect(address, TIMEOUT);
             socket.close();
-            log.debug("success checked");
+            //log.debug("success checked");
             future.complete(Optional.of(address.getAddress().toString().replace("/", "")));
         } catch (Exception xep) {
             future.complete(Optional.empty());

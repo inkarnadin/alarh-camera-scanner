@@ -1,4 +1,4 @@
-package scanner.scan;
+package scanner.runner.exploring;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -6,7 +6,12 @@ import scanner.ExecutorHolder;
 import scanner.stat.ScanStatItem;
 
 import java.net.InetSocketAddress;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -34,22 +39,22 @@ public class CameraScanner {
         addresses.addAll(list);
 
         List<CompletableFuture<Optional<String>>> futures = new ArrayList<>();
-        while (!addresses.isEmpty())
+        while (!addresses.isEmpty()) {
             futures.add(createCameraScanTask(addresses.poll()));
+        }
 
         List<Optional<String>> results = futures.stream()
                 .map(CompletableFuture::join)
                 .collect(Collectors.toList());
 
-        Set<String> targetList = results.stream()
+        Set<String> targets = results.stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .peek(x -> SCAN_GATHERER.increment(ScanStatItem.SUCCESS))
-                .peek(log::info)
                 .collect(Collectors.toSet());
 
         ExecutorHolder.await(TERMINATION_TIMEOUT);
-        return targetList;
+        return targets;
     }
 
     private CompletableFuture<Optional<String>> createCameraScanTask(InetSocketAddress address) {

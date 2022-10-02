@@ -11,7 +11,10 @@ import scanner.recover.RecoveryElement;
 import scanner.recover.RecoveryManager;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static scanner.recover.RecoveryElement.STOP_SCAN_RANGE;
 
@@ -31,7 +34,7 @@ public class RangeUtilsTest {
     public void prepare_with_recovery() {
         Preferences.configure(new String[] {"-recovery_scanning:true", "-source:list.txt"});
         setStopScanValue("163.36.0.0-163.36.255.255");
-        List<IpV4AddressRange> preparedList = RangeUtils.prepare(list);
+        Set<IpV4AddressRange> preparedList = RangeUtils.prepare(list);
 
         System.out.println(preparedList);
         Assert.assertEquals(3, preparedList.size());
@@ -44,7 +47,7 @@ public class RangeUtilsTest {
     public void prepare_with_recovery_missing_range() {
         Preferences.configure(new String[] {"-recovery_scanning:true", "-source:list.txt"});
         setStopScanValue("163.30.0.0-163.30.255.255");
-        List<IpV4AddressRange> preparedList = RangeUtils.prepare(list);
+        Set<IpV4AddressRange> preparedList = RangeUtils.prepare(list);
 
         System.out.println(preparedList);
         Assert.assertTrue(preparedList.isEmpty());
@@ -54,7 +57,7 @@ public class RangeUtilsTest {
     public void prepare_without_recovery() {
         Preferences.configure(new String[] {"-recovery_scanning:false", "-source:list.txt"});
         setStopScanValue("163.36.0.0-163.36.255.255");
-        List<IpV4AddressRange> preparedList = RangeUtils.prepare(list);
+        Set<IpV4AddressRange> preparedList = RangeUtils.prepare(list);
 
         System.out.println(preparedList);
         Assert.assertEquals(4, preparedList.size());

@@ -4,7 +4,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import scanner.http.ip.IpV4AddressRange;
 import scanner.recover.RecoveryManager;
-import scanner.scan.CameraScanner;
+import scanner.runner.exploring.CameraScanner;
 
 import java.net.InetSocketAddress;
 import java.util.HashSet;
@@ -32,6 +32,10 @@ public class ScanRunner extends AbstractRunner {
      * @return list of targets
      */
     public Set<String> run(IpV4AddressRange range) {
+        if (!timer.isRunning()) {
+            timer.start();
+        }
+
         Set<String> result = new HashSet<>();
         try {
             Set<InetSocketAddress> addresses = range.getAddresses();

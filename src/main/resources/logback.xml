@@ -2,41 +2,40 @@
   <property name="LOG_DIR" value="logs"/>
   <property name="RESULT_DIR" value="result"/>
 
+  <!-- common log settings-->
   <appender name="COMMON" class="ch.qos.logback.core.FileAppender">
     <file>${LOG_DIR}/out.log</file>
     <append>false</append>
     <encoder>
-      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-    </encoder>
-  </appender>
-
-  <appender name="FFMPEG" class="ch.qos.logback.core.FileAppender">
-    <file>${LOG_DIR}/ffmpeg.log</file>
-    <append>false</append>
-    <encoder>
-      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-    </encoder>
-  </appender>
-
-  <appender name="CAMERA" class="ch.qos.logback.core.FileAppender">
-    <file>${RESULT_DIR}/hosts.log</file>
-    <append>true</append>
-    <encoder>
-      <pattern>%msg%n</pattern>
-    </encoder>
-  </appender>
-
-  <appender name="BRUTE" class="ch.qos.logback.core.FileAppender">
-    <file>${RESULT_DIR}/bruted.log</file>
-    <append>true</append>
-    <encoder>
-      <pattern>%msg%n</pattern>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - %msg%n</pattern>
     </encoder>
   </appender>
 
   <root name="scanner.Main" level="debug">
     <appender-ref ref="COMMON"/>
   </root>
+
+  <!-- brute log settings-->
+  <appender name="BRUTE" class="ch.qos.logback.core.FileAppender">
+    <file>${LOG_DIR}/bruted.log</file>
+    <append>true</append>
+    <encoder>
+      <pattern>%msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="scanner.runner.logging.LoggerModule" level="info">
+    <appender-ref ref="BRUTE"/>
+  </logger>
+
+  <!-- ffmpeg log settings-->
+  <appender name="FFMPEG" class="ch.qos.logback.core.FileAppender">
+    <file>${LOG_DIR}/ffmpeg.log</file>
+    <append>false</append>
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - %msg%n</pattern>
+    </encoder>
+  </appender>
 
   <logger name="scanner.ffmpeg.FFmpegExecutor" level="info">
     <appender-ref ref="FFMPEG"/>
@@ -52,18 +51,6 @@
 
   <logger name="scanner.ffmpeg.FFmpegProcessKiller" level="info">
     <appender-ref ref="FFMPEG"/>
-  </logger>
-
-  <logger name="scanner.scan.CameraScanner" level="info">
-    <appender-ref ref="CAMERA"/>
-  </logger>
-
-  <logger name="scanner.brute.BruteForceScanner" level="info">
-    <appender-ref ref="BRUTE"/>
-  </logger>
-
-  <logger name="scanner.brute.BasicAuthScanner" level="info">
-    <appender-ref ref="BRUTE"/>
   </logger>
 
 </configuration>

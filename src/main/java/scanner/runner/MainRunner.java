@@ -6,7 +6,6 @@ import scanner.http.ip.IpV4AddressRange;
 import scanner.http.ip.RangeUtils;
 import scanner.stat.StatsUtility;
 
-import java.util.List;
 import java.util.Set;
 
 import static scanner.Preferences.NO_BRUTE;
@@ -31,7 +30,7 @@ public class MainRunner {
         Set<String> listSources = Preferences.getRangesList();
         Set<String> listPasswords = Preferences.getPasswordsList();
 
-        List<IpV4AddressRange> ranges = RangeUtils.prepare(listSources);
+        Set<IpV4AddressRange> ranges = RangeUtils.prepare(listSources);
 
         int completeRange = 0;
         long completeAddress = 0;
@@ -44,7 +43,7 @@ public class MainRunner {
         if (needScanning) {
             StatsUtility.calculateTotalTime(totalAddress);
             for (IpV4AddressRange range : ranges) {
-                log.info("in progress: range {} (ip count = {})", range.toString(), range.getCount());
+                log.info("in progress: range {} (ip count = {})", range.getSourceRange(), range.getCount());
                 Set<String> targetList = scanRunner.run(range);
 
                 if (needBrute) {

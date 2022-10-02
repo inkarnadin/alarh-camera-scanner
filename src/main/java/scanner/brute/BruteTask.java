@@ -1,8 +1,10 @@
 package scanner.brute;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import scanner.rtsp.RTSPCredentialVerifier;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
@@ -26,9 +28,9 @@ public class BruteTask implements Runnable {
      */
     @Override
     public void run() {
-        int num = ThreadLocalRandom.current().nextInt(0, 10);
+        int num = ThreadLocalRandom.current().nextInt(100, 999);
 
-        Thread.currentThread().setName(String.format("brute-%s-%s...-%s", ip, passwords[0], num));
+        Thread.currentThread().setName(String.format("brute-%s-%s", ip, num));
         AuthContainer auth = new AuthContainer(ip);
 
         try (RTSPCredentialVerifier sender = new RTSPCredentialVerifier()) {
