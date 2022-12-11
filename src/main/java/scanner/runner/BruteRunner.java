@@ -23,6 +23,7 @@ import static scanner.stat.TimeStatItem.TOTAL_BRUTE_TIME;
  */
 @Slf4j
 @NoArgsConstructor
+@Deprecated
 public class BruteRunner extends AbstractRunner {
 
     /**

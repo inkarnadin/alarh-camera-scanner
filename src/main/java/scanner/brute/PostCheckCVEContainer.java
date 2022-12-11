@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
  *
  * @author inkarnadin
  */
+@Deprecated
 public class PostCheckCVEContainer {
 
     @Getter

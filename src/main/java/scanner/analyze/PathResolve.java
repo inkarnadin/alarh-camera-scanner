@@ -1,13 +1,14 @@
 package scanner.analyze;
 
-import scanner.ffmpeg.FFmpegPath;
+import scanner.rtsp.RTSPPath;
 
 /**
  * Stream path problem solution.
  *
  * @author inkarnadin
  */
-public class PathResolve implements Resolve<FFmpegPath> {
+@Deprecated
+public class PathResolve implements Resolve<RTSPPath> {
 
     /**
      * Get solution.
@@ -15,8 +16,8 @@ public class PathResolve implements Resolve<FFmpegPath> {
      * @return base stream path for trying checking
      */
     @Override
-    public FFmpegPath resolve() {
-        return FFmpegPath.BASE;
+    public RTSPPath resolve() {
+        return RTSPPath.BASE;
     }
 
 }

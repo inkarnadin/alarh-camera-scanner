@@ -9,6 +9,7 @@ import java.util.Map;
  *
  * @author inkarnadin
  */
+@Deprecated
 public class MapToHTMLTableConverter {
 
     /**

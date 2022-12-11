@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import scanner.runner.Target;
 import scanner.runner.logging.obj.LoggerInput;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Set;
 
 @Slf4j

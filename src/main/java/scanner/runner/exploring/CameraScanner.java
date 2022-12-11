@@ -32,6 +32,7 @@ public class CameraScanner {
     /**
      * Start scanning certain address by prepared IPs ranges and settings port.
      *
+     * @param list list of target hosts
      * @return list of checked ip addresses
      */
     @SneakyThrows
@@ -57,6 +58,12 @@ public class CameraScanner {
         return targets;
     }
 
+    /**
+     * Method of creation simple scanning task.
+     *
+     * @param address target host
+     * @return deferred scanning task
+     */
     private CompletableFuture<Optional<String>> createCameraScanTask(InetSocketAddress address) {
         CompletableFuture<Optional<String>> future = new CompletableFuture<>();
         CompletableFuture.runAsync(() -> new CameraScanTask(future, address).run(), ExecutorHolder.EXECUTOR_SERVICE);

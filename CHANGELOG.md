@@ -1,13 +1,23 @@
 # Changelog
-
 All notable changes to this project will be documented in this file.
 
 ## [UNRELEASED]
+
+## [0.5.0] - ???
+
+### Added
+- Added more tests.
 
 ### Changed
 - Changed result output camera file: camera.txt to hosts.txt.
 - The process of working from a range of addresses has been optimized - the application consumes much less memory now.
 - The limit on the maximum number of addresses during processing has been removed.
+- Improve repeat checking algorithm.
+- Improve range scanning algorithm.
+
+### Removed
+- Removed report module (_deprecated_).
+- Removed analyze module (_deprecated_).
 
 ## [0.4.0] - 17-11-2021
 
@@ -129,7 +139,8 @@ dictionaries without overloading the server. It is desirable that the connection
 ### Fixed
 - A partial fix for brute force blocking when server is not responding and read stream is empty.
 
-[unreleased]: https://github.com/inkarnadin/alarh-camera-scanner/compare/v0.4.0...HEAD
+[unreleased]: https://github.com/inkarnadin/alarh-camera-scanner/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/inkarnadin/alarh-camera-scanner/releases/tag/v0.5.0
 [0.4.0]: https://github.com/inkarnadin/alarh-camera-scanner/releases/tag/v0.4.0
 [0.3.0]: https://github.com/inkarnadin/alarh-camera-scanner/releases/tag/v0.3.0
 [0.2.0]: https://github.com/inkarnadin/alarh-camera-scanner/releases/tag/v0.2.0

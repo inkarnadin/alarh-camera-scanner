@@ -1,13 +1,13 @@
-package scanner.runner.breaking;
+package scanner.runner.breaking.brute;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.ExecutorHolder;
-import scanner.brute.AuthContainer;
-import scanner.brute.BruteTask;
+import scanner.runner.breaking.AuthContainer;
 import scanner.rtsp.RTSPContext;
 import scanner.rtsp.TransportMode;
 import scanner.runner.Target;
+import scanner.runner.breaking.Credentials;
 
 import java.util.ArrayList;
 import java.util.Arrays;

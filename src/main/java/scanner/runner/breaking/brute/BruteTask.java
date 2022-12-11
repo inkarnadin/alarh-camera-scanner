@@ -1,10 +1,9 @@
-package scanner.brute;
+package scanner.runner.breaking.brute;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import scanner.runner.breaking.AuthContainer;
 import scanner.rtsp.RTSPCredentialVerifier;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;

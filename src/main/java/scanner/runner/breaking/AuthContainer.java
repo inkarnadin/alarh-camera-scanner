@@ -1,4 +1,4 @@
-package scanner.brute;
+package scanner.runner.breaking;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

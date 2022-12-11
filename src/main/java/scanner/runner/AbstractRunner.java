@@ -7,6 +7,7 @@ import com.google.common.base.Stopwatch;
  *
  * @author inkarnadin
  */
+@Deprecated
 public abstract class AbstractRunner {
 
     protected final Stopwatch timer = Stopwatch.createStarted();

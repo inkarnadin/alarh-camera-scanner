@@ -1,7 +1,5 @@
 package scanner.analyze;
 
-import lombok.Getter;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,6 +8,7 @@ import java.util.Set;
  *
  * @author inkarnadin
  */
+@Deprecated
 public class ProblemHolder {
 
     public static final Set<ProblemTarget<?>> STORE = new HashSet<>();

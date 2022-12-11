@@ -11,9 +11,21 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Exploring module class.
+ *
+ * @author inkarnadin
+ * on 02-10-2022
+ */
 @Slf4j
 public class ExplorerModule {
 
+    /**
+     * Method for start scanning available camera addresses.
+     *
+     * @param input input wrapped object
+     * @return output wrapped object
+     */
     public ExploreOutput execute(ExploreInput input) {
         Set<String> result = new HashSet<>();
 

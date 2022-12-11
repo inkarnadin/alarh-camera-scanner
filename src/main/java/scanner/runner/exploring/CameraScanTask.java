@@ -12,12 +12,12 @@ import java.util.concurrent.CompletableFuture;
 import static scanner.Preferences.SOCKET_TIMEOUT;
 
 /**
- * Scan port subtask class.
+ * Simple scanning subtask class.
  *
  * @author inkarnadin
  */
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class CameraScanTask implements Runnable {
 
     private final static int TIMEOUT = Integer.parseInt(Preferences.get(SOCKET_TIMEOUT));
@@ -34,7 +34,7 @@ public class CameraScanTask implements Runnable {
         try (Socket socket = new Socket()) {
             socket.connect(address, TIMEOUT);
             socket.close();
-            //log.debug("success checked");
+            log.trace("success checked, {}", address);
             future.complete(Optional.of(address.getAddress().toString().replace("/", "")));
         } catch (Exception xep) {
             future.complete(Optional.empty());

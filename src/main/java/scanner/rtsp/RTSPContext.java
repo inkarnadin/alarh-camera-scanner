@@ -4,39 +4,47 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Defines and remembers the base path for credential validation.
+ * Контекст определения базового путь для проверки учетных данных.
+ * <p>Иногда базовый путь к целевому адресу не позволяет проверить, можно ли авторизоваться и возвращает код 404.
+ * Класс Context нужен для сохранения выбора пути проверки для каждого проверяемого хоста.
+ * Его значение определяется при первом запросе с пустыми учетными данными. Это позволяет избежать ненужных проверок по некорректному
+ * пути.
  *
- * Sometimes the base path to the host does not allow checking whether it is possible to log in and returns a 404 code.
- * The Context class is needed to remember the choice of the verification path for each checked host.
- * Its value is determined on the first request with empty credentials. This avoids unnecessary checks on the wrong path.
- *
- * ORTHODOX mode will return by default.
+ * Режим <b>ORTODOX</b> вернется по умолчанию.
  *
  * @author inkarnadin
+ * on 01-01-2022
  */
 public class RTSPContext {
 
     private static final Map<String, TransportMode> storage = new HashMap<>();
 
     /**
-     * Set certain for given IP address. For one IP address must be only one active mode.
-     * It override previous value.
+     * Метод устанавливает определенное значение базового пути для указанного адреса. Для каждого адреса доступен только
+     * один активный базовый путь, устанавливаемое значение перезапишет предыдущее.
      *
-     * @param ip target IP address.
-     * @param mode current active mode.
+     * @param ip целевой адрес
+     * @param mode активный базовый путь
      */
     public static void set(String ip, TransportMode mode) {
         storage.put(ip, mode);
     }
 
     /**
-     * Getting current RTSP mode for certain IP.
+     * Получение активного базового пути для указанного целевого адреса.
      *
-     * @param ip certain IP address.
-     * @return active RTSP mode.
+     * @param ip целевой адрес
+     * @return активный базовый путь, по умолчанию <b>ORTHODOX</b>
      */
     public static TransportMode get(String ip) {
         return storage.getOrDefault(ip, TransportMode.ORTHODOX);
+    }
+
+    /**
+     * Метод сброса состояния контекста.
+     */
+    public static void evict() {
+        storage.clear();
     }
 
 }

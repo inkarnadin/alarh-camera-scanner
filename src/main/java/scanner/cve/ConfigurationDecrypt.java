@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
  *
  * @author inkarnadin
  */
+@Deprecated
 public class ConfigurationDecrypt {
 
     /**

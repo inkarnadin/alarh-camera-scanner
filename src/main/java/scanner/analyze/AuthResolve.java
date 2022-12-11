@@ -5,6 +5,7 @@ package scanner.analyze;
  *
  * @author inkarnadin
  */
+@Deprecated
 public class AuthResolve implements Resolve<String> {
 
     /**

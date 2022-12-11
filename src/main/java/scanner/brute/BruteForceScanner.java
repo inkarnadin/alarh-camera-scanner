@@ -6,10 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import scanner.ExecutorHolder;
 import scanner.Preferences;
 import scanner.cve.CVEScanner;
-import scanner.ffmpeg.FFmpegExecutor;
+import scanner.ffmpeg.FFMpegExecutor;
 import scanner.onvif.OnvifScreenSaver;
 import scanner.rtsp.RTSPContext;
 import scanner.rtsp.TransportMode;
+import scanner.runner.breaking.AuthContainer;
+import scanner.runner.breaking.brute.BruteTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +31,7 @@ import static scanner.Preferences.ALLOW_UNTRUSTED_HOST;
  * @author inkarnadin
  */
 @Slf4j
+@Deprecated
 public class BruteForceScanner {
 
     private final static long TERMINATION_TIMEOUT = 1000L;
@@ -62,7 +65,7 @@ public class BruteForceScanner {
             if (Preferences.check(ALLOW_FRAME_SAVING)) {
                 boolean isSuccess = OnvifScreenSaver.saveSnapshot(ip);
                 if (!isSuccess)
-                    FFmpegExecutor.saveFrame(credentials, ip);
+                    FFMpegExecutor.saveFrame(credentials, ip);
             }
             return;
         }

@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Class-container for store and control ip range state.
+ * Класс, содержащий сведения о рабочем диапазоне IP-адресов.
  *
  * @author inkarnadin
  * on 31-05-2022
@@ -34,6 +34,11 @@ public class IpV4AddressRange implements Comparable<IpV4AddressRange> {
     private long count;
     private boolean isLarge;
 
+    /**
+     * Конструктор создания объекта диапазона адресов.
+     * <p>В качестве обязательного параметра принимает значение диапазона в формате <i>11.10.1.0-11.10.1.255</i>.
+     * @param range диапазон адресов в строковом представлении заданного формата
+     */
     @SneakyThrows
     public IpV4AddressRange(String range) {
         String[] rangeAddresses = range.split("-");
@@ -54,48 +59,55 @@ public class IpV4AddressRange implements Comparable<IpV4AddressRange> {
     }
 
     /**
-     * Method get list of all range ip addresses by range.
+     * Метод получения списка всех адресов текущего диапазона.
      *
-     * @return list of ip addresses
+     * @return список IP-адресов
      */
     public Set<InetSocketAddress> getAddresses() {
         Set<InetSocketAddress> results = new HashSet<>();
         BigInteger inc = new BigInteger("1");
+        BigInteger bufferIp = startIp;
 
-        results.add(getIp());
-        while (!Objects.equals(startIp, stopIp)) {
-            startIp = startIp.add(inc);
-            InetSocketAddress inetSocketAddress = getIp();
+        results.add(getIp(bufferIp));
+        while (!Objects.equals(bufferIp, stopIp)) {
+            bufferIp = bufferIp.add(inc);
+            InetSocketAddress inetSocketAddress = getIp(bufferIp);
             results.add(inetSocketAddress);
         }
         return results;
     }
 
     /**
-     * Method get first range IP address.
+     * Метод получения начального IP-адреса диапазона.
      *
-     * @return IP address as string
+     * @return IP-адрес в строковом представлении
      */
     public String first() {
         return sourceRange.split("-")[0];
     }
 
+    /**
+     * Метод проверки вхождения IP-адреса в строковом представлении в диапазон.
+     * @param ip проверяемый IP-адрес в строковом представлении
+     * @return результат проверки - {@code true}, если IP-адрес входит в диапазон, иначе {@code false}
+     */
     @SneakyThrows
     public boolean contains(String ip) {
         BigInteger currentIp = new BigInteger(1, InetAddress.getByName(ip).getAddress());
-        return (startIp.compareTo(currentIp) < 0 && stopIp.compareTo(currentIp) > 0);
+        return (this.startIp.compareTo(currentIp) < 0 && stopIp.compareTo(currentIp) > 0);
     }
 
     /**
-     * Method get {@link InetSocketAddress} from active IP value.
-     * If IP as bytes arrays has more 4 bytes (leading sign byte), it truncated leading byte because IP address always positive.
+     * Метод получения объекта {@link InetSocketAddress} из значения текущего IP-адреса.
+     * <p>Если массив байтов, представляющий собой IP-адрес, содержит более 4 байтов (имеет начальный знаковый байт), то
+     * первый байт должен быть обрезан - значение IP-адреса всегда положительное числовое значение.
      *
-     * @return active {@link InetSocketAddress}
+     * @return текущий {@link InetSocketAddress}
      */
     @SneakyThrows
-    private InetSocketAddress getIp() {
+    private InetSocketAddress getIp(BigInteger currentIp) {
         try {
-            byte[] startIpBytes = startIp.toByteArray();
+            byte[] startIpBytes = currentIp.toByteArray();
             byte[] truncatedBytes = (startIpBytes.length == 5)
                     ? Arrays.copyOfRange(startIpBytes, 1, 5)
                     : startIpBytes;
@@ -106,9 +118,14 @@ public class IpV4AddressRange implements Comparable<IpV4AddressRange> {
         }
     }
 
+    /**
+     * Метод сравнения двух IP-диапазонов.
+     * @param range диапазон адресов для сравнения
+     * @return -1, 0 или 1 если значение меньше чем, равно или больше чем заданное.
+     */
     @Override
-    public int compareTo(@NotNull IpV4AddressRange o) {
-        return this.startIp.compareTo(o.startIp);
+    public int compareTo(@NotNull IpV4AddressRange range) {
+        return this.startIp.compareTo(range.startIp);
     }
 
 }

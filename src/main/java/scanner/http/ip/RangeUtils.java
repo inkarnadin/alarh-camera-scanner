@@ -4,28 +4,34 @@ import lombok.extern.slf4j.Slf4j;
 import scanner.Preferences;
 import scanner.recover.RecoveryManager;
 
-import java.util.*;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static scanner.Preferences.ALLOW_RECOVERY_SCANNING;
 import static scanner.recover.RecoveryElement.STOP_SCAN_RANGE;
 
 /**
- * Range manager parsing class.
+ * Вспомогательный класс разбора диапазонов.
  *
  * @author inkarnadin
- * on 11.05.2021
+ * on 11-05-2021
  */
 @Slf4j
 public final class RangeUtils {
 
+    /**
+     * Не создаваемый конструктор вспомогательного класса.
+     */
     private RangeUtils() {
         throw new AssertionError("Utility class can't be instantiate");
     }
 
     /**
-     * Method prepare IP range list.
+     * Метод подготовки диапазона адресов.
      *
-     * @param listSources list of IP addresses as string
+     * @param listSources список диапазонов адресов в виде строк
+     * @return список диапазонов в виде объектов
      */
     public static Set<IpV4AddressRange> prepare(Set<String> listSources) {
         log.info("count of ranges: {}", listSources.size());
@@ -45,6 +51,12 @@ public final class RangeUtils {
         return result;
     }
 
+    /**
+     * Метод получения количества адресов во всех диапазонах.
+     *
+     * @param ranges список диапазонов
+     * @return количество уникальных целевых адресов
+     */
     public static long count(Set<IpV4AddressRange> ranges) {
         return ranges.stream()
                 .mapToLong(IpV4AddressRange::getCount)
@@ -52,11 +64,13 @@ public final class RangeUtils {
     }
 
     /**
-     * Method checks if the previous scan session needs to be restored.
-     * <p>If the scan flag is set to {@code true}, then it checks that the session ended on the specified range
+     * Метод проверки необходимости восстановления предыдущей рабочей сессии на текущем диапазоне.
+     * <p>Если флаг сканирования установлен в состояние {@code true}, то производится проверка, что
+     * сессия закончилась на текущем переданном диапазоне.
      *
-     * @param range checking range
-     * @return state, if {@code true} - need restore, else not
+     * @param range проверяемый диапазон
+     * @return состояние восстановления, если {@code true} - восстановление рабочей сессии должно произойти с текущего
+     * диапазона, иначе нет.
      */
     private static boolean needRestore(IpV4AddressRange range) {
         if (Preferences.check(ALLOW_RECOVERY_SCANNING)) {

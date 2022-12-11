@@ -18,6 +18,7 @@ import static scanner.Preferences.NO_SCANNING;
  * on 07-08-2022
  */
 @Slf4j
+@Deprecated
 public class MainRunner {
 
     BruteRunner bruteRunner = new BruteRunner();

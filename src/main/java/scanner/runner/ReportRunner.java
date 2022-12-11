@@ -22,6 +22,7 @@ import static scanner.stat.StatDataHolder.*;
  * @author inkarnadin
  */
 @Slf4j
+@Deprecated
 public class ReportRunner extends AbstractRunner {
 
     /**

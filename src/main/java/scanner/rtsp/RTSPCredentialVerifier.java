@@ -4,9 +4,8 @@ import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.Preferences;
-import scanner.brute.AuthState;
-import scanner.brute.SocketConnector;
-import scanner.ffmpeg.FFmpegExecutor;
+import scanner.runner.breaking.AuthState;
+import scanner.ffmpeg.FFMpegExecutor;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -20,9 +19,10 @@ import static scanner.Preferences.CONNECTION_ATTEMPT;
 import static scanner.Preferences.PORT;
 
 /**
- * RTSP credential pair checking class.
+ * Класс проверки валидности учетных данных по протоколу RSTP.
  *
  * @author inkarnadin
+ * on 01-01-2022
  */
 @Slf4j
 @NoArgsConstructor
@@ -45,11 +45,11 @@ public class RTSPCredentialVerifier implements Closeable {
     private final static List<Integer> GOOD_CODES = Arrays.asList(SUCCESS_CODE, FAILURE_CODE);
 
     /**
-     * Wrapper for create socket connection.
-     * Try until the connection is established or attempts are terminated.
+     * Метод создания сокет-соединения.
+     * <p>Будет предпринято указанное количество попыток открыть соединение, прежде чем операция прервется.
      *
-     * @param ip target IP address.
-     * @throws SocketException if connection failed.
+     * @param ip целевой адрес
+     * @throws SocketException в случае неудачной попытки соединения
      */
     public void connect(String ip) throws SocketException {
         this.ip = ip;
@@ -70,7 +70,7 @@ public class RTSPCredentialVerifier implements Closeable {
     }
 
     /**
-     * Wrapper for closing socket connection.
+     * Метод закрытия сокет соединения.
      */
     @Override
     public void close() {
@@ -78,10 +78,10 @@ public class RTSPCredentialVerifier implements Closeable {
     }
 
     /**
-     * Method of auth attempt via RTSP describe.
+     * Метод попытки аутентификации через сокет соединение с помощью RTSP метода <b>DESCRIBE<b/>.
      *
-     * @param credentials Login and password pair, ex. admin:12345.
-     * @return Authentication status.
+     * @param credentials учетные данные в виде строки, разделенной двоеточием (например, <i>admin:12345<i/>)
+     * @return статус аутентификации
      */
     @SneakyThrows
     public AuthState check(String credentials) {
@@ -99,7 +99,7 @@ public class RTSPCredentialVerifier implements Closeable {
             }
 
             if (statusCode == SUCCESS_CODE && Preferences.check(Preferences.ALLOW_FRAME_SAVING)) {
-                FFmpegExecutor.saveFrame(credentials, ip);
+                FFMpegExecutor.saveFrame(credentials, ip);
             }
 
             return statusCode == SUCCESS_CODE
@@ -111,17 +111,24 @@ public class RTSPCredentialVerifier implements Closeable {
         }
     }
 
-    private RTSPStateStore send(RequestBuilder request) throws IOException {
+    /**
+     * Метод отправки сообщения через сокет-соединение.
+     *
+     * @param request тело запроса
+     * @return разобранный объект ответа
+     * @throws IOException ошибка ввода-вывода в случае превышения времени ожидания ответа от сервера
+     */
+    private RTSPResponse send(RequestBuilder request) throws IOException {
         BufferedReader bufferedReader = connector.input();
         BufferedWriter bufferedWriter = connector.output();
 
         bufferedWriter.write(request.describe());
         bufferedWriter.flush();
 
-        RTSPStateStore store = ResponseHandler.handle(bufferedReader);
-        log.debug("[{}] response code => {}", request.getCredentials(), store.getStatusLine());
+        RTSPResponse rtspResponse = ResponseHandler.handle(bufferedReader);
+        log.debug("[{}] response code => {}", request.getCredentials(), rtspResponse.getStatusLine());
 
-        return store;
+        return rtspResponse;
     }
 
 }

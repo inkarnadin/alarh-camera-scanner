@@ -22,6 +22,7 @@ import static scanner.stat.TimeStatItem.TOTAL_SCAN_TIME;
  */
 @Slf4j
 @NoArgsConstructor
+@Deprecated
 public class ScanRunner extends AbstractRunner {
 
     /**

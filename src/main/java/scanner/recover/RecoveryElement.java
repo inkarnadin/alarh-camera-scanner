@@ -4,10 +4,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * List of keys for recovery items.
+ * Перечисление списка ключей, необходимых для восстановления рабочей сессии в случае ее прерывания.
  *
  * @author inkarnadin
- * on 11.05.2021
+ * on 11-05-2021
  */
 @Getter
 @RequiredArgsConstructor
@@ -21,10 +21,10 @@ public enum RecoveryElement {
     private final String description;
 
     /**
-     * Find element by description.
+     * Поиск ключа восстановления по его описанию.
      *
-     * @param description definition of element
-     * @return recovery element, if missing return {@code null}
+     * @param description описание элемента
+     * @return элемент, который необходимо восстановить, если ничего не найдено, вернет {@code null}
      */
     public static RecoveryElement find(String description) {
         for (RecoveryElement position : RecoveryElement.values())

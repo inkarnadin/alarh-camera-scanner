@@ -18,7 +18,7 @@ import static scanner.stat.StatDataHolder.SCREEN_GATHERER;
  *
  * @author inkarnadin
  */
-public class FFmpegInspector {
+public class FFMpegInspector {
 
     /**
      * Analyzes the source and calculates statistics and determines further actions.

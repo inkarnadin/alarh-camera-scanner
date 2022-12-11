@@ -17,7 +17,7 @@ import static scanner.stat.StatDataHolder.SCREEN_GATHERER;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class FFmpegLogReader implements Runnable {
+public class FFMpegLogReader implements Runnable {
 
     private final Process process;
     private final String ip;
@@ -35,7 +35,7 @@ public class FFmpegLogReader implements Runnable {
                 //log.info(line);
                 output.append(line);
             }
-            FFmpegInspector.inspect(output.toString(), ip, credentials);
+            FFMpegInspector.inspect(output.toString(), ip, credentials);
         } catch (IOException e) {
             SCREEN_GATHERER.increment(ScreenStatItem.UNEXPECTED_ERROR);
             log.warn("Read buffer error: pid = {}, message = {}", process.pid(), e.getMessage());

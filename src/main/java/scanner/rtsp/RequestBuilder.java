@@ -5,9 +5,10 @@ import lombok.Getter;
 import java.util.Objects;
 
 /**
- * Basic RTSP request builder.
+ * Класс для создания базовых RTSP-запросов.
  *
  * @author inkarnadin
+ * on 01-01-2022
  */
 public class RequestBuilder {
 
@@ -19,15 +20,21 @@ public class RequestBuilder {
     @Getter
     private final String credentials;
 
+    /**
+     * Конструктор для создания объекта.
+     *
+     * @param ip целевой адрес
+     * @param credentials учетные данные в виде строки, разделенной двоеточием
+     */
     public RequestBuilder(String ip, String credentials) {
         this.ip = ip;
         this.credentials = Objects.nonNull(credentials) ? credentials : "";
     }
 
     /**
-     * Create request for a method DESCRIBE.
+     * Создание запроса для инициации метода <b>DESCRIBE<b/>.
      *
-     * @return request body.
+     * @return тело запроса
      */
     public String describe() {
         return RTSPContext.get(ip) == TransportMode.ORTHODOX
@@ -48,9 +55,9 @@ public class RequestBuilder {
     }
 
     /**
-     * Create request for a method SETUP.
+     * Создание запроса для инициации метода <b>SETUP<b/>.
      *
-     * @return request body.
+     * @return тело запроса
      */
     @Deprecated
     public String setup() {
@@ -65,10 +72,9 @@ public class RequestBuilder {
     }
 
     /**
-     * Create request for a method PLAY.
+     * Создание запроса для инициации метода <b>PLAY<b/>.
      *
-     * @param session active socket session
-     * @return request body.
+     * @return тело запроса
      */
     @Deprecated
     public String play(String session) {

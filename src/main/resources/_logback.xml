@@ -38,19 +38,19 @@
     <appender-ref ref="COMMON"/>
   </root>
 
-  <logger name="scanner.ffmpeg.FFmpegExecutor" level="info">
+  <logger name="scanner.ffmpeg.FFMpegExecutor" level="info">
     <appender-ref ref="FFMPEG"/>
   </logger>
 
-  <logger name="scanner.ffmpeg.FFmpegFrameSaver" level="info">
+  <logger name="scanner.ffmpeg.FFMpegFrameSaver" level="info">
     <appender-ref ref="FFMPEG"/>
   </logger>
 
-  <logger name="scanner.ffmpeg.FFmpegLogReader" level="info">
+  <logger name="scanner.ffmpeg.FFMpegLogReader" level="info">
     <appender-ref ref="FFMPEG"/>
   </logger>
 
-  <logger name="scanner.ffmpeg.FFmpegProcessKiller" level="info">
+  <logger name="scanner.ffmpeg.FFMpegProcessKiller" level="info">
     <appender-ref ref="FFMPEG"/>
   </logger>
 

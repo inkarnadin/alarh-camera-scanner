@@ -13,6 +13,7 @@ import java.util.Optional;
  *
  * @author inkarnadin
  */
+@Deprecated
 public class CVEScanner {
 
     private static final String CVE_2013_4975 = "http://%s/system/deviceInfo?auth=YWRtaW46MTIzNDU=";
@@ -25,12 +26,12 @@ public class CVEScanner {
      * @return result of cve scanning
      */
     public static Optional<String> scanning(String ip) {
-        try (Response response = HttpClient.execute(String.format(CVE_2013_4975, ip))) {
+        try (Response response = HttpClient.doGet(String.format(CVE_2013_4975, ip))) {
             ResponseBody responseBody = response.body();
             if (Objects.nonNull(responseBody)) {
                 String body = responseBody.string();
                 if (body.contains("firmwareVersion")) {
-                    try (Response configFile = HttpClient.execute(String.format(CONFIG_FILE, ip))) {
+                    try (Response configFile = HttpClient.doGet(String.format(CONFIG_FILE, ip))) {
                         ResponseBody configFileBody = configFile.body();
                         return (Objects.nonNull(configFileBody))
                                 ? ConfigurationDecrypt.decrypt(configFileBody.byteStream())

@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import scanner.Preferences;
-import scanner.ffmpeg.FFmpegExecutor;
+import scanner.ffmpeg.FFMpegExecutor;
 import scanner.http.HttpClient;
 import scanner.onvif.OnvifScreenSaver;
 import scanner.runner.Target;
@@ -24,12 +24,12 @@ public class CVEScanner {
 
     public Target scanning(String ip) {
         Credentials credentials = Credentials.empty();
-        try (Response response = HttpClient.execute(String.format(CVE_2013_4975, ip))) {
+        try (Response response = HttpClient.doGet(String.format(CVE_2013_4975, ip))) {
             ResponseBody responseBody = response.body();
             if (Objects.nonNull(responseBody)) {
                 String body = responseBody.string();
                 if (body.contains("firmwareVersion")) {
-                    try (Response configFile = HttpClient.execute(String.format(CONFIG_FILE, ip))) {
+                    try (Response configFile = HttpClient.doGet(String.format(CONFIG_FILE, ip))) {
                         ResponseBody configFileBody = configFile.body();
                         credentials = (Objects.nonNull(configFileBody))
                                 ? ConfigurationDecrypt.decrypt(configFileBody.byteStream())
@@ -46,7 +46,7 @@ public class CVEScanner {
             if (Preferences.check(ALLOW_FRAME_SAVING)) {
                 boolean isSuccess = OnvifScreenSaver.saveSnapshot(ip);
                 if (!isSuccess) {
-                    FFmpegExecutor.saveFrame(creds, ip);
+                    FFMpegExecutor.saveFrame(creds, ip);
                 }
             }
         }

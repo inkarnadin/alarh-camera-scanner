@@ -12,31 +12,58 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Класс повторного сканирования диапазона.
+ * <p> Все ранее найденные пароли повторно проверяются для еще не разблокированных адресов текущего диапазона.
+ *
+ * @author inkarnadin
+ * on 01-10-2022
+ */
 @Slf4j
 public class RepeatScanner {
 
+    /**
+     * Метод повторного сканирования адресов.
+     * <p> На вход подаются выявленные в ходе рабочей сессии пароли, включая начально заданные. Новый список паролей
+     * применяется повторно к еще не разблокированным адресам.
+     *
+     * @param input входной объект (служит для трансляции исходного списка паролей и адресов)
+     * @param brokenTargets список разблокированных целей
+     * @param action функция действия - рекурсивное обращение к модулю перебора
+     * @return список разблокированных объектов
+     */
     public Set<Target> scanning(BreakInput input, Set<Target> brokenTargets, Function<BreakInput, BreakOutput> action) {
+        int repeatCount = input.getRepeatCount();
+        if (repeatCount < 1) {
+            log.trace("repeat count = {}, skipped", repeatCount);
+            return Collections.emptySet();
+        }
+
         Set<Target> result = new HashSet<>();
         Set<String> repeatPasswords = brokenTargets.stream()
                 .filter(x -> x.getCredentials().isPresent())
                 .map(p -> p.getCredentials().getPassword())
                 .collect(Collectors.toSet());
-        repeatPasswords.removeAll(input.getPasswords());
-        log.info("repeat password check list: {}", repeatPasswords);
-
+        repeatPasswords.addAll(input.getPasswords());
+        //repeatPasswords.removeAll(input.getPasswords());
         Set<Target> unbrokenTargets = input.getAddresses().stream()
-                .filter(x -> !x.isBroken())
+                .filter(y -> !brokenTargets.contains(y))
                 .collect(Collectors.toSet());
-        log.info("unbroken targets list size: {}", unbrokenTargets.size());
 
         if (repeatPasswords.isEmpty()) {
-            log.debug("repeat password check list is empty, skipped");
+            log.trace("repeat password check list is empty, skipped");
             return Collections.emptySet();
         }
+
+        log.debug("repeat password check list: {}", repeatPasswords);
+        log.debug("unbroken targets list size: {}", unbrokenTargets.size());
+
         BreakOutput repeatResult = action.apply(BreakInput.builder()
                 .addresses(unbrokenTargets)
                 .passwords(repeatPasswords)
-                .build());
+                .repeatCount(--repeatCount)
+                .build()
+        );
         for (Target repeatTarget : repeatResult.getTargets()) {
             if (repeatTarget.isBroken()) {
                 if (repeatTarget.isFreeStream()) {

@@ -3,16 +3,23 @@ package scanner.runner.breaking;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import scanner.runner.Target;
+import scanner.runner.breaking.brute.BruteScanner;
 import scanner.runner.breaking.cve.CVEScanner;
 import scanner.runner.breaking.obj.BreakInput;
 import scanner.runner.breaking.obj.BreakOutput;
 import scanner.runner.breaking.repeat.RepeatScanner;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.HashSet;
 import java.util.Set;
 
+import static scanner.runner.logging.LoggingUtility.showSubtaskPercentCompletion;
+
+/**
+ * Модуль разблокировки с помощью перебора.
+ *
+ * @author inkarnadin
+ * on 02-10-2022
+ */
 @Slf4j
 public class BreakerModule {
 
@@ -20,6 +27,12 @@ public class BreakerModule {
     private final BruteScanner bruteScanner = new BruteScanner();
     private final RepeatScanner repeatScanner = new RepeatScanner();
 
+    /**
+     * Метод выполнения разблокировки целей с помощью перебора.
+     *
+     * @param input входной объект-обертка
+     * @return выходной объект-обертка
+     */
     public BreakOutput execute(@NotNull BreakInput input) {
         Set<Target> result = new HashSet<>();
         try {
@@ -34,14 +47,14 @@ public class BreakerModule {
                 Target resultItem = cveScanner.scanning(host);
                 if (resultItem.isBroken()) {
                     result.add(resultItem);
-                    showPercent(++i, targets.size());
+                    showSubtaskPercentCompletion(++i, targets.size());
                     continue;
                 }
 
                 // brute
                 resultItem = bruteScanner.scanning(host, passwords.toArray(new String[0]));
                 result.add(resultItem);
-                showPercent(++i, targets.size());
+                showSubtaskPercentCompletion(++i, targets.size());
             }
 
             //repeat
@@ -54,12 +67,5 @@ public class BreakerModule {
                 .targets(result)
                 .build();
     }
-
-    private void showPercent(int i, int size) {
-        BigDecimal percent = BigDecimal.valueOf((double) i / size * 100).setScale(2, RoundingMode.FLOOR);
-        log.info("subtask complete {}/{} ({}%)", i, size, percent);
-    }
-
-
 
 }

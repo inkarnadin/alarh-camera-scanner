@@ -1,9 +1,10 @@
 package scanner.rtsp;
 
 /**
- * RTSP methods enumeration.
+ * Перечисление допустимых RTSP-методов.
  *
  * @author inkarnadin
+ * on 01-01-2022
  */
 public enum RTSPMethod {
 

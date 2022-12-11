@@ -6,6 +6,12 @@ import scanner.runner.Target;
 
 import java.util.Set;
 
+/**
+ * Input logging object wrapper.
+ *
+ * @author inkarnadin
+ * on 01-10-2022
+ */
 @Getter
 @Builder
 public class LoggerInput {

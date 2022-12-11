@@ -7,19 +7,30 @@ import scanner.SourceReader;
 import scanner.stat.ScanStatItem;
 import scanner.stat.ScreenStatItem;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static scanner.Preferences.*;
-import static scanner.recover.RecoveryElement.*;
+import static scanner.Preferences.ALLOW_RECOVERY_SCANNING;
+import static scanner.Preferences.check;
+import static scanner.Preferences.get;
+import static scanner.recover.RecoveryElement.SCANNING_STAT;
+import static scanner.recover.RecoveryElement.SCREENING_STAT;
+import static scanner.recover.RecoveryElement.SOURCE_CHECKSUM;
 import static scanner.stat.StatDataHolder.SCAN_GATHERER;
 import static scanner.stat.StatDataHolder.SCREEN_GATHERER;
 
 /**
- * Class for save and load interrupted checking process.
+ * Класс управления сохранением и загрузкой процесса восстановления сессия из бекапа.
  *
  * @author inkarnadin
  * on 11-05-2021
@@ -38,10 +49,10 @@ public final class RecoveryManager {
     }
 
     /**
-     * Method for saving some value for later recovery.
+     * Метод сохранения информации для восстановления.
      *
-     * @param element recover element
-     * @param value checking range
+     * @param element элемент восстановления
+     * @param value сохраняемое значение
      */
     public static void save(RecoveryElement element, String value) {
         BUFFERED_DATA.put(element, value);
@@ -49,7 +60,7 @@ public final class RecoveryManager {
     }
 
     /**
-     * Method for writing data to a backup file.
+     * Метод для записи данных в файл восстановления.
      */
     public static void flush() {
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(BACKUP)))) {
@@ -65,10 +76,9 @@ public final class RecoveryManager {
     }
 
     /**
-     * Method for recovering data from a backup file to restore the state of the application.
-     * Only if checksum source file equals.
-     *
-     * After restoring, the backup file will be overwritten.
+     * Метод восстановления данных из бекап-файла для получения последнего состояния приложения до прерывания его работы.
+     * <p>Восстановление будет произведено только в случае совпадения контрольной суммы входного файла параметров.
+     * <p>После восстановления бекап-файл будет перезаписан.
      */
     @SneakyThrows
     public static void recover() {
@@ -108,17 +118,17 @@ public final class RecoveryManager {
     }
 
     /**
-     * Method to getting recovered value by recovery key.
+     * Метод получения данных для восстановления по ключу.
      *
-     * @param element recovery key
-     * @return recovered element
+     * @param element элемент восстановления
+     * @return восстановленное значение элемента
      */
     public static String getRestoredValue(RecoveryElement element) {
         return restoredData.get(element);
     }
 
     /**
-     * Method for Drop backup file if successfully exit.
+     * Метод удаления бекап-файла в случае успешного завершения рабочей сессии приложения.
      */
     public static void dropBackup() {
         if (BACKUP.delete())

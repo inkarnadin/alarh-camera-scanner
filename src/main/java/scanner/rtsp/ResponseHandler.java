@@ -10,9 +10,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Socket response handler.
+ * Класс разбора ответа (состояние, основные заголовки) о статусе установки соединения через сокет.
  *
  * @author inkarnadin
+ * on 01-01-2022
  */
 @Slf4j
 public class ResponseHandler {
@@ -24,14 +25,14 @@ public class ResponseHandler {
     private static final String session = "Session";
 
     /**
-     * Handle socket answer.
+     * Метод обработки входного потока данных
      *
-     * @param reader socket input stream.
-     * @return parsed response.
+     * @param reader входной поток данных
+     * @return объект ответа
      */
     @SneakyThrows
-    public static RTSPStateStore handle(BufferedReader reader) {
-        RTSPStateStore store = new RTSPStateStore();
+    public static RTSPResponse handle(BufferedReader reader) {
+        RTSPResponse rtspResponse = new RTSPResponse();
         List<String> items = new ArrayList<>();
 
         String line;
@@ -43,41 +44,54 @@ public class ResponseHandler {
             items.add(line);
         }
 
-        parseCode(store, items.get(0));
+        parseCode(rtspResponse, items.get(0));
         items.remove(0);
 
-        parseHeaders(store, items);
+        parseHeaders(rtspResponse, items);
 
-        return store;
+        return rtspResponse;
     }
 
-    private static void parseCode(RTSPStateStore store, String firstLine) {
-        store.setStatusLine(firstLine);
+    /**
+     * Метод разбора ответа для получения статус кода.
+     * <p>Первая полученная строка ответа разбирается для получения статус кода ответа.
+     *
+     * @param rtspResponse тело ответа
+     * @param firstLine первая строка ответа
+     */
+    private static void parseCode(RTSPResponse rtspResponse, String firstLine) {
+        rtspResponse.setStatusLine(firstLine);
 
         Matcher matcher = Pattern.compile("RTSP/1\\.0\\s(\\d{3})\\s(.*)").matcher(firstLine);
         if (matcher.find()) {
-            store.setCode(Integer.parseInt(matcher.group(1)));
-            store.setCodeDescription(matcher.group(2));
+            rtspResponse.setCode(Integer.parseInt(matcher.group(1)));
+            rtspResponse.setCodeDescription(matcher.group(2));
         } else {
-            store.setCode(418);
+            rtspResponse.setCode(418);
         }
     }
 
-    private static void parseHeaders(RTSPStateStore store, List<String> items) {
+    /**
+     * Метод разбора заголовков ответа.
+     *
+     * @param rtspResponse тело ответа
+     * @param items строки, содержащие заголовки ответа
+     */
+    private static void parseHeaders(RTSPResponse rtspResponse, List<String> items) {
         for (String item : items) {
             String[] splitHeaders = item.split(": ");
             switch (splitHeaders[0]) {
                 case cSeq:
-                    store.setCSeq(Integer.parseInt(splitHeaders[1]));
+                    rtspResponse.setCSeq(Integer.parseInt(splitHeaders[1]));
                     break;
                 case wwwAuthenticate:
                     if (splitHeaders[1].contains("Digest"))
-                        store.setDigestAuth(splitHeaders[1]);
+                        rtspResponse.setDigestAuth(splitHeaders[1]);
                     else
-                        store.setBasicAuth(splitHeaders[1]);
+                        rtspResponse.setBasicAuth(splitHeaders[1]);
                     break;
                 case session:
-                    store.setSession(splitHeaders[1].split(";")[0]);
+                    rtspResponse.setSession(splitHeaders[1].split(";")[0]);
                 default:
                     break;
             }

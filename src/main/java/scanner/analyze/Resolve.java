@@ -5,6 +5,7 @@ package scanner.analyze;
  *
  * @param <T> solution argument type
  */
+@Deprecated
 public interface Resolve<T> {
 
     T resolve();

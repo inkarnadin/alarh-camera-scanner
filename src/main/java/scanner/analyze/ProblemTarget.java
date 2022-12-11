@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @EqualsAndHashCode
 @RequiredArgsConstructor
+@Deprecated
 public class ProblemTarget<T> {
 
     private final String ip;
