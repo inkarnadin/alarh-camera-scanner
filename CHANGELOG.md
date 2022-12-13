@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [UNRELEASED]
 
-## [0.5.0] - ???
+## [0.5.0] - 14-12-2022
 
 ### Added
 - Added more tests.
