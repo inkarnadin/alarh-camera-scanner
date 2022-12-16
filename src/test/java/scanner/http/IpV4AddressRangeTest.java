@@ -1,6 +1,7 @@
 package scanner.http;
 
 import org.junit.Test;
+import scanner.exception.InetAddressException;
 import scanner.http.ip.IpV4AddressRange;
 
 import static org.junit.Assert.*;
@@ -37,6 +38,12 @@ public class IpV4AddressRangeTest {
         assertFalse(range.contains("255.0.0.3"));
     }
 
+    @Test(expected = InetAddressException.class)
+    public void range_contains_ip_wrong() {
+        IpV4AddressRange range = new IpV4AddressRange("255.1.0.1-255.5.255.255");
+        range.contains("1000.0.0.0");
+    }
+
     @Test
     public void check_format_equals() {
         IpV4AddressRange range = new IpV4AddressRange("10.100.12.01-10.100.12.001");
@@ -47,6 +54,12 @@ public class IpV4AddressRangeTest {
     public void check_count() {
         IpV4AddressRange range = new IpV4AddressRange("10.100.12.0-10.100.12.255");
         assertEquals(255L, range.getCount());
+    }
+
+    @Test(expected = InetAddressException.class)
+    public void getIp_wrong_address() {
+        IpV4AddressRange range = new IpV4AddressRange("0.0.0.0-10.100.12.255");
+        range.getAddresses();
     }
 
 }

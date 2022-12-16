@@ -6,10 +6,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import scanner.exception.InetAddressException;
 
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
@@ -23,7 +25,6 @@ import java.util.Set;
  */
 @Slf4j
 @Getter
-@RequiredArgsConstructor
 @EqualsAndHashCode
 public class IpV4AddressRange implements Comparable<IpV4AddressRange> {
 
@@ -38,6 +39,8 @@ public class IpV4AddressRange implements Comparable<IpV4AddressRange> {
      * Конструктор создания объекта диапазона адресов.
      * <p>В качестве обязательного параметра принимает значение диапазона в формате <i>11.10.1.0-11.10.1.255</i>.
      * @param range диапазон адресов в строковом представлении заданного формата
+     *
+     * @throws InetAddressException исключение, которое может возникнуть при ошибках обработки адреса
      */
     @SneakyThrows
     public IpV4AddressRange(String range) {
@@ -89,12 +92,18 @@ public class IpV4AddressRange implements Comparable<IpV4AddressRange> {
     /**
      * Метод проверки вхождения IP-адреса в строковом представлении в диапазон.
      * @param ip проверяемый IP-адрес в строковом представлении
+     *
+     * @throws InetAddressException исключение, возникающее при передаче неверного значения проверяемого адреса
      * @return результат проверки - {@code true}, если IP-адрес входит в диапазон, иначе {@code false}
      */
-    @SneakyThrows
     public boolean contains(String ip) {
-        BigInteger currentIp = new BigInteger(1, InetAddress.getByName(ip).getAddress());
-        return (this.startIp.compareTo(currentIp) < 0 && stopIp.compareTo(currentIp) > 0);
+        try {
+            BigInteger currentIp = new BigInteger(1, InetAddress.getByName(ip).getAddress());
+            return (this.startIp.compareTo(currentIp) < 0 && stopIp.compareTo(currentIp) > 0);
+        } catch (Exception xep) {
+            log.warn("wrong IP address: {}", xep.getMessage());
+            throw new InetAddressException(xep.getMessage(), xep);
+        }
     }
 
     /**
@@ -102,9 +111,9 @@ public class IpV4AddressRange implements Comparable<IpV4AddressRange> {
      * <p>Если массив байтов, представляющий собой IP-адрес, содержит более 4 байтов (имеет начальный знаковый байт), то
      * первый байт должен быть обрезан - значение IP-адреса всегда положительное числовое значение.
      *
+     * @throws InetAddressException исключение, которое возникает в результате неверной обработки адреса удаленного хоста
      * @return текущий {@link InetSocketAddress}
      */
-    @SneakyThrows
     private InetSocketAddress getIp(BigInteger currentIp) {
         try {
             byte[] startIpBytes = currentIp.toByteArray();
@@ -113,8 +122,8 @@ public class IpV4AddressRange implements Comparable<IpV4AddressRange> {
                     : startIpBytes;
             return new InetSocketAddress(InetAddress.getByAddress(truncatedBytes), 554);
         } catch (Exception xep) {
-            log.warn("wrong byte array of IP address: {}", xep.getMessage());
-            throw xep;
+            log.warn("wrong IP address: {}", xep.getMessage());
+            throw new InetAddressException(xep.getMessage(), xep);
         }
     }
 
