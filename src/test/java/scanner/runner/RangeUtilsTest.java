@@ -10,7 +10,9 @@ import scanner.http.ip.RangeUtils;
 import scanner.recover.RecoveryElement;
 import scanner.recover.RecoveryManager;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -61,6 +63,14 @@ public class RangeUtilsTest {
 
         System.out.println(preparedList);
         Assert.assertEquals(4, preparedList.size());
+    }
+
+    @Test(expected = InvocationTargetException.class)
+    @SneakyThrows
+    public void illegal_create() {
+        Constructor<RangeUtils> constructor = RangeUtils.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        constructor.newInstance();
     }
 
     @SneakyThrows
