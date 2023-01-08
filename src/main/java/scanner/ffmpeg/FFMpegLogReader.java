@@ -35,7 +35,7 @@ public class FFMpegLogReader implements Runnable {
                 //log.info(line);
                 output.append(line);
             }
-            FFMpegInspector.inspect(output.toString(), ip, credentials);
+            //FFMpegInspector.inspect(output.toString(), ip, credentials);
         } catch (IOException e) {
             SCREEN_GATHERER.increment(ScreenStatItem.UNEXPECTED_ERROR);
             log.warn("Read buffer error: pid = {}, message = {}", process.pid(), e.getMessage());

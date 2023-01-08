@@ -4,8 +4,8 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import scanner.runner.breaking.BreakType;
-import scanner.runner.breaking.Credentials;
+import scanner.runner.unlock.UnlockType;
+import scanner.runner.unlock.Credentials;
 
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -27,7 +27,7 @@ public class Target {
     private final Credentials credentials;
     private final boolean isFreeStream;
     @Setter
-    private BreakType breakType;
+    private UnlockType unlockType;
 
     /**
      * Метод получения статуса цели.
@@ -42,8 +42,8 @@ public class Target {
 
     public String asFullFormattedString() {
         return (isFreeStream)
-                ? new StringJoiner(":").add(host).add(path).add("").add("").add(breakType.getDescription()).toString()
-                : new StringJoiner(":").add(host).add(path).add(credentials.get()).add(breakType.getDescription()).toString();
+                ? new StringJoiner(":").add(host).add(path).add("").add("").add(unlockType.getDescription()).toString()
+                : new StringJoiner(":").add(host).add(path).add(credentials.get()).add(unlockType.getDescription()).toString();
     }
 
 }

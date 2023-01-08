@@ -1,4 +1,4 @@
-package scanner.runner.breaking;
+package scanner.runner.unlock;
 
 /**
  * Authorization state that reflects the result of the attempt.

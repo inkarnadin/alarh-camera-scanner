@@ -1,13 +1,13 @@
-package scanner.runner.breaking.brute;
+package scanner.runner.unlock.brute;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.ExecutorHolder;
-import scanner.runner.breaking.AuthContainer;
+import scanner.runner.unlock.AuthContainer;
 import scanner.rtsp.RTSPContext;
 import scanner.rtsp.TransportMode;
 import scanner.runner.Target;
-import scanner.runner.breaking.Credentials;
+import scanner.runner.unlock.Credentials;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import static scanner.runner.breaking.BreakType.BRUTE;
-import static scanner.runner.breaking.BreakType.EMPTY;
-import static scanner.runner.breaking.BreakType.UNBROKEN;
+import static scanner.runner.unlock.UnlockType.BRUTE;
+import static scanner.runner.unlock.UnlockType.EMPTY;
+import static scanner.runner.unlock.UnlockType.UNBROKEN;
 
 /**
  * Brute force attack basic class.
@@ -62,14 +62,14 @@ public class BruteScanner {
                     .path("11")
                     .credentials(new Credentials(result.get()))
                     .isFreeStream(false)
-                    .breakType(BRUTE)
+                    .unlockType(BRUTE)
                     .build();
         }
         return Target.builder()
                 .credentials(Credentials.empty())
                 .host(host)
                 .isFreeStream(false)
-                .breakType(UNBROKEN)
+                .unlockType(UNBROKEN)
                 .build();
     }
 
@@ -84,7 +84,7 @@ public class BruteScanner {
         CompletableFuture<AuthContainer> bruteTask = createBruteTask(ip, new String[] { null });
         AuthContainer result = bruteTask.join();
 
-        // if true - skip further brute with credentials
+        // если true - пропустить все будущие проверки учетных данных, так как потом не защищен
         switch (result.getEmptyCredentialsAuth()) {
             case AUTH:
                 return Optional.of(Target.builder()
@@ -92,7 +92,7 @@ public class BruteScanner {
                             .path("11")
                             .credentials(Credentials.empty())
                             .isFreeStream(true)
-                            .breakType(EMPTY)
+                            .unlockType(EMPTY)
                             .build());
             case NOT_AVAILABLE:
             case UNKNOWN_STATE:
@@ -100,7 +100,7 @@ public class BruteScanner {
                             .host(ip)
                             .credentials(Credentials.empty())
                             .isFreeStream(false)
-                            .breakType(UNBROKEN)
+                            .unlockType(UNBROKEN)
                             .build());
             default:
                 return Optional.empty();

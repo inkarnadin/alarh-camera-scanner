@@ -1,4 +1,4 @@
-package scanner.runner.breaking.obj;
+package scanner.runner.unlock.obj;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.util.Set;
  */
 @Getter
 @Builder
-public class BreakInput {
+public class UnlockInput {
 
     private final Set<Target> addresses;
     private final Set<String> passwords;

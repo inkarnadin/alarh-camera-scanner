@@ -4,8 +4,8 @@ import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import scanner.Preferences;
-import scanner.runner.breaking.AuthState;
-import scanner.ffmpeg.FFMpegExecutor;
+import scanner.runner.unlock.AuthState;
+import scanner.screen.StreamScreenSaver;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,7 +19,7 @@ import static scanner.Preferences.CONNECTION_ATTEMPT;
 import static scanner.Preferences.PORT;
 
 /**
- * Класс проверки валидности учетных данных по протоколу RSTP.
+ * Класс проверки валидности учетных данных по протоколу RTSP.
  *
  * @author inkarnadin
  * on 01-01-2022
@@ -78,7 +78,17 @@ public class RTSPCredentialVerifier implements Closeable {
     }
 
     /**
-     * Метод попытки аутентификации через сокет соединение с помощью RTSP метода <b>DESCRIBE<b/>.
+     * Метод попытки аутентификации через сокет соединение с помощью RTSP метода <b>DESCRIBE</b>.
+     * <p/>Метод получает на вход учетные данные для проверки, создает синтаксически корректный запрос для взаимодействия по
+     * протоколу {@code RTSP} и производит попытку проверить учетные данные.
+     * <p/>В случае возврата некорректного кода происходит попытка подмены базового пути на альтернативный, если это приводит
+     * к неудаче - адрес игнорируется со статусом, означающим, что не удалось подобрать верные параметры для проверки.
+     * <p/>В случае, когда попытка авторизации по учетным данным (либо без них) закончилась успехом, проверяется, доступно ли
+     * сохранение изображения. Если да, то происходит попытка сохранить изображение с камеры на физический носитель в формате
+     * JPEG.
+     * <p/>В тех случах, когда проверка закончилась неудачно по каким-либо техническим причинам, возвращается код состояния
+     * {@code NOT_AVAILABLE}, означающий недоступность целевого хоста для проверки.
+     * <p/>
      *
      * @param credentials учетные данные в виде строки, разделенной двоеточием (например, <i>admin:12345<i/>)
      * @return статус аутентификации
@@ -99,7 +109,7 @@ public class RTSPCredentialVerifier implements Closeable {
             }
 
             if (statusCode == SUCCESS_CODE && Preferences.check(Preferences.ALLOW_FRAME_SAVING)) {
-                FFMpegExecutor.saveFrame(credentials, ip);
+                StreamScreenSaver.save(credentials, ip);
             }
 
             return statusCode == SUCCESS_CODE
@@ -113,6 +123,8 @@ public class RTSPCredentialVerifier implements Closeable {
 
     /**
      * Метод отправки сообщения через сокет-соединение.
+     * <p/>Метод ссылается на входной и выходной потоки сокет-соединения для возможности дальнейшего управления ими извне,
+     * после чего производится попытка отправки необходимых сообщений и обработка полученного результата.
      *
      * @param request тело запроса
      * @return разобранный объект ответа

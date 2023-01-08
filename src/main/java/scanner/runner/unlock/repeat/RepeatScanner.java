@@ -1,10 +1,10 @@
-package scanner.runner.breaking.repeat;
+package scanner.runner.unlock.repeat;
 
 import lombok.extern.slf4j.Slf4j;
 import scanner.runner.Target;
-import scanner.runner.breaking.BreakType;
-import scanner.runner.breaking.obj.BreakInput;
-import scanner.runner.breaking.obj.BreakOutput;
+import scanner.runner.unlock.UnlockType;
+import scanner.runner.unlock.obj.UnlockInput;
+import scanner.runner.unlock.obj.UnlockOutput;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -27,12 +27,12 @@ public class RepeatScanner {
      * <p> На вход подаются выявленные в ходе рабочей сессии пароли, включая начально заданные. Новый список паролей
      * применяется повторно к еще не разблокированным адресам.
      *
-     * @param input входной объект (служит для трансляции исходного списка паролей и адресов)
-     * @param brokenTargets список разблокированных целей
+     * @param input входной объект (служит для трансляции исходной информации)
+     * @param targets список целей, проведенных через другие проверки хотя бы один раз
      * @param action функция действия - рекурсивное обращение к модулю перебора
      * @return список разблокированных объектов
      */
-    public Set<Target> scanning(BreakInput input, Set<Target> brokenTargets, Function<BreakInput, BreakOutput> action) {
+    public Set<Target> scanning(UnlockInput input, Set<Target> targets, Function<UnlockInput, UnlockOutput> action) {
         int repeatCount = input.getRepeatCount();
         if (repeatCount < 1) {
             log.trace("repeat count = {}, skipped", repeatCount);
@@ -40,25 +40,27 @@ public class RepeatScanner {
         }
 
         Set<Target> result = new HashSet<>();
-        Set<String> repeatPasswords = brokenTargets.stream()
+        Set<String> repeatPasswords = targets.stream()
                 .filter(x -> x.getCredentials().isPresent())
                 .map(p -> p.getCredentials().getPassword())
                 .collect(Collectors.toSet());
-        repeatPasswords.addAll(input.getPasswords());
-        //repeatPasswords.removeAll(input.getPasswords());
-        Set<Target> unbrokenTargets = input.getAddresses().stream()
-                .filter(y -> !brokenTargets.contains(y))
+
+        if (!repeatPasswords.isEmpty()) {
+            log.debug("new passwords repeat check list: {}", repeatPasswords);
+            repeatPasswords.addAll(input.getPasswords());
+        }
+
+        Set<Target> unbrokenTargets = targets.stream()
+                .filter(f -> !f.isBroken())
                 .collect(Collectors.toSet());
+        log.debug("unbroken targets list size: {}", unbrokenTargets.size());
 
         if (repeatPasswords.isEmpty()) {
             log.trace("repeat password check list is empty, skipped");
             return Collections.emptySet();
         }
 
-        log.debug("repeat password check list: {}", repeatPasswords);
-        log.debug("unbroken targets list size: {}", unbrokenTargets.size());
-
-        BreakOutput repeatResult = action.apply(BreakInput.builder()
+        UnlockOutput repeatResult = action.apply(UnlockInput.builder()
                 .addresses(unbrokenTargets)
                 .passwords(repeatPasswords)
                 .repeatCount(--repeatCount)
@@ -68,11 +70,11 @@ public class RepeatScanner {
             if (repeatTarget.isBroken()) {
                 if (repeatTarget.isFreeStream()) {
                     log.debug("repeat password check - empty password found");
-                    repeatTarget.setBreakType(BreakType.REPEAT_EMPTY);
+                    repeatTarget.setUnlockType(UnlockType.REPEAT_EMPTY);
                     result.add(repeatTarget);
                 } else {
                     log.debug("repeat password check - password found");
-                    repeatTarget.setBreakType(BreakType.REPEAT);
+                    repeatTarget.setUnlockType(UnlockType.REPEAT);
                     result.add(repeatTarget);
                 }
             }

@@ -1,33 +1,28 @@
 package scanner.runner.logging;
 
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * Logging utility class.
+ * Вспомогательный класс для логирования данных.
  *
  * @author inkarnadin
  * on 05-10-2022
  */
 @Slf4j
+@UtilityClass
 public final class LoggingUtility {
 
     /**
-     * Not instantiate constructor.
-     */
-    private LoggingUtility() {
-        throw new AssertionError("Not instantiate utility class");
-    }
-
-    /**
-     * Method for calculate and show total percent of completion subtask.
+     * Метод расчета и вывода количества завершенных и оставшихся подзадач.
      *
-     * @param numberOfItem number of current item
-     * @param totalItemCount total items count
+     * @param numberOfItem количество элементов
+     * @param totalItemCount общее количество элементов
      */
-    public static void showSubtaskPercentCompletion(int numberOfItem, int totalItemCount) {
+    public static void printSubtaskPercentCompletion(int numberOfItem, int totalItemCount) {
         BigDecimal percent = BigDecimal.valueOf((double) numberOfItem / totalItemCount * 100).setScale(2, RoundingMode.FLOOR);
         log.info("subtask complete {}/{} ({}%)", numberOfItem, totalItemCount, percent);
     }

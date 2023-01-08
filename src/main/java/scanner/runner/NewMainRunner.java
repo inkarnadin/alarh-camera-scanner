@@ -5,9 +5,9 @@ import scanner.Preferences;
 import scanner.http.ip.IpV4AddressRange;
 import scanner.http.ip.RangeUtils;
 import scanner.rtsp.RTSPContext;
-import scanner.runner.breaking.BreakerModule;
-import scanner.runner.breaking.obj.BreakInput;
-import scanner.runner.breaking.obj.BreakOutput;
+import scanner.runner.unlock.UnlockModule;
+import scanner.runner.unlock.obj.UnlockInput;
+import scanner.runner.unlock.obj.UnlockOutput;
 import scanner.runner.exploring.ExplorerModule;
 import scanner.runner.exploring.obj.ExploreInput;
 import scanner.runner.exploring.obj.ExploreOutput;
@@ -29,11 +29,21 @@ import static java.math.RoundingMode.FLOOR;
 public class NewMainRunner {
 
     private final ExplorerModule explorerModule = new ExplorerModule();
-    private final BreakerModule breakerModule = new BreakerModule();
+    private final UnlockModule unlockModule = new UnlockModule();
     private final LoggerModule loggerModule = new LoggerModule();
 
     /**
      * Метод запуска проверок возможности разблокировки целевого пула адресов.
+     * <p/>Из свойств приложения извлекаются два списка - список паролей и список диапазонов для дальнейшего анализа.
+     * Далее список диапазонов преобразуется в удобный для перебора формат и итеративно, каждый из диапазонов проходит через
+     * ряд шагов обработки:
+     * <ol>
+     * <li>поиск подходящих целей;</li>
+     * <li>получение доступа к потокам найденных ранее целей;</li>
+     * <li>запись результата в файлы логов.</li>
+     * </ol>
+     * <p/>После выполнения всех операций в рамках диапазона происходит сброс контекста - очистка временного хранилища путей
+     * до целевого потока в рамках каждого адреса.
      */
     public void run() {
         Set<String> sources = Preferences.getRangesList();
@@ -48,15 +58,15 @@ public class NewMainRunner {
             ExploreOutput exploreOutput = explorerModule.execute(ExploreInput.builder()
                     .range(range)
                     .build());
-            // breaking
-            BreakOutput breakOutput = breakerModule.execute(BreakInput.builder()
+            // unlock
+            UnlockOutput unlockOutput = unlockModule.execute(UnlockInput.builder()
                     .addresses(exploreOutput.getTargets())
                     .passwords(passwords)
                     .repeatCount(1)
                     .build());
             //logging
             loggerModule.execute(LoggerInput.builder()
-                    .targets(breakOutput.getTargets())
+                    .targets(unlockOutput.getTargets())
                     .build());
 
             completeAddress += range.getCount();

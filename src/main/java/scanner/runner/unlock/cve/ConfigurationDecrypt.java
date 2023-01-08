@@ -1,6 +1,7 @@
-package scanner.cve;
+package scanner.runner.unlock.cve;
 
 import lombok.SneakyThrows;
+import scanner.runner.unlock.Credentials;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -19,7 +20,6 @@ import java.util.regex.Pattern;
  *
  * @author inkarnadin
  */
-@Deprecated
 public class ConfigurationDecrypt {
 
     /**
@@ -35,7 +35,7 @@ public class ConfigurationDecrypt {
      * @return union login & password values. If not found - return all valid words
      */
     @SneakyThrows
-    public static Optional<String> decrypt(InputStream inputStream) {
+    public static Credentials decrypt(InputStream inputStream) {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, generateKey());
@@ -57,7 +57,9 @@ public class ConfigurationDecrypt {
             for (int i = 0; i < content.length; i++)
                 xorOutput[i] = (byte) ((int) content[i] ^ (int) key[i % key.length]);
 
-            return parse(new String(xorOutput));
+            return parse(new String(xorOutput))
+                    .map(Credentials::new)
+                    .orElse(Credentials.empty());
         }
     }
 

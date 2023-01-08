@@ -1,7 +1,7 @@
-package scanner.runner.breaking.brute;
+package scanner.runner.unlock.brute;
 
 import lombok.RequiredArgsConstructor;
-import scanner.runner.breaking.AuthContainer;
+import scanner.runner.unlock.AuthContainer;
 import scanner.rtsp.RTSPCredentialVerifier;
 
 import java.util.Objects;

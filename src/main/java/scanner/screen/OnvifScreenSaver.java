@@ -1,4 +1,4 @@
-package scanner.onvif;
+package scanner.screen;
 
 import lombok.SneakyThrows;
 import okhttp3.Response;
@@ -33,7 +33,7 @@ public class OnvifScreenSaver {
      * @return статус получения и сохранения изображения, если изображение получено, вернется {@code true}, иначе {@code false}
      */
     @SneakyThrows
-    public static boolean saveSnapshot(String ip) {
+    public static boolean save(String ip) {
         try (Response response = HttpClient.doGet(String.format(ONVIF_SCREEN, ip))) {
             if (response.code() == 200) {
                 ResponseBody body = response.body();

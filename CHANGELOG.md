@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## [UNRELEASED]
 
+### Fixed
+- Fixed wrong repeat checking algorithm.
+
+### Removed
+- Deprecated functionality.
+
 ## [0.5.0] - 14-12-2022
 
 ### Added

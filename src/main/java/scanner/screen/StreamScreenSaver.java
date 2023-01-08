@@ -1,7 +1,8 @@
-package scanner.ffmpeg;
+package scanner.screen;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import scanner.ffmpeg.FFMpegFrameSaver;
 import scanner.rtsp.RTSPPath;
 import scanner.stat.ScreenStatItem;
 
@@ -12,13 +13,13 @@ import static scanner.rtsp.RTSPPath.STANDARD;
 import static scanner.stat.StatDataHolder.SCREEN_GATHERER;
 
 /**
- * Класс управления внешней программой FFmpeg для получения данных изображения.
+ * Класс сохранения изображения из видео потока.
  *
  * @author inkarnadin
  * on 01-01-2022
  */
 @Slf4j
-public class FFMpegExecutor {
+public class StreamScreenSaver {
 
     /**
      * Метод сохранения одного кадра с помощью внешней программы FFMpeg с последующей остановкой внешнего процесса.
@@ -30,7 +31,7 @@ public class FFMpegExecutor {
      * @param path базовый путь
      */
     @SneakyThrows
-    public static void saveFrame(String credentials, String ip, RTSPPath path) {
+    public static void save(String credentials, String ip, RTSPPath path) {
         CompletableFuture.supplyAsync(() -> new FFMpegFrameSaver(ip, credentials, path).get())
                 .thenAccept(x -> {
                     if (x.isAlive())
@@ -40,8 +41,9 @@ public class FFMpegExecutor {
                 .get();
 
         File file = new File(String.format("result/screen/%s.jpg", ip));
-        if (file.exists())
+        if (file.exists()) {
             SCREEN_GATHERER.increment(ScreenStatItem.SUCCESS);
+        }
     }
 
     /**
@@ -54,9 +56,9 @@ public class FFMpegExecutor {
      * @param ip целевой адрес
      */
     @SneakyThrows
-    public static void saveFrame(String credentials, String ip) {
+    public static void save(String credentials, String ip) {
         SCREEN_GATHERER.increment(ScreenStatItem.ALL);
-        saveFrame(credentials, ip, STANDARD);
+        save(credentials, ip, STANDARD);
     }
 
 }

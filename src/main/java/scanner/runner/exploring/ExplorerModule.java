@@ -21,10 +21,10 @@ import java.util.stream.Collectors;
 public class ExplorerModule {
 
     /**
-     * Method for start scanning available camera addresses.
+     * Метод запуска начала сканирования адресов на предмет принадлежности к целевым портам.
      *
-     * @param input input wrapped object
-     * @return output wrapped object
+     * @param input входной объект-обертка для сканирования
+     * @return выходной объект - результат сканирования
      */
     public ExploreOutput execute(ExploreInput input) {
         Set<String> result = new HashSet<>();
@@ -35,7 +35,8 @@ public class ExplorerModule {
 
             CameraScanner scanner = new CameraScanner();
             result = scanner.scanning(addresses);
-            log.info("range [{}] => {}, success: {}/{}", range.getName(), result, result.size(), addresses.size());
+            log.info("range [{}], success: {}/{}", range.getName(), result.size(), addresses.size());
+            log.info("addresses {}", result);
         } catch (Exception xep) {
             log.error("error during check ip range [{}]: {}", range.getName(), xep.getMessage());
         }

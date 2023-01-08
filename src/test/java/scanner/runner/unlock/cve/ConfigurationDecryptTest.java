@@ -1,4 +1,4 @@
-package scanner.runner.breaking.cve;
+package scanner.runner.unlock.cve;
 
 import org.junit.Assert;
 import org.junit.Test;

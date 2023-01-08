@@ -37,7 +37,7 @@
     </encoder>
   </appender>
 
-  <logger name="scanner.ffmpeg.FFMpegExecutor" level="info">
+  <logger name="scanner.screen.StreamScreenSaver" level="info">
     <appender-ref ref="FFMPEG"/>
   </logger>
 

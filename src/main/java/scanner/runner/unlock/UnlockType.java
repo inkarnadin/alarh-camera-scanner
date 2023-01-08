@@ -1,4 +1,4 @@
-package scanner.runner.breaking;
+package scanner.runner.unlock;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum BreakType {
+public enum UnlockType {
 
     CVE("<cve>"),
     EMPTY("<empty>"),

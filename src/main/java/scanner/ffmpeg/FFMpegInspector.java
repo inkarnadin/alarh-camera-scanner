@@ -1,9 +1,5 @@
 package scanner.ffmpeg;
 
-import scanner.analyze.AuthResolve;
-import scanner.analyze.PathResolve;
-import scanner.analyze.ProblemHolder;
-import scanner.analyze.ProblemTarget;
 import scanner.stat.ScreenStatItem;
 
 import java.util.Optional;
@@ -18,6 +14,7 @@ import static scanner.stat.StatDataHolder.SCREEN_GATHERER;
  *
  * @author inkarnadin
  */
+@Deprecated
 public class FFMpegInspector {
 
     /**
@@ -34,12 +31,12 @@ public class FFMpegInspector {
     private static void process(ScreenStatItem item, String ip, String credentials) {
         boolean result;
         switch (item) {
-            case STREAM_NOT_FOUND:
-                result = ProblemHolder.save(new ProblemTarget<>(ip, credentials, new PathResolve()));
-                break;
-            case WRONG_AUTH_ERROR:
-                result = ProblemHolder.save(new ProblemTarget<>(ip, credentials, new AuthResolve()));
-                break;
+//            case STREAM_NOT_FOUND:
+//                result = ProblemHolder.save(new ProblemTarget<>(ip, credentials, new PathResolve()));
+//                break;
+//            case WRONG_AUTH_ERROR:
+//                result = ProblemHolder.save(new ProblemTarget<>(ip, credentials, new AuthResolve()));
+//                break;
             default:
                 result = false;
         }
