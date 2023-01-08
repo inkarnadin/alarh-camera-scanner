@@ -47,8 +47,8 @@ public class RepeatScanner {
 
         if (!repeatPasswords.isEmpty()) {
             log.debug("new passwords repeat check list: {}", repeatPasswords);
-            repeatPasswords.addAll(input.getPasswords());
         }
+        repeatPasswords.addAll(input.getPasswords());
 
         Set<Target> unbrokenTargets = targets.stream()
                 .filter(f -> !f.isBroken())
