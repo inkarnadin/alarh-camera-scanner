@@ -2,7 +2,7 @@ package scanner;
 
 import lombok.extern.slf4j.Slf4j;
 import scanner.recover.RecoveryManager;
-import scanner.runner.NewMainRunner;
+import scanner.runner.Runner;
 
 @Slf4j
 public class Main {
@@ -13,7 +13,7 @@ public class Main {
         Preferences.configure(args);
         RecoveryManager.recover();
 
-        new NewMainRunner().run();
+        new Runner().run();
 
         RecoveryManager.dropBackup();
 

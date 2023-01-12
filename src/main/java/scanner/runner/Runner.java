@@ -26,7 +26,7 @@ import static java.math.RoundingMode.FLOOR;
  * on 02-10-2022
  */
 @Slf4j
-public class NewMainRunner {
+public class Runner {
 
     private final ExplorerModule explorerModule = new ExplorerModule();
     private final UnlockModule unlockModule = new UnlockModule();
