@@ -46,6 +46,7 @@ public class CVEScanner {
         try (Response response = HttpClient.doGet(String.format(CVE_2013_4975, ip))) {
             ResponseBody responseBody = response.body();
             if (Objects.nonNull(responseBody)) {
+                long startTime = System.currentTimeMillis();
                 String body = responseBody.string();
                 if (body.contains("firmwareVersion")) {
                     try (Response configFile = HttpClient.doGet(String.format(CONFIG_FILE, ip))) {
@@ -55,6 +56,7 @@ public class CVEScanner {
                                 : Credentials.empty();
                     }
                 }
+                log.trace("Configuration reading time: {} s", (double) (System.currentTimeMillis() - startTime) / 1000);
             }
         } catch (IOException iox) {
             log.debug("[{}] error during CVE checking: {}", ip, iox.getMessage());
