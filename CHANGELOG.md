@@ -3,11 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ## [UNRELEASED]
 
+### Changed
+- Decreased basic timeout of request get camera configuration via CVE vulnerability.
+
 ### Fixed
 - Fixed wrong repeat checking algorithm.
 
 ### Removed
-- Deprecated functionality.
+- Removed deprecated functionality.
 
 ## [0.5.0] - 14-12-2022
 
