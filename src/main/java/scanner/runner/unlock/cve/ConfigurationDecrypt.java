@@ -44,9 +44,9 @@ public class ConfigurationDecrypt {
             int bytesRead;
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 byte[] output = cipher.update(buffer, 0, bytesRead);
-                if (output != null)
+                if (output != null) {
                     outputStream.write(output);
-                // ignore doFinal(), doesn't matter
+                }
             }
 
             // xor content
@@ -54,8 +54,9 @@ public class ConfigurationDecrypt {
             byte[] xorOutput = new byte[content.length];
             byte[] key = {(byte) 0x73, (byte) 0x8B, (byte) 0x55, (byte) 0x44};
 
-            for (int i = 0; i < content.length; i++)
+            for (int i = 0; i < content.length; i++) {
                 xorOutput[i] = (byte) ((int) content[i] ^ (int) key[i % key.length]);
+            }
 
             return parse(new String(xorOutput))
                     .map(Credentials::new)
@@ -93,12 +94,14 @@ public class ConfigurationDecrypt {
         }
 
         // if login-pass pair more then two - remove default
-        if (list.size() > 1)
+        if (list.size() > 1) {
             list.remove("admin:12345");
+        }
 
         // if login and pass not found - return message
-        if (list.isEmpty())
+        if (list.isEmpty()) {
             return Optional.empty();
+        }
 
         return Optional.of(list.get(0));
     }
