@@ -1,5 +1,6 @@
 package scanner.stat;
 
+@Deprecated
 public class StatDataHolder {
 
     public static final ScanStatGatherer SCAN_GATHERER = new ScanStatGatherer();

@@ -20,11 +20,9 @@ import static scanner.stat.StatDataHolder.SCREEN_GATHERER;
 public class FFMpegLogReader implements Runnable {
 
     private final Process process;
-    private final String ip;
-    private final String credentials;
 
     /**
-     * Read FFmpeg console output.
+     * Read FFMpeg console output.
      */
     @Override
     public void run() {
@@ -32,10 +30,8 @@ public class FFMpegLogReader implements Runnable {
             String line;
             StringBuilder output = new StringBuilder();
             while ((line = br.readLine()) != null) {
-                //log.info(line);
                 output.append(line);
             }
-            //FFMpegInspector.inspect(output.toString(), ip, credentials);
         } catch (IOException e) {
             SCREEN_GATHERER.increment(ScreenStatItem.UNEXPECTED_ERROR);
             log.warn("Read buffer error: pid = {}, message = {}", process.pid(), e.getMessage());

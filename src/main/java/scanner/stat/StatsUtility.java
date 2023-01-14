@@ -17,6 +17,7 @@ import static scanner.stat.StatDataHolder.TIME_GATHERER;
  * on 07-08-2022
  */
 @Slf4j
+@Deprecated
 public final class StatsUtility {
 
     private StatsUtility() {

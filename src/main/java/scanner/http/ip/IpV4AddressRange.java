@@ -28,11 +28,12 @@ import java.util.Set;
 @EqualsAndHashCode
 public class IpV4AddressRange implements Comparable<IpV4AddressRange> {
 
-    private String sourceRange;
-    private String name;
-    private BigInteger startIp;
-    private BigInteger stopIp;
-    private long count;
+    private final String sourceRange;
+    private final String name;
+    private final BigInteger startIp;
+    private final BigInteger stopIp;
+    private final long count;
+
     private boolean isLarge;
 
     /**
