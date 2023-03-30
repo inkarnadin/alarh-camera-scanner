@@ -73,7 +73,7 @@ public final class RangeUtils {
      * диапазона, иначе нет.
      */
     private static boolean needRestore(IpV4AddressRange range) {
-        if (Preferences.check(ALLOW_RECOVERY_SCANNING)) {
+        if (Preferences.parseBoolean(ALLOW_RECOVERY_SCANNING)) {
             String stopScanAddress = RecoveryManager.getRestoredValue(STOP_SCAN_RANGE);
             if (Objects.nonNull(stopScanAddress)) {
                 return !Objects.equals(range.getSourceRange(), stopScanAddress);

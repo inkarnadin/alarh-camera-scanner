@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.*;
 
 /**
- * Global settings class.
+ * Класс глобальных конфигурация приложения.
  *
  * @author inkarnadin
  */
@@ -49,17 +49,13 @@ public class Preferences {
     private static Set<String> passwordsList;
 
     /**
-     * Save all start arguments as application preferences.
+     * Метод сохранения всех свойств, вычитанных из файла, в память приложения.
+     * <p>Подготавливает для проверки диапазон адресов, указанных под флагом <b>-source</b>.
+     * Если диапазон не указан, приложение закрывается.
+     * <p>Подготавливает список паролей для атаки методом полного перебора, указанного под флагом <b>-passwords</b>.
+     * Если диапазон не указан, приложение использует один пароль по умолчанию. <b>asdf1234</b>.
      *
-     * <p> Prepares a range of addresses for validation specified under the flag <b>-source</b>.
-     * If no range is specified, the application exits.
-     *
-     * <p> Prepares a list of passwords for brute force attack specified under the flag <b>-passwords</b>.
-     * If no range is specified, the application use single default password <b>asdf1234</b>.
-     *
-     * <p> Configure some application settings such as needed directory structures.
-     *
-     * @param values input application args
+     * @param values свойства приложения
      */
     public static void configure(String[] values) {
         for (String value : values) {
@@ -86,34 +82,37 @@ public class Preferences {
     }
 
     /**
-     * Check some property value.
+     * Метод конвертации свойств двоичного характера.
      *
-     * @param value property name
-     * @return property state - true/false
+     * @param value значение
+     * @return конвертированное значение - true/false
      */
-    public static boolean check(String value) {
+    public static boolean parseBoolean(String value) {
         return Boolean.parseBoolean(prefs.get(value));
     }
 
     /**
-     * Get some property value.
+     * Метод получения значения свойства.
      *
-     * @param value property name
-     * @return property value. If specified, then it, otherwise by default
+     * @param value значение
+     * @return значение в виде строки
      */
     public static String get(String value) {
         return prefs.get(value);
     }
 
     /**
-     * Change some property value.
+     * Метод изменения значения свойства.
      *
-     * @param value property name
+     * @param value новое значение
      */
     public static void change(String key, String value) {
         prefs.put(key, value);
     }
 
+    /**
+     * Метод создания директории.
+     */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private static void createDirectories() {
         new File("result/screen").mkdir();

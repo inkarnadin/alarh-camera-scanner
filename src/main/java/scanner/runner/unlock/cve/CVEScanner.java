@@ -64,7 +64,7 @@ public class CVEScanner {
 
         if (credentials.isPresent()) {
             String creds = credentials.get();
-            if (Preferences.check(ALLOW_FRAME_SAVING)) {
+            if (Preferences.parseBoolean(ALLOW_FRAME_SAVING)) {
                 boolean isSuccess = OnvifScreenSaver.save(ip);
                 if (!isSuccess) {
                     StreamScreenSaver.save(creds, ip);

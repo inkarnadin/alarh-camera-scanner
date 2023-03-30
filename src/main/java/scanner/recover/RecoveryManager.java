@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static scanner.Preferences.ALLOW_RECOVERY_SCANNING;
-import static scanner.Preferences.check;
+import static scanner.Preferences.parseBoolean;
 import static scanner.Preferences.get;
 import static scanner.recover.RecoveryElement.SCANNING_STAT;
 import static scanner.recover.RecoveryElement.SCREENING_STAT;
@@ -94,7 +94,7 @@ public final class RecoveryManager {
             if (!currentSourceHash.equals(savedSourceHash))
                 Preferences.change(ALLOW_RECOVERY_SCANNING, Boolean.FALSE.toString());
 
-            if (check(ALLOW_RECOVERY_SCANNING)) {
+            if (parseBoolean(ALLOW_RECOVERY_SCANNING)) {
                 String scanStats = restoredData.get(SCANNING_STAT);
                 if (Objects.nonNull(scanStats)) {
                     String[] values = restoredData.get(SCANNING_STAT).split(";");

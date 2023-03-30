@@ -108,7 +108,7 @@ public class RTSPCredentialVerifier implements Closeable {
                 }
             }
 
-            if (statusCode == SUCCESS_CODE && Preferences.check(Preferences.ALLOW_FRAME_SAVING)) {
+            if (statusCode == SUCCESS_CODE && Preferences.parseBoolean(Preferences.ALLOW_FRAME_SAVING)) {
                 StreamScreenSaver.save(credentials, ip);
             }
 
