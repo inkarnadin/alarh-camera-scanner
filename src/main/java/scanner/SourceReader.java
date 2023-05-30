@@ -13,9 +13,10 @@ import java.util.*;
 import java.util.stream.Stream;
 
 /**
- * Resource reading class.
+ * Компонент чтения файла данных.
  *
  * @author inkarnadin
+ * on 16-02-2021
  */
 @Slf4j
 public final class SourceReader {
@@ -25,10 +26,10 @@ public final class SourceReader {
     }
 
     /**
-     * Gets a list of values from the specified file.
+     * Получения листа значения специально сформированного файла данных.
      *
-     * @param path file location
-     * @return list of values. Returns an empty list if the file is not found
+     * @param path путь размещения файла
+     * @return лист значений, вернет пустой список, если файл пустой
      */
     public static Set<String> readSource(String path) {
         Set<String> sources = new TreeSet<>();
@@ -50,9 +51,10 @@ public final class SourceReader {
     }
 
     /**
-     * Calculate file checksum.
+     * Метод расчета контрольной суммы исходного файла.
+     * <p>Основное назначение - восстановление прерванной сессии.
      *
-     * @param path file location
+     * @param path путь размещения файла
      */
     @SuppressWarnings({"UnstableApiUsage", "deprecation"})
     public static String checksum(String path) {

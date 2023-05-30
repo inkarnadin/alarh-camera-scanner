@@ -131,8 +131,9 @@ public final class RecoveryManager {
      * Метод удаления бекап-файла в случае успешного завершения рабочей сессии приложения.
      */
     public static void dropBackup() {
-        if (BACKUP.delete())
+        if (BACKUP.delete()) {
             log.info("backup file was removed.");
+        }
     }
 
 }
