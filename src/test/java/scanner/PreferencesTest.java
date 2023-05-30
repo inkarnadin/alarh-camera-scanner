@@ -14,10 +14,10 @@ public class PreferencesTest {
 
     @Test
     public void check_preferences() {
-        Boolean rCheck = Preferences.check("-exists_flag");
+        Boolean rCheck = Preferences.parseBoolean("-exists_flag");
         Assert.assertEquals(true, rCheck);
 
-        Boolean dCheck = Preferences.check("-not_exists_flag");
+        Boolean dCheck = Preferences.parseBoolean("-not_exists_flag");
         Assert.assertEquals(false, dCheck);
     }
 

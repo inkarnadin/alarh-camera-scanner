@@ -19,7 +19,7 @@ public class HttpClient {
     private final static OkHttpClient client = new OkHttpClient()
             .newBuilder()
             .followSslRedirects(true)
-            .callTimeout(500, TimeUnit.MILLISECONDS)
+            .callTimeout(10, TimeUnit.SECONDS)
             .build();
 
     /**
