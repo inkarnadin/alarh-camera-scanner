@@ -27,9 +27,11 @@ public enum RecoveryElement {
      * @return элемент, который необходимо восстановить, если ничего не найдено, вернет {@code null}
      */
     public static RecoveryElement find(String description) {
-        for (RecoveryElement position : RecoveryElement.values())
-            if (position.description.equals(description))
+        for (RecoveryElement position : RecoveryElement.values()) {
+            if (position.description.equals(description)) {
                 return position;
+            }
+        }
         return null;
     }
 

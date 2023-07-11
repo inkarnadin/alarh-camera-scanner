@@ -11,9 +11,9 @@ public class ConfigurationDecryptFuncTest {
     @Test
     @Ignore("Functionality checking test")
     public void test_decrypt() {
-        Response response = HttpClient.doGet("http://host/System/configurationFile?auth=YWRtaW46MTEK");
+        Response response = HttpClient.doGet("http://176.195.169.220/System/configurationFile?auth=YWRtaW46MTEK");
         InputStream inputStream = response.body().byteStream();
-        System.out.println(ConfigurationDecrypt.decrypt(inputStream));
+        System.out.println(ConfigurationDecrypt.decrypt(inputStream).getPassword());
     }
 
 }

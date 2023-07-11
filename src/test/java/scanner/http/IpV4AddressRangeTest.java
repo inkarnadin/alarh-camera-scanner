@@ -9,13 +9,13 @@ import static org.junit.Assert.*;
 public class IpV4AddressRangeTest {
 
     @Test
-    public void getAddresses_small() {
+    public void get_addresses_small() {
         IpV4AddressRange range = new IpV4AddressRange("2.1.2.0-2.1.2.255");
         assertEquals(256, range.getAddresses().size());
     }
 
     @Test
-    public void getAddresses_large() {
+    public void get_addresses_large() {
         IpV4AddressRange range = new IpV4AddressRange("255.1.0.1-255.5.255.255");
         assertEquals(327679, range.getAddresses().size());
     }
