@@ -61,8 +61,9 @@ public class RTSPCredentialVerifier implements Closeable {
             } catch (IOException ignored) {
                 log.debug("socket connection failed (try {})", repeatCount--);
             }
-            if (connector.isConnected())
+            if (connector.isConnected()) {
                 return;
+            }
         } while (repeatCount > 0);
 
         log.warn("socket connection failed (attempts ended)");
