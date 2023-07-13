@@ -18,11 +18,12 @@ import java.util.regex.Pattern;
 @Slf4j
 public class ResponseHandler {
 
-    private static final String eos = "";
+    private static final String EOS = "";
 
-    private static final String cSeq = "CSeq";
-    private static final String wwwAuthenticate = "WWW-Authenticate";
-    private static final String session = "Session";
+    private static final String C_SEQ = "CSeq";
+    private static final String WWW_AUTHENTICATE = "WWW-Authenticate";
+    private static final String SESSION = "Session";
+    private static final String DATE_TIME = "Date";
 
     /**
      * Метод обработки входного потока данных.
@@ -41,7 +42,7 @@ public class ResponseHandler {
         String line;
         while ((line = reader.readLine()) != null) {
             log.trace(line);
-            if (line.equals(eos)) {
+            if (line.equals(EOS)) {
                 break;
             }
             items.add(line);
@@ -84,16 +85,19 @@ public class ResponseHandler {
         for (String item : items) {
             String[] splitHeaders = item.split(": ");
             switch (splitHeaders[0]) {
-                case cSeq:
+                case C_SEQ:
                     rtspResponse.setCSeq(Integer.parseInt(splitHeaders[1]));
                     break;
-                case wwwAuthenticate:
+                case DATE_TIME:
+                    rtspResponse.setDateAsString(splitHeaders[1]);
+                    break;
+                case WWW_AUTHENTICATE:
                     if (splitHeaders[1].contains("Digest"))
                         rtspResponse.setDigestAuth(splitHeaders[1]);
                     else
                         rtspResponse.setBasicAuth(splitHeaders[1]);
                     break;
-                case session:
+                case SESSION:
                     rtspResponse.setSession(splitHeaders[1].split(";")[0]);
                 default:
                     break;
