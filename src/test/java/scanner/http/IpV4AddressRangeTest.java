@@ -53,7 +53,13 @@ public class IpV4AddressRangeTest {
     @Test
     public void check_count() {
         IpV4AddressRange range = new IpV4AddressRange("10.100.12.0-10.100.12.255");
-        assertEquals(255L, range.getCount());
+        assertEquals(256L, range.getCount());
+    }
+
+    @Test
+    public void check_count_for_close_range() {
+        IpV4AddressRange range = new IpV4AddressRange("10.100.12.14-10.100.12.14");
+        assertEquals(1L, range.getCount());
     }
 
     @Test(expected = InetAddressException.class)
