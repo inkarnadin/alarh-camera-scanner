@@ -56,7 +56,7 @@ public class IpV4AddressRange implements Comparable<IpV4AddressRange> {
         byte[] stop = InetAddress.getByName(rangeAddresses[1]).getAddress();
         stopIp = new BigInteger(1, stop);
 
-        count = stopIp.subtract(startIp).longValue();
+        count = stopIp.subtract(startIp).longValue() + 1L;
         if (count > 255) {
             isLarge = true;
         }
